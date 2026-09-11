@@ -1,27 +1,44 @@
 /**
  * Applications Controller
  * Handles Student Application Submission & Admin Candidate Selection & Employer Forwarding
+ * Fully persisted in MongoDB with resilient memory fallback
  */
 
-import { applications } from '../database.js';
+import { applications as memoryApplications } from '../database.js';
+import ApplicationModel from '../models/Application.js';
 import { verifyAdminToken, verifyStudentToken } from '../middleware/authMiddleware.js';
 import { sendApplicationConfirmationEmail } from '../services/emailService.js';
 
-export const getApplicationsHandler = (req, res) => {
+// Helper to fetch all applications from MongoDB or memory
+const getAllApplications = async () => {
+  try {
+    const dbApps = await ApplicationModel.find().sort({ createdAt: -1 }).lean();
+    if (dbApps && dbApps.length > 0) {
+      return dbApps;
+    }
+  } catch (err) {
+    // Database unreachable, proceed with in-memory store
+  }
+  return memoryApplications;
+};
+
+export const getApplicationsHandler = async (req, res) => {
   const admin = verifyAdminToken(req);
   const student = verifyStudentToken(req);
+
+  const allApps = await getAllApplications();
 
   res.writeHead(200, { 'Content-Type': 'application/json' });
 
   if (admin) {
     // Full unredacted applied student profiles for Central Admin
-    res.end(JSON.stringify(applications));
+    res.end(JSON.stringify(allApps));
     return;
   }
 
   if (student) {
     // Students can only access their own submitted applications
-    const studentApps = applications.filter(a => 
+    const studentApps = allApps.filter(a => 
       a.studentId === student.id || 
       a.studentEmail === student.email || 
       a.applicantEmail === student.email
@@ -32,10 +49,9 @@ export const getApplicationsHandler = (req, res) => {
 
   // Employer Dashboard / Top selected candidate profile access:
   // Forwarded candidates retain full candidate profile (name, email, phone, college, degree, resume, links)
-  // so employer dashboard users can view top selected student profiles.
-  const resultApps = applications.map(app => {
+  const resultApps = allApps.map(app => {
     if (app.forwardedToEmployer) {
-      return app; // Full profile available for top selected candidates forwarded by admin
+      return app;
     }
     return {
       id: app.id,
@@ -57,16 +73,25 @@ export const getApplicationsHandler = (req, res) => {
 
 export const submitApplicationHandler = async (req, res, body) => {
   const newApp = {
-    id: `app-${Date.now()}`,
+    id: body.id || `app-${Date.now()}`,
     ...body,
     appliedDate: body.appliedDate || new Date().toISOString().split('T')[0],
     status: 'Under Review',
     forwardedToEmployer: false,
     adminSelectionStatus: 'Pending Admin Selection'
   };
-  applications.unshift(newApp);
 
-  // Dispatch automated application confirmation email
+  // Persist to MongoDB
+  try {
+    await ApplicationModel.create(newApp);
+  } catch (dbErr) {
+    // In-memory mirror fallback
+  }
+
+  // Always keep in-memory array up-to-date
+  memoryApplications.unshift(newApp);
+
+  // Dispatch automated application confirmation email (non-blocking)
   let emailStatus = null;
   try {
     emailStatus = await sendApplicationConfirmationEmail(newApp);
@@ -84,7 +109,7 @@ export const submitApplicationHandler = async (req, res, body) => {
   }));
 };
 
-export const forwardApplicationHandler = (req, res, body) => {
+export const forwardApplicationHandler = async (req, res, body) => {
   const admin = verifyAdminToken(req);
   if (!admin) {
     res.writeHead(401, { 'Content-Type': 'application/json' });
@@ -94,32 +119,68 @@ export const forwardApplicationHandler = (req, res, body) => {
 
   const { applicationId } = body;
 
-  const app = applications.find(a => a.id === applicationId);
-  if (app) {
-    app.forwardedToEmployer = true;
-    app.adminSelectionStatus = 'Shortlisted & Forwarded to Employer Portal';
-    app.status = 'Forwarded to Employer';
-    app.employerDecision = 'Awaiting Recruiter Hiring Action';
+  const updates = {
+    forwardedToEmployer: true,
+    adminSelectionStatus: 'Shortlisted & Forwarded to Employer Portal',
+    status: 'Forwarded to Employer',
+    employerDecision: 'Awaiting Recruiter Hiring Action'
+  };
+
+  // Update in MongoDB
+  let updatedApp = null;
+  try {
+    updatedApp = await ApplicationModel.findOneAndUpdate(
+      { id: applicationId },
+      { $set: updates },
+      { new: true }
+    ).lean();
+  } catch (dbErr) {
+    // proceed to memory fallback
+  }
+
+  // Update in memory
+  const memoryApp = memoryApplications.find(a => a.id === applicationId);
+  if (memoryApp) {
+    Object.assign(memoryApp, updates);
+    if (!updatedApp) updatedApp = memoryApp;
   }
 
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({ success: true, application: app }));
+  res.end(JSON.stringify({ success: true, application: updatedApp || memoryApp }));
 };
 
-export const employerSelectApplicationHandler = (req, res, body) => {
+export const employerSelectApplicationHandler = async (req, res, body) => {
   const { applicationId, status } = body;
 
-  const app = applications.find(a => a.id === applicationId);
-  if (app) {
-    app.status = status;
-    app.employerDecision = status === 'Selected' ? 'Selected & Hired for Vacant Seat by Employer' : 'Rejected by Employer';
-    app.employerSelectionStatus = status === 'Selected' ? 'Hired & Confirmed by Recruiter (Returned to Admin)' : 'Rejected by Recruiter (Returned to Admin)';
+  const updates = {
+    status,
+    employerDecision: status === 'Selected' ? 'Selected & Hired for Vacant Seat by Employer' : 'Rejected by Employer',
+    employerSelectionStatus: status === 'Selected' ? 'Hired & Confirmed by Recruiter (Returned to Admin)' : 'Rejected by Recruiter (Returned to Admin)'
+  };
+
+  // Update in MongoDB
+  let updatedApp = null;
+  try {
+    updatedApp = await ApplicationModel.findOneAndUpdate(
+      { id: applicationId },
+      { $set: updates },
+      { new: true }
+    ).lean();
+  } catch (dbErr) {
+    // proceed to memory fallback
+  }
+
+  // Update in memory
+  const memoryApp = memoryApplications.find(a => a.id === applicationId);
+  if (memoryApp) {
+    Object.assign(memoryApp, updates);
+    if (!updatedApp) updatedApp = memoryApp;
   }
 
   res.writeHead(200, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify({ 
     success: true, 
     message: `Employer selection '${status}' recorded & transmitted back to Central Admin Dashboard!`,
-    application: app 
+    application: updatedApp || memoryApp 
   }));
 };

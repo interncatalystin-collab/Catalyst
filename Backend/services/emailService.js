@@ -259,3 +259,67 @@ export const sendRegistrationConfirmationMail = async (student) => {
     return { success: false, error: err.message };
   }
 };
+
+/**
+ * Send an automated OTP code email for passwordless verification
+ */
+export const sendOtpEmail = async (email, otpCode) => {
+  if (!email || !email.includes('@')) {
+    return { success: false, error: 'Valid email address required' };
+  }
+
+  const subject = `🔐 InternCatalyst Login OTP: ${otpCode}`;
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${subject}</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f1f5f9; padding: 24px 10px; margin: 0; color: #1e293b;">
+  <div style="max-width: 500px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <div style="background: #2563eb; color: #ffffff; padding: 20px; text-align: center;">
+      <h2 style="margin: 0; font-size: 20px;">InternCatalyst Security</h2>
+      <p style="margin: 4px 0 0 0; font-size: 13px; opacity: 0.9;">One-Time Password (OTP) Verification</p>
+    </div>
+    <div style="padding: 24px; text-align: center;">
+      <p style="font-size: 14px; color: #475569; margin-top: 0;">Use the verification code below to complete your login session:</p>
+      <div style="display: inline-block; background-color: #eff6ff; border: 2px dashed #3b82f6; border-radius: 8px; padding: 14px 28px; margin: 16px 0;">
+        <span style="font-size: 32px; font-weight: 800; letter-spacing: 6px; color: #1d4ed8; font-family: monospace;">${otpCode}</span>
+      </div>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 4px;">⏱️ This code is valid for <strong>10 minutes</strong>.</p>
+      <p style="font-size: 12px; color: #94a3b8;">If you did not request this login code, please ignore this email.</p>
+    </div>
+    <div style="background: #f8fafc; padding: 14px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8;">
+      InternCatalyst Student Career Platform • Automated Security Service
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  const mailOptions = {
+    from: EMAIL_CONFIG.from,
+    to: email,
+    subject,
+    html: htmlContent
+  };
+
+  const mailTransport = getTransporter();
+
+  if (!mailTransport) {
+    console.log(`📧 [EMAIL SIMULATION] Login OTP ${otpCode} generated for ${email}`);
+    return { success: true, simulated: true, otp: otpCode };
+  }
+
+  try {
+    const info = await mailTransport.sendMail(mailOptions);
+    console.log(`✅ [Email Service] OTP code email dispatched to ${email}`);
+    return { success: true, messageId: info.messageId };
+  } catch (err) {
+    console.error(`❌ [Email Service] Failed to dispatch OTP email to ${email}:`, err.message);
+    return { success: false, error: err.message };
+  }
+};

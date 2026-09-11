@@ -4,8 +4,9 @@
  */
 
 import { activeOtps } from '../database.js';
+import { sendOtpEmail } from '../services/emailService.js';
 
-export const sendOtpHandler = (req, res, body) => {
+export const sendOtpHandler = async (req, res, body) => {
   const { emailOrPhone } = body;
 
   if (!emailOrPhone) {
@@ -16,6 +17,13 @@ export const sendOtpHandler = (req, res, body) => {
 
   const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
   activeOtps[emailOrPhone] = otpCode;
+
+  // If input is an email, dispatch OTP email asynchronously
+  if (emailOrPhone.includes('@')) {
+    sendOtpEmail(emailOrPhone, otpCode).catch(err => {
+      console.error('⚠️ [Auth Controller] Failed to dispatch OTP email:', err.message);
+    });
+  }
 
   res.writeHead(200, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify({

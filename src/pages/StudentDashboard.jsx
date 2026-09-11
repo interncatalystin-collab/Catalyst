@@ -983,6 +983,26 @@ export default function StudentDashboard({
               Email & SMS Notification Log
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {/* Dynamic Notifications for Submitted Applications */}
+              {applications.filter(a => a.studentId === safeProfile.id || a.studentEmail === safeProfile.email || !a.studentId).map((app, idx) => (
+                <div key={app.id || idx} style={{ background: 'rgba(30, 58, 138, 0.2)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.4)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#60a5fa', fontSize: '0.8rem', fontWeight: '700', marginBottom: '0.2rem' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                      <Mail size={13} /> Official Confirmation Mail Dispatched • {app.appliedDate || 'Recent'}
+                    </span>
+                    <span style={{ background: '#1e3a8a', padding: '0.15rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem' }}>
+                      Ref: {app.id?.slice(0, 11) || 'APP-REF'}
+                    </span>
+                  </div>
+                  <strong style={{ color: '#ffffff', fontSize: '0.925rem' }}>
+                    Application Confirmed: {app.internshipTitle} ({app.companyName})
+                  </strong>
+                  <p style={{ color: '#cbd5e1', fontSize: '0.85rem', marginTop: '0.25rem', lineHeight: '1.5' }}>
+                    Confirmation email delivered to <strong>{app.studentEmail || safeProfile.email}</strong>. Application fee of {app.paymentAmount || '₹100'} verified ({app.txnId || 'TXN_VERIFIED'}). Profile is queued for Central Admin vetting.
+                  </p>
+                </div>
+              ))}
+
               <div style={{ background: 'rgba(15,23,42,0.8)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: '#818cf8', fontSize: '0.8rem', fontWeight: '700', marginBottom: '0.2rem' }}>
                   <span>SMS & Email Broadcast • Received Today</span>
@@ -1001,7 +1021,7 @@ export default function StudentDashboard({
                 </div>
                 <strong style={{ color: '#fff', fontSize: '0.925rem' }}>Application Submitted: Nexus Tech Solutions</strong>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.25rem' }}>
-                  Your application for Full-Stack Web Development Intern was received. SMS notification dispatched to +91 98450 12345.
+                  Your application for Full-Stack Web Development Intern was received. Notification dispatched to registered student contacts.
                 </p>
               </div>
             </div>

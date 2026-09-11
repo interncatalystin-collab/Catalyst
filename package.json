@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node --env-file=.env Backend/index.js",
+    "start": "node Backend/index.js",
     "dev": "vite",
-    "backend": "node --env-file=.env Backend/index.js",
-    "seed:admin": "node --env-file=.env Backend/seedAdmins.js",
+    "backend": "node Backend/index.js",
+    "seed:admin": "node Backend/seedAdmins.js",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"

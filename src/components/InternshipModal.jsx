@@ -490,7 +490,7 @@ export default function InternshipModal({
               </div>
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+              <div className="modal-actions" style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
                 <button type="button" className="btn btn-secondary" onClick={onClose}>
                   Cancel
                 </button>

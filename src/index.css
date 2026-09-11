@@ -664,5 +664,56 @@ button, input, select, textarea {
     -webkit-overflow-scrolling: touch !important;
     padding-bottom: 0.5rem !important;
   }
+
+  /* Modal action buttons stacked for mobile */
+  .modal-actions {
+    flex-direction: column-reverse !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  .modal-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.8rem 1rem !important;
+  }
+
+  /* Mobile Profile Header adjustments */
+  .profile-header-card {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem !important;
+  }
+
+  /* Filter pill scroll container */
+  .filter-pills-row {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+    padding-bottom: 0.35rem !important;
+  }
+
+  /* Prevent overflow on small screens */
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* Extra small devices (< 480px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.65rem !important;
+  }
+
+  .btn {
+    font-size: 0.78rem !important;
+  }
+
+  .hero-badge-pill {
+    font-size: 0.72rem !important;
+  }
 }
 
