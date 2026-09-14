@@ -6,7 +6,6 @@ import BrowseInternshipsPage from './pages/BrowseInternshipsPage';
 import HowItWorksPage from './pages/HowItWorksPage';
 import ResumeTemplatesPage from './pages/ResumeTemplatesPage';
 import ForCompaniesPage from './pages/ForCompaniesPage';
-import ForCollegesPage from './pages/ForCollegesPage';
 import AboutUsPage from './pages/AboutUsPage';
 import StudentDashboard from './pages/StudentDashboard';
 import CompanyDashboard from './pages/CompanyDashboard';
@@ -30,7 +29,7 @@ import {
 
 export default function App() {
   // Navigation & Role State
-  const [activeTab, setActiveTab] = useState('home'); // 'home', 'browse', 'how-it-works', 'resume-templates', 'for-companies', 'for-colleges', 'about', 'student-dash', 'company-dash', 'admin-dash', 'login'
+  const [activeTab, setActiveTab] = useState('home'); // 'home', 'browse', 'how-it-works', 'resume-templates', 'for-companies', 'about', 'student-dash', 'company-dash', 'admin-dash', 'login'
   const [currentRole, setCurrentRole] = useState('visitor'); // 'visitor', 'student', 'company', 'admin'
 
   // Portal Login Authentication State (Guards dashboards until credentials entered)
@@ -404,10 +403,6 @@ export default function App() {
             setActiveTab={setActiveTab} 
             setCurrentRole={setCurrentRole} 
           />
-        )}
-
-        {activeTab === 'for-colleges' && (
-          <ForCollegesPage />
         )}
 
         {activeTab === 'about' && (

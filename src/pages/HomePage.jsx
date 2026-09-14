@@ -9,7 +9,6 @@ import {
   Sparkles, 
   Users, 
   Briefcase, 
-  Award, 
   CheckCircle2, 
   BookOpen, 
   CheckCircle,
@@ -158,7 +157,7 @@ export default function HomePage({
             <p style={{ color: 'var(--text-muted)' }}>Empowering all stakeholders in the career ecosystem</p>
           </div>
 
-          <div className="grid-3">
+          <div className="grid-2">
             {/* Box 1: Students */}
             <div className="glass-card">
               <div style={{
@@ -196,26 +195,6 @@ export default function HomePage({
                 style={{ background: 'none', border: 'none', color: '#16a34a', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}
               >
                 Post Opportunities & Get Badge <ArrowRight size={14} />
-              </button>
-            </div>
-
-            {/* Box 3: Colleges */}
-            <div className="glass-card">
-              <div style={{
-                width: '48px', height: '48px', borderRadius: '12px', background: '#e0f2fe',
-                color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem'
-              }}>
-                <Award size={24} />
-              </div>
-              <h3 style={{ fontSize: '1.2rem', color: '#0f172a', marginBottom: '0.5rem' }}>For Colleges & Institutions</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>
-                Partner with InternCatalyst to onboard entire student batches, track college placement metrics, arrange campus hiring drives, and boost institutional outcomes.
-              </p>
-              <button 
-                onClick={() => setActiveTab('for-colleges')}
-                style={{ background: 'none', border: 'none', color: '#0284c7', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}
-              >
-                Institutional Partnership <ArrowRight size={14} />
               </button>
             </div>
           </div>
