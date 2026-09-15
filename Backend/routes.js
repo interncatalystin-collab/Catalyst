@@ -10,8 +10,21 @@ import { registerStudentHandler, loginStudentHandler, getStudentProfileHandler }
 import { adminLoginHandler, getAdminDashboardMetricsHandler, getAllStudentsHandler, getStudentByIdHandler } from './controllers/adminController.js';
 import { exportStudentsExcelHandler } from './controllers/excelController.js';
 
-// Utility helper to parse JSON payload
+// Utility helper to parse JSON payload (supports standalone Node streams and serverless pre-parsed req.body)
 const parseJson = (req) => {
+  if (req.body !== undefined && req.body !== null) {
+    if (typeof req.body === 'object') {
+      return Promise.resolve(req.body);
+    }
+    if (typeof req.body === 'string') {
+      try {
+        return Promise.resolve(req.body ? JSON.parse(req.body) : {});
+      } catch (err) {
+        return Promise.reject(err);
+      }
+    }
+  }
+
   return new Promise((resolve, reject) => {
     let body = '';
     req.on('data', chunk => { body += chunk.toString(); });
@@ -22,8 +35,10 @@ const parseJson = (req) => {
         reject(err);
       }
     });
+    req.on('error', (err) => reject(err));
   });
 };
+
 
 export const routeDispatcher = async (req, res, pathname) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
