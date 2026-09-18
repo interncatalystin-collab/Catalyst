@@ -52,14 +52,6 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
     internshipPreference: 'Remote / Online'
   });
 
-  const PRESET_AVATARS = [
-    { id: 'reg-av-1', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80', label: 'Candidate 1' },
-    { id: 'reg-av-2', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80', label: 'Candidate 2' },
-    { id: 'reg-av-3', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80', label: 'Candidate 3' },
-    { id: 'reg-av-4', url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80', label: 'Candidate 4' },
-    { id: 'reg-av-5', url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80', label: 'Candidate 5' },
-    { id: 'reg-av-6', url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80', label: 'Candidate 6' },
-  ];
 
   const handlePhotoUpload = (e) => {
     const file = e.target.files?.[0];
@@ -360,32 +352,6 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
                 </div>
               </div>
 
-              <div>
-                <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '4px' }}>
-                  Or pick preset headshot:
-                </span>
-                <div style={{ display: 'flex', gap: '0.4rem' }}>
-                  {PRESET_AVATARS.map(preset => (
-                    <button
-                      key={preset.id}
-                      type="button"
-                      onClick={() => setFormData(p => ({ ...p, avatar: preset.url }))}
-                      title={preset.label}
-                      style={{
-                        border: formData.avatar === preset.url ? '2px solid #2563eb' : '1px solid #cbd5e1',
-                        borderRadius: '50%',
-                        padding: 0,
-                        cursor: 'pointer',
-                        background: 'none',
-                        transform: formData.avatar === preset.url ? 'scale(1.1)' : 'scale(1)',
-                        transition: 'all 0.15s'
-                      }}
-                    >
-                      <img src={preset.url} alt={preset.label} style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover', display: 'block' }} />
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>

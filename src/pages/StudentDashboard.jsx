@@ -157,15 +157,6 @@ export default function StudentDashboard({
     }
   }, [safeProfile]);
 
-  // Preset Avatars for Instant Selection
-  const PRESET_AVATARS = [
-    { id: 'av-1', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80', label: 'Candidate 1' },
-    { id: 'av-2', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80', label: 'Candidate 2' },
-    { id: 'av-3', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80', label: 'Candidate 3' },
-    { id: 'av-4', url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80', label: 'Candidate 4' },
-    { id: 'av-5', url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80', label: 'Candidate 5' },
-    { id: 'av-6', url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80', label: 'Candidate 6' },
-  ];
 
   // Photo Upload Handler with validation & FileReader dataURL
   const handlePhotoUpload = (e) => {
@@ -196,13 +187,6 @@ export default function StudentDashboard({
     reader.readAsDataURL(file);
   };
 
-  const handleSelectPresetAvatar = (url) => {
-    setAvatar(url);
-    if (onUpdateProfile) {
-      onUpdateProfile({ ...safeProfile, avatar: url });
-    }
-    if (onAddToast) onAddToast('Avatar updated from presets!', 'success');
-  };
 
   // Derive active domain role with live vacancies
   const studentDomain = safeProfile.domain || safeProfile.preferredDomain || 'Software & Full-Stack Web Development';
@@ -1634,105 +1618,77 @@ export default function StudentDashboard({
                   background: '#f8fafc',
                   border: '2px dashed #93c5fd',
                   borderRadius: '14px',
-                  padding: '1.5rem',
+                  padding: '1.75rem',
                   marginBottom: '2rem',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
-                  flexWrap: 'wrap',
-                  gap: '1.5rem'
+                  gap: '1.75rem',
+                  flexWrap: 'wrap'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
-                    {/* Live Preview Photo Frame */}
-                    <div style={{ position: 'relative' }}>
-                      <img 
-                        src={avatar} 
-                        alt="Candidate Uploaded Preview"
-                        style={{
-                          width: '100px',
-                          height: '100px',
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                          border: '3px solid #2563eb',
-                          boxShadow: '0 6px 16px rgba(37, 99, 235, 0.25)'
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => photoInputRef.current?.click()}
-                        title="Upload photo"
-                        style={{
-                          position: 'absolute',
-                          bottom: '2px',
-                          right: '2px',
-                          background: '#2563eb',
-                          color: '#fff',
-                          border: '2px solid #fff',
-                          borderRadius: '50%',
-                          width: '28px',
-                          height: '28px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        <Camera size={14} />
-                      </button>
-                    </div>
-
-                    <div>
-                      <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#0f172a', margin: '0 0 4px 0', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        <Image size={18} style={{ color: '#2563eb' }} /> Candidate Profile Photograph
-                      </h4>
-                      <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', margin: '0 0 10px 0' }}>
-                        Upload your official candidate photograph. Accepted formats: PNG, JPG, JPEG, WEBP (Max 5MB).
-                      </p>
-                      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                        <button 
-                          type="button" 
-                          onClick={() => photoInputRef.current?.click()}
-                          className="btn btn-primary btn-sm"
-                          style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: '700' }}
-                        >
-                          <Upload size={14} /> Choose Candidate Photo
-                        </button>
-                        <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                          Reflects instantly across all placement portals
-                        </span>
-                      </div>
-                    </div>
+                  {/* Live Preview Photo Frame */}
+                  <div style={{ position: 'relative', flexShrink: 0 }}>
+                    <img 
+                      src={avatar} 
+                      alt="Candidate Uploaded Preview"
+                      style={{
+                        width: '105px',
+                        height: '105px',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        border: '3px solid #2563eb',
+                        boxShadow: '0 6px 16px rgba(37, 99, 235, 0.25)',
+                        background: '#fff'
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => photoInputRef.current?.click()}
+                      title="Upload candidate photo"
+                      style={{
+                        position: 'absolute',
+                        bottom: '4px',
+                        right: '4px',
+                        background: '#2563eb',
+                        color: '#fff',
+                        border: '2px solid #fff',
+                        borderRadius: '50%',
+                        width: '32px',
+                        height: '32px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+                      }}
+                    >
+                      <Camera size={16} />
+                    </button>
                   </div>
 
-                  {/* Preset Professional Avatars Gallery */}
-                  <div>
-                    <span style={{ fontSize: '0.78rem', fontWeight: '700', color: '#475569', display: 'block', marginBottom: '6px' }}>
-                      Or choose from professional presets:
-                    </span>
-                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      {PRESET_AVATARS.map(preset => (
-                        <button
-                          key={preset.id}
-                          type="button"
-                          onClick={() => handleSelectPresetAvatar(preset.url)}
-                          title={`Select ${preset.label}`}
-                          style={{
-                            border: avatar === preset.url ? '3px solid #2563eb' : '2px solid #e2e8f0',
-                            borderRadius: '50%',
-                            padding: '0',
-                            cursor: 'pointer',
-                            background: 'none',
-                            transform: avatar === preset.url ? 'scale(1.1)' : 'scale(1)',
-                            transition: 'all 0.2s'
-                          }}
-                        >
-                          <img 
-                            src={preset.url} 
-                            alt={preset.label} 
-                            style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', display: 'block' }} 
-                          />
-                        </button>
-                      ))}
+                  <div style={{ flex: 1, minWidth: '260px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '4px' }}>
+                      <h4 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <Image size={18} style={{ color: '#2563eb' }} /> Candidate Profile Photograph <span className="required">*</span>
+                      </h4>
+                      <span className="badge badge-verified" style={{ background: '#eff6ff', color: '#2563eb', fontSize: '0.7rem', padding: '2px 8px' }}>
+                        Mandatory Upload
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0 0 12px 0' }}>
+                      Please upload your official candidate passport-style photograph. Accepted formats: PNG, JPG, JPEG, WEBP (Max 5MB).
+                    </p>
+                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <button 
+                        type="button" 
+                        onClick={() => photoInputRef.current?.click()}
+                        className="btn btn-primary"
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '700', padding: '0.55rem 1.15rem' }}
+                      >
+                        <Upload size={16} /> Choose Candidate Photo to Upload
+                      </button>
+                      <span style={{ fontSize: '0.775rem', color: '#64748b' }}>
+                        ✓ Reflects on student ID, ATS resume, and employer applications
+                      </span>
                     </div>
                   </div>
                 </div>
