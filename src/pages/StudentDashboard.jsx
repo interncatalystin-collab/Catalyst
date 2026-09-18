@@ -39,7 +39,10 @@ import {
   RefreshCw,
   Eye,
   EyeOff,
-  AlertCircle
+  AlertCircle,
+  Bell,
+  Settings,
+  Shield
 } from 'lucide-react';
 import { DOMAIN_ROLES_DATA, getDomainRoleForStudent } from '../data/domainRolesData';
 import ProctoredAssessmentModal from '../components/ProctoredAssessmentModal';
@@ -82,6 +85,51 @@ export default function StudentDashboard({
 
   // Delete Account Modal State
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // Notification & Settings States
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [studentNotifications, setStudentNotifications] = useState([
+    {
+      id: 'notif-1',
+      title: 'Proctored Assessment Ready',
+      message: 'Your domain assessment is unlocked. Complete evaluation to boost recruiter visibility.',
+      time: '10m ago',
+      read: false,
+      tab: 'assessment'
+    },
+    {
+      id: 'notif-2',
+      title: 'New Domain Openings',
+      message: 'Verified partner companies have listed new internship vacancies in your specialized domain.',
+      time: '1h ago',
+      read: false,
+      tab: 'domain'
+    },
+    {
+      id: 'notif-3',
+      title: 'Profile Active & Verified',
+      message: 'Student account credential security is managed under AIET Placement Administration.',
+      time: 'Today',
+      read: true,
+      tab: 'profile'
+    }
+  ]);
+
+  const unreadNotifCount = studentNotifications.filter(n => !n.read).length;
+
+  const handleMarkAllRead = () => {
+    setStudentNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    if (onAddToast) onAddToast('All notifications marked as read', 'info');
+  };
+
+  const handleNotificationClick = (notif) => {
+    setStudentNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, read: true } : n));
+    setShowNotifications(false);
+    if (notif.tab) {
+      setActiveTab(notif.tab);
+    }
+  };
 
   const safeProfile = profile || {};
 
@@ -416,7 +464,26 @@ export default function StudentDashboard({
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          {/* Backdrop for closing notification and settings dropdowns */}
+          {(showNotifications || showSettings) && (
+            <div 
+              onClick={() => {
+                setShowNotifications(false);
+                setShowSettings(false);
+              }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 80,
+                background: 'transparent'
+              }}
+            />
+          )}
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap', position: 'relative', zIndex: 85 }}>
             <button 
               className="btn btn-secondary btn-sm"
               onClick={() => {
@@ -426,17 +493,366 @@ export default function StudentDashboard({
               }}
               style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: '700' }}
             >
-              <FileText size={14} /> Profile Registration Form
+              <FileText size={14} /> Profile
             </button>
-            {onLogout && (
+
+            {/* Notification Bell Icon & Dropdown */}
+            <div style={{ position: 'relative' }}>
               <button 
+                type="button"
+                onClick={() => {
+                  setShowNotifications(prev => !prev);
+                  setShowSettings(false);
+                }}
                 className="btn btn-secondary btn-sm"
-                onClick={onLogout}
-                style={{ color: '#ef4444' }}
+                style={{ 
+                  position: 'relative',
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  padding: '0.5rem 0.65rem',
+                  borderRadius: 'var(--radius-md)',
+                  background: showNotifications ? 'rgba(37, 99, 235, 0.1)' : '#ffffff',
+                  borderColor: showNotifications ? 'var(--primary)' : 'var(--border-color)',
+                  color: showNotifications ? 'var(--primary)' : 'var(--text-main)',
+                  transition: 'all 0.2s ease',
+                  cursor: 'pointer'
+                }}
+                title="Notifications"
+                aria-label="Student Notifications"
               >
-                <LogOut size={14} /> Log Out
+                <Bell size={17} />
+                {unreadNotifCount > 0 && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '-5px',
+                    right: '-5px',
+                    background: '#ef4444',
+                    color: '#ffffff',
+                    fontSize: '0.65rem',
+                    fontWeight: '800',
+                    minWidth: '18px',
+                    height: '18px',
+                    padding: '0 4px',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '2px solid #ffffff',
+                    boxShadow: '0 2px 4px rgba(239, 68, 68, 0.3)'
+                  }}>
+                    {unreadNotifCount}
+                  </span>
+                )}
               </button>
-            )}
+
+              {/* Notification Dropdown Panel */}
+              {showNotifications && (
+                <div style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 8px)',
+                  right: 0,
+                  width: '320px',
+                  maxWidth: '90vw',
+                  background: '#ffffff',
+                  borderRadius: '12px',
+                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
+                  border: '1px solid var(--border-color)',
+                  zIndex: 90,
+                  overflow: 'hidden',
+                  animation: 'fadeIn 0.15s ease-out'
+                }}>
+                  {/* Header */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0.85rem 1rem',
+                    background: '#f8fafc',
+                    borderBottom: '1px solid var(--border-color)'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Bell size={15} color="var(--primary)" />
+                      <span style={{ fontWeight: '700', fontSize: '0.88rem', color: 'var(--text-main)' }}>
+                        Notifications
+                      </span>
+                      {unreadNotifCount > 0 && (
+                        <span style={{
+                          background: 'rgba(37, 99, 235, 0.12)',
+                          color: 'var(--primary)',
+                          fontSize: '0.7rem',
+                          fontWeight: '700',
+                          padding: '0.1rem 0.45rem',
+                          borderRadius: '10px'
+                        }}>
+                          {unreadNotifCount} new
+                        </span>
+                      )}
+                    </div>
+                    {unreadNotifCount > 0 && (
+                      <button
+                        type="button"
+                        onClick={handleMarkAllRead}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--primary)',
+                          fontSize: '0.75rem',
+                          fontWeight: '600',
+                          cursor: 'pointer',
+                          padding: '0.2rem 0.4rem',
+                          borderRadius: '4px'
+                        }}
+                      >
+                        Mark all read
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Notification Items */}
+                  <div style={{ maxHeight: '320px', overflowY: 'auto' }}>
+                    {studentNotifications.map((notif) => (
+                      <div
+                        key={notif.id}
+                        onClick={() => handleNotificationClick(notif)}
+                        style={{
+                          padding: '0.85rem 1rem',
+                          borderBottom: '1px solid #f1f5f9',
+                          background: notif.read ? '#ffffff' : '#f0f7ff',
+                          cursor: 'pointer',
+                          transition: 'background 0.15s ease',
+                          display: 'flex',
+                          gap: '0.75rem'
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = notif.read ? '#ffffff' : '#f0f7ff'; }}
+                      >
+                        <div style={{
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          background: notif.read ? 'transparent' : 'var(--primary)',
+                          marginTop: '6px',
+                          flexShrink: 0
+                        }} />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '2px' }}>
+                            <span style={{ fontWeight: notif.read ? '600' : '700', fontSize: '0.82rem', color: 'var(--text-main)' }}>
+                              {notif.title}
+                            </span>
+                            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                              {notif.time}
+                            </span>
+                          </div>
+                          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0, lineHeight: 1.4 }}>
+                            {notif.message}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Footer */}
+                  <div style={{
+                    padding: '0.6rem 1rem',
+                    background: '#f8fafc',
+                    textAlign: 'center',
+                    fontSize: '0.75rem',
+                    color: 'var(--text-muted)',
+                    borderTop: '1px solid #f1f5f9'
+                  }}>
+                    Catalyst Student Placement Alert Hub
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Settings Button & Dropdown (Housing the Logout Button) */}
+            <div style={{ position: 'relative' }}>
+              <button 
+                type="button"
+                onClick={() => {
+                  setShowSettings(prev => !prev);
+                  setShowNotifications(false);
+                }}
+                className="btn btn-secondary btn-sm"
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.45rem',
+                  padding: '0.5rem 0.85rem',
+                  borderRadius: 'var(--radius-md)',
+                  background: showSettings ? 'rgba(37, 99, 235, 0.1)' : '#ffffff',
+                  borderColor: showSettings ? 'var(--primary)' : 'var(--border-color)',
+                  color: showSettings ? 'var(--primary)' : 'var(--text-main)',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                title="Account Settings"
+                aria-label="Account Settings"
+              >
+                <Settings size={16} />
+                <span>Settings</span>
+              </button>
+
+              {/* Settings Dropdown Menu */}
+              {showSettings && (
+                <div style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 8px)',
+                  right: 0,
+                  width: '270px',
+                  background: '#ffffff',
+                  borderRadius: '12px',
+                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
+                  border: '1px solid var(--border-color)',
+                  zIndex: 90,
+                  padding: '0.65rem',
+                  overflow: 'hidden',
+                  animation: 'fadeIn 0.15s ease-out'
+                }}>
+                  {/* Student Quick Bio Header */}
+                  <div style={{
+                    padding: '0.5rem 0.65rem 0.75rem',
+                    borderBottom: '1px solid #f1f5f9',
+                    marginBottom: '0.4rem'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                      <img 
+                        src={avatar} 
+                        alt={name}
+                        style={{
+                          width: '36px',
+                          height: '36px',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          border: '2px solid var(--primary-light, #e0e7ff)'
+                        }}
+                      />
+                      <div style={{ overflow: 'hidden' }}>
+                        <div style={{ fontWeight: '700', fontSize: '0.85rem', color: 'var(--text-main)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {name}
+                        </div>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {email || 'Student Account'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Settings Menu Options */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSettings(false);
+                      setActiveTab('profile');
+                      setProfileViewMode('form');
+                      setIsEditing(true);
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.65rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: 'none',
+                      color: 'var(--text-main)',
+                      fontSize: '0.82rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'background 0.15s'
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; }}
+                  >
+                    <User size={15} color="var(--primary)" />
+                    <span>Profile & Bio Details</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSettings(false);
+                      setActiveTab('domain');
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.65rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: 'none',
+                      color: 'var(--text-main)',
+                      fontSize: '0.82rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'background 0.15s'
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; }}
+                  >
+                    <Briefcase size={15} color="#16a34a" />
+                    <span>Domain & Vacancies</span>
+                  </button>
+
+                  <div style={{
+                    padding: '0.45rem 0.65rem',
+                    margin: '0.2rem 0',
+                    fontSize: '0.72rem',
+                    color: '#64748b',
+                    background: '#f8fafc',
+                    borderRadius: '6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem'
+                  }}>
+                    <ShieldCheck size={14} color="#16a34a" />
+                    <span>Credentials governed by Admin</span>
+                  </div>
+
+                  <div style={{ height: '1px', background: '#f1f5f9', margin: '0.4rem 0' }} />
+
+                  {/* Log Out Button inside Settings Dropdown */}
+                  {onLogout && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowSettings(false);
+                        onLogout();
+                      }}
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.6rem',
+                        padding: '0.6rem 0.65rem',
+                        borderRadius: '8px',
+                        border: '1px solid #fee2e2',
+                        background: '#fef2f2',
+                        color: '#dc2626',
+                        fontSize: '0.84rem',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'all 0.15s'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = '#fee2e2'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = '#fef2f2'; }}
+                    >
+                      <LogOut size={15} />
+                      <span>Log Out</span>
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
