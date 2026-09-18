@@ -257,10 +257,10 @@ export default function StudentDashboard({
 
     const updated = {
       ...safeProfile,
-      ...(password ? { password } : {}),
+      email: safeProfile.email || email.trim(), // Preserved: Only Admin can change student login email
+      password: safeProfile.password, // Preserved: Only Admin can change student password
       name: name.trim(),
       fullName: name.trim(),
-      email: email.trim(),
       phone: phone.trim(),
       avatar,
       domain,
@@ -1777,14 +1777,26 @@ export default function StudentDashboard({
 
                     <div className="grid-2">
                       <div className="form-group">
-                        <label className="form-label">Email Address <span className="required">*</span></label>
-                        <input 
-                          type="email" 
-                          className="form-input" 
-                          value={email} 
-                          onChange={(e) => setEmail(e.target.value)} 
-                          required 
-                        />
+                        <label className="form-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <span>Email Address <span className="required">*</span></span>
+                          <span className="badge" style={{ background: '#fffbeb', color: '#b45309', fontSize: '0.7rem', padding: '2px 6px', border: '1px solid #fde68a' }}>
+                            <Lock size={10} /> Admin-Controlled
+                          </span>
+                        </label>
+                        <div style={{ position: 'relative' }}>
+                          <Mail size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                          <input 
+                            type="email" 
+                            className="form-input" 
+                            style={{ paddingLeft: '2.5rem', background: '#f8fafc', color: '#475569', cursor: 'not-allowed' }}
+                            value={safeProfile.email || email} 
+                            disabled 
+                            readOnly
+                          />
+                        </div>
+                        <span style={{ fontSize: '0.725rem', color: '#b45309', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
+                          <Lock size={11} /> Only Central Admin has access to change student login email and password.
+                        </span>
                       </div>
 
                       <div className="grid-2">
@@ -1810,78 +1822,33 @@ export default function StudentDashboard({
                     </div>
                   </div>
 
-                  {/* SECTION 2: ACCOUNT SECURITY & PASSWORD (MIN 8, CAPITAL LETTER, SPECIAL CHARACTER) */}
+                  {/* SECTION 2: ACCOUNT SECURITY & CREDENTIALS (ADMIN-GOVERNED ONLY) */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
                       <Lock size={18} style={{ color: '#2563eb' }} /> 2. Security & Account Credentials
                     </h4>
 
-                    <div className="grid-2">
-                      <div className="form-group">
-                        <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span>Candidate Password</span>
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', fontSize: '0.75rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '3px' }}
-                          >
-                            {showPassword ? <EyeOff size={13} /> : <Eye size={13} />}
-                            {showPassword ? 'Hide' : 'Show'}
-                          </button>
-                        </label>
-                        <input 
-                          type={showPassword ? 'text' : 'password'}
-                          className="form-input" 
-                          value={password} 
-                          onChange={(e) => setPassword(e.target.value)} 
-                          placeholder="Min 8 chars, e.g. Catalyst@2026"
-                        />
-                        {/* Live password policy indicators (minimum 8, capital letter, special character) */}
-                        <div style={{ display: 'flex', gap: '0.6rem', marginTop: '6px', flexWrap: 'wrap', fontSize: '0.74rem' }}>
-                          <span style={{ 
-                            color: password.length >= 8 ? '#16a34a' : '#94a3b8',
-                            fontWeight: password.length >= 8 ? '700' : '500',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '2px'
-                          }}>
-                            {password.length >= 8 ? '✓' : '○'} Min 8 chars
-                          </span>
-                          <span style={{ 
-                            color: /[A-Z]/.test(password) ? '#16a34a' : '#94a3b8',
-                            fontWeight: /[A-Z]/.test(password) ? '700' : '500',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '2px'
-                          }}>
-                            {/[A-Z]/.test(password) ? '✓' : '○'} Capital letter
-                          </span>
-                          <span style={{ 
-                            color: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password) ? '#16a34a' : '#94a3b8',
-                            fontWeight: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password) ? '700' : '500',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '2px'
-                          }}>
-                            {/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password) ? '✓' : '○'} Special character
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="form-group">
-                        <label className="form-label">Confirm Password</label>
-                        <input 
-                          type={showPassword ? 'text' : 'password'}
-                          className="form-input" 
-                          value={confirmPassword} 
-                          onChange={(e) => setConfirmPassword(e.target.value)} 
-                          placeholder="Re-enter your password"
-                        />
-                        {confirmPassword && (
-                          <div style={{ marginTop: '6px', fontSize: '0.74rem', fontWeight: '700', color: password === confirmPassword ? '#16a34a' : '#ef4444' }}>
-                            {password === confirmPassword ? '✓ Passwords match' : '✕ Passwords do not match'}
+                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Lock size={20} />
                           </div>
-                        )}
+                          <div>
+                            <div style={{ fontWeight: '700', color: '#0f172a', fontSize: '0.95rem' }}>
+                              Student Portal Authentication Credentials
+                            </div>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                              Registered Email: <strong style={{ color: '#0f172a' }}>{safeProfile.email}</strong> • Password: <strong>••••••••</strong>
+                            </div>
+                          </div>
+                        </div>
+                        <span className="badge" style={{ background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', fontWeight: '700', fontSize: '0.725rem' }}>
+                          <ShieldCheck size={12} /> Managed by Central Admin
+                        </span>
+                      </div>
+                      <div style={{ marginTop: '0.85rem', paddingTop: '0.85rem', borderTop: '1px solid #e2e8f0', fontSize: '0.8rem', color: '#64748b', lineHeight: '1.5' }}>
+                        🔒 <strong>Platform Security Rule:</strong> Only Central Administration has the authority to change or reset passwords and email addresses for student accounts. If you require email modification or a password reset, please contact the Central Administration office at <a href="mailto:admin@interncatalyst.org" style={{ color: '#2563eb', fontWeight: '700', textDecoration: 'none' }}>admin@interncatalyst.org</a>.
                       </div>
                     </div>
                   </div>

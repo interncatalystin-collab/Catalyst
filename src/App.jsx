@@ -134,6 +134,16 @@ export default function App() {
     });
   };
 
+  const handleAdminUpdateStudents = (updatedList) => {
+    setStudents(updatedList);
+    if (studentProfile && studentProfile.id) {
+      const updatedMatch = updatedList.find(s => s.id === studentProfile.id || (s.email && studentProfile.email && s.email.toLowerCase() === studentProfile.email.toLowerCase()));
+      if (updatedMatch) {
+        setStudentProfile(prev => ({ ...prev, ...updatedMatch }));
+      }
+    }
+  };
+
   const handleLoginSuccess = (role, userEmail, userObj = null, token = null) => {
     setAuthenticatedRoles(prev => ({ ...prev, [role]: true }));
     setCurrentRole(role);
@@ -579,7 +589,7 @@ export default function App() {
           ) : (
             <AdminDashboard 
               students={students}
-              onUpdateStudents={setStudents}
+              onUpdateStudents={handleAdminUpdateStudents}
               companies={companies}
               onUpdateCompanies={setCompanies}
               internships={internships}

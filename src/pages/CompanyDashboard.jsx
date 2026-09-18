@@ -89,7 +89,7 @@ export default function CompanyDashboard({
     const updated = {
       ...company,
       name: compName,
-      businessEmail,
+      businessEmail: company.businessEmail, // Preserved: Only Admin can change company login email
       contactPerson,
       phone: compPhone,
       logo,
@@ -641,15 +641,26 @@ export default function CompanyDashboard({
               </div>
 
               <div className="form-group">
-                <label className="form-label">Corporate Business Email <span className="required">*</span></label>
-                <input 
-                  type="email" 
-                  className="form-input" 
-                  value={businessEmail} 
-                  onChange={(e) => setBusinessEmail(e.target.value)} 
-                  required 
-                />
-                <span style={{ fontSize: '0.75rem', color: '#34d399' }}>✓ Verified Business Domain (Domain identity check passed)</span>
+                <label className="form-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span>Corporate Business Email</span>
+                  <span className="badge" style={{ background: '#fffbeb', color: '#b45309', fontSize: '0.7rem', padding: '2px 6px', border: '1px solid #fde68a' }}>
+                    <Lock size={10} /> Admin-Controlled
+                  </span>
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <Mail size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                  <input 
+                    type="email" 
+                    className="form-input" 
+                    style={{ paddingLeft: '2.5rem', background: '#f8fafc', color: '#475569', cursor: 'not-allowed' }}
+                    value={company.businessEmail} 
+                    disabled
+                    readOnly
+                  />
+                </div>
+                <span style={{ fontSize: '0.725rem', color: '#b45309', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
+                  <Lock size={11} /> Only Admin has the access to change company login email and password.
+                </span>
               </div>
             </div>
 

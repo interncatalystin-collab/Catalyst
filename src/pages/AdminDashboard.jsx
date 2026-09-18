@@ -223,6 +223,59 @@ export default function AdminDashboard({
   const [domainFilter, setDomainFilter] = useState('');
   const [selectedStudentForDetail, setSelectedStudentForDetail] = useState(null);
 
+  // Student Login Credential Governance State (Admin Exclusive)
+  const [studentCredModal, setStudentCredModal] = useState(null);
+  const [studentEditEmail, setStudentEditEmail] = useState('');
+  const [studentEditPassword, setStudentEditPassword] = useState('');
+  const [showStudentEditPassword, setShowStudentEditPassword] = useState(false);
+  const [studentCredError, setStudentCredError] = useState('');
+  const [studentRecentNotice, setStudentRecentNotice] = useState(null);
+
+  const handleOpenStudentCredModal = (student) => {
+    setStudentCredModal(student);
+    setStudentEditEmail(student.email || '');
+    setStudentEditPassword(student.password || 'StudentPass@2026');
+    setShowStudentEditPassword(false);
+    setStudentCredError('');
+  };
+
+  const handleSaveStudentCredentials = (e) => {
+    e.preventDefault();
+    if (!studentEditEmail.trim() || !studentEditEmail.includes('@')) {
+      setStudentCredError('Please enter a valid student email address.');
+      return;
+    }
+    const passError = validatePasswordStrength(studentEditPassword);
+    if (passError) {
+      setStudentCredError(passError);
+      return;
+    }
+
+    const updatedStudents = students.map(s => 
+      (s.id === studentCredModal.id || s._id === studentCredModal._id)
+        ? { ...s, email: studentEditEmail.trim(), password: studentEditPassword.trim() }
+        : s
+    );
+
+    onUpdateStudents(updatedStudents);
+
+    onAddAuditLog(
+      'ADMIN_CHANGE_STUDENT_CREDENTIALS',
+      `Admin updated login credentials for student '${studentCredModal.fullName || studentCredModal.name}'. New Login Email: '${studentEditEmail.trim()}'.`
+    );
+
+    onAddToast(`🎉 Credentials updated for ${studentCredModal.fullName || studentCredModal.name}!`, 'success');
+
+    setStudentRecentNotice({
+      studentName: studentCredModal.fullName || studentCredModal.name,
+      email: studentEditEmail.trim(),
+      password: studentEditPassword.trim(),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    });
+
+    setStudentCredModal(null);
+  };
+
   const filteredStudents = students.filter(s => {
     const name = s.fullName || s.name || '';
     const email = s.email || '';
@@ -1186,6 +1239,55 @@ export default function AdminDashboard({
               </div>
             </div>
 
+            {/* Student Credentials Updated Alert Banner */}
+            {studentRecentNotice && (
+              <div style={{
+                background: '#f0fdf4',
+                border: '1px solid #86efac',
+                borderRadius: '12px',
+                padding: '1.25rem 1.5rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '1rem'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}>
+                    <CheckCircle size={22} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: '800', color: '#166534', fontSize: '1rem' }}>
+                      ✓ Student Login Credentials Updated by Admin!
+                    </div>
+                    <div style={{ fontSize: '0.875rem', color: '#15803d', marginTop: '3px' }}>
+                      Student: <strong>{studentRecentNotice.studentName}</strong> | Login Email: <strong>{studentRecentNotice.email}</strong> | Password: <code style={{ background: '#dcfce7', padding: '2px 6px', borderRadius: '4px', fontWeight: '700' }}>{studentRecentNotice.password}</code>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText(`InternCatalyst Student Credentials\nEmail: ${studentRecentNotice.email}\nPassword: ${studentRecentNotice.password}`);
+                      onAddToast('Student credentials copied to clipboard!', 'info');
+                    }}
+                    style={{ borderColor: '#86efac', color: '#166534' }}
+                  >
+                    <Copy size={13} /> Copy Credentials
+                  </button>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => setStudentRecentNotice(null)}
+                    style={{ borderColor: '#86efac', color: '#166534' }}
+                  >
+                    <X size={13} /> Dismiss
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="data-table-container">
               <table className="data-table">
                 <thead>
@@ -1220,13 +1322,21 @@ export default function AdminDashboard({
                         </td>
                         <td>{s.createdAt ? new Date(s.createdAt).toISOString().split('T')[0] : '2026-08-20'}</td>
                         <td>
-                          <div style={{ display: 'flex', gap: '0.4rem' }}>
+                          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                             <button 
                               className="btn btn-secondary btn-sm"
                               style={{ fontSize: '0.75rem' }}
                               onClick={() => setSelectedStudentForDetail(s)}
                             >
                               View Details
+                            </button>
+                            <button 
+                              className="btn btn-secondary btn-sm"
+                              style={{ fontSize: '0.75rem', borderColor: '#bfdbfe', color: '#2563eb', display: 'flex', alignItems: 'center', gap: '3px' }}
+                              onClick={() => handleOpenStudentCredModal(s)}
+                              title="Admin: Change student password and email"
+                            >
+                              <Key size={12} /> Edit Login (Email & Pass)
                             </button>
                             <button 
                               className={`btn ${s.status === 'Suspended' ? 'btn-emerald' : 'btn-danger'} btn-sm`}
@@ -1249,6 +1359,169 @@ export default function AdminDashboard({
                 </tbody>
               </table>
             </div>
+
+            {/* Admin Edit Student Credentials Modal */}
+            {studentCredModal && (
+              <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(15, 23, 42, 0.65)',
+                backdropFilter: 'blur(4px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 9999,
+                padding: '1rem'
+              }}>
+                <div style={{
+                  background: '#ffffff',
+                  borderRadius: '16px',
+                  maxWidth: '520px',
+                  width: '100%',
+                  padding: '2rem',
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                  border: '1px solid #e2e8f0',
+                  maxHeight: '90vh',
+                  overflowY: 'auto'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Key size={20} />
+                      </div>
+                      <div>
+                        <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+                          Edit Student Login Credentials
+                        </h3>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+                          Admin exclusive authority to change student login email and password.
+                        </p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => setStudentCredModal(null)}
+                      style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', padding: '4px' }}
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+
+                  <div style={{ background: '#f8fafc', padding: '0.85rem 1rem', borderRadius: '10px', marginBottom: '1.25rem', border: '1px solid #e2e8f0' }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Target Student Candidate:</div>
+                    <div style={{ fontSize: '1.05rem', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '2px' }}>
+                      <Users size={16} style={{ color: '#2563eb' }} /> {studentCredModal.fullName || studentCredModal.name}
+                    </div>
+                    <div style={{ fontSize: '0.775rem', color: 'var(--text-dim)', marginTop: '2px' }}>
+                      College: {studentCredModal.collegeName || studentCredModal.institution || 'N/A'} • Branch: {studentCredModal.branch || studentCredModal.degree || 'N/A'}
+                    </div>
+                  </div>
+
+                  {studentCredError && (
+                    <div style={{
+                      background: '#fef2f2',
+                      border: '1px solid #fecaca',
+                      color: '#dc2626',
+                      padding: '0.75rem 1rem',
+                      borderRadius: '8px',
+                      fontSize: '0.825rem',
+                      marginBottom: '1rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}>
+                      <AlertCircle size={16} /> {studentCredError}
+                    </div>
+                  )}
+
+                  <form onSubmit={handleSaveStudentCredentials}>
+                    {/* Student Login Email */}
+                    <div className="form-group" style={{ marginBottom: '1.25rem' }}>
+                      <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>
+                        Student Login Email Address <span className="required">*</span>
+                      </label>
+                      <div style={{ position: 'relative' }}>
+                        <Mail size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                        <input 
+                          type="email"
+                          className="form-input"
+                          style={{ paddingLeft: '2.5rem' }}
+                          value={studentEditEmail}
+                          onChange={(e) => setStudentEditEmail(e.target.value)}
+                          placeholder="e.g. student@college.edu"
+                          required
+                        />
+                      </div>
+                      <span style={{ fontSize: '0.725rem', color: 'var(--text-muted)', marginTop: '3px', display: 'block' }}>
+                        The student will use this new email address to authenticate into the Student Portal.
+                      </span>
+                    </div>
+
+                    {/* Student Password */}
+                    <div className="form-group" style={{ marginBottom: '1.25rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                        <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700', margin: 0 }}>
+                          New Student Password <span className="required">*</span>
+                        </label>
+                        <button 
+                          type="button"
+                          onClick={() => setStudentEditPassword(generateStrongPassword())}
+                          style={{ background: 'none', border: 'none', color: '#2563eb', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}
+                        >
+                          <RefreshCw size={12} /> Auto-Generate Password
+                        </button>
+                      </div>
+                      <div style={{ position: 'relative' }}>
+                        <Key size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                        <input 
+                          type={showStudentEditPassword ? 'text' : 'password'}
+                          className="form-input"
+                          style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', fontFamily: showStudentEditPassword ? 'inherit' : 'monospace' }}
+                          value={studentEditPassword}
+                          onChange={(e) => setStudentEditPassword(e.target.value)}
+                          placeholder="Assign strong candidate password"
+                          required
+                        />
+                        <button 
+                          type="button"
+                          onClick={() => setShowStudentEditPassword(!showStudentEditPassword)}
+                          style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
+                        >
+                          {showStudentEditPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
+                      <div style={{ fontSize: '0.725rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                        Rule: Minimum 8 characters with at least 1 capital letter and 1 special character (!@#$%&*).
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: '1.5rem', background: '#eff6ff', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid #bfdbfe', fontSize: '0.8rem', color: '#1e40af' }}>
+                      🔒 <strong>Administrative Notice:</strong> Changes take effect immediately. The student's dashboard session and credentials will synchronize with this new email and password.
+                    </div>
+
+                    {/* Actions */}
+                    <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                      <button 
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() => setStudentCredModal(null)}
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        type="submit"
+                        className="btn btn-primary"
+                        style={{ fontWeight: '800' }}
+                      >
+                        <Key size={15} /> Save & Update Credentials
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

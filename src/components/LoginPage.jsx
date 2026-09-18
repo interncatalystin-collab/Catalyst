@@ -29,6 +29,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [showAdminAssistNotice, setShowAdminAssistNotice] = useState(false);
 
   const handleRoleTabChange = (role) => {
     setSelectedRole(role);
@@ -436,7 +437,10 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                   <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700', marginBottom: 0 }}>
                     Student Account Password <span className="required">*</span>
                   </label>
-                  <span style={{ fontSize: '0.75rem', color: '#2563eb', cursor: 'pointer', fontWeight: '600' }}>
+                  <span 
+                    style={{ fontSize: '0.75rem', color: '#2563eb', cursor: 'pointer', fontWeight: '600' }}
+                    onClick={() => setShowAdminAssistNotice(true)}
+                  >
                     Forgot Password?
                   </span>
                 </div>
@@ -513,7 +517,10 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                   <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700', marginBottom: 0 }}>
                     Account Password <span className="required">*</span>
                   </label>
-                  <span style={{ fontSize: '0.75rem', color: '#2563eb', cursor: 'pointer', fontWeight: '600' }}>
+                  <span 
+                    style={{ fontSize: '0.75rem', color: '#2563eb', cursor: 'pointer', fontWeight: '600' }}
+                    onClick={() => setShowAdminAssistNotice(true)}
+                  >
                     Forgot Password?
                   </span>
                 </div>
@@ -631,6 +638,63 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
             )}
           </div>
         </div>
+
+        {/* ADMIN CREDENTIAL GOVERNANCE NOTICE MODAL */}
+        {showAdminAssistNotice && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '1rem'
+          }}>
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '16px',
+              maxWidth: '480px',
+              width: '100%',
+              padding: '2rem',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
+              border: '1px solid #e2e8f0',
+              textAlign: 'center'
+            }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem' }}>
+                <Lock size={28} />
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
+                Admin-Controlled Credential Governance
+              </h3>
+              <div className="badge" style={{ background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', marginBottom: '1rem', padding: '0.35rem 0.75rem', margin: '0 auto 1rem', width: 'fit-content' }}>
+                <ShieldCheck size={13} /> Strict Platform Security Standard
+              </div>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '1.25rem' }}>
+                Only <strong>Central Administration</strong> has the access and authority to change or reset passwords and email addresses for <strong>Student</strong> and <strong>Company</strong> accounts.
+              </p>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '1rem', textAlign: 'left', marginBottom: '1.5rem', fontSize: '0.825rem', color: '#475569' }}>
+                <div style={{ fontWeight: '700', color: '#0f172a', marginBottom: '0.25rem' }}>
+                  Need to change your password or email?
+                </div>
+                <div>
+                  Please contact our Central Administration Office at <strong style={{ color: '#2563eb' }}>admin@interncatalyst.org</strong> with your registered phone number or institution details.
+                </div>
+              </div>
+              <button 
+                className="btn btn-primary"
+                style={{ width: '100%', padding: '0.75rem', fontWeight: '700' }}
+                onClick={() => setShowAdminAssistNotice(false)}
+              >
+                I Understand
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
