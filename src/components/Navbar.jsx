@@ -106,22 +106,13 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 {currentRole === 'student' && (
-                  <div style={{ display: 'flex', gap: '0.4rem' }}>
-                    <button 
-                      className="btn btn-primary btn-sm"
-                      onClick={() => handleNavClick('student-dash')}
-                      style={{ background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 100%)', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
-                    >
-                      <GraduationCap size={14} /> Dashboard
-                    </button>
-                    <button 
-                      className="btn btn-secondary btn-sm"
-                      onClick={() => handleNavClick('student-profile')}
-                      style={{ borderColor: '#38bdf8', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
-                    >
-                      <User size={14} /> Profile
-                    </button>
-                  </div>
+                  <button 
+                    className="btn btn-primary btn-sm"
+                    onClick={() => handleNavClick('student-dash')}
+                    style={{ background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 100%)', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
+                  >
+                    <GraduationCap size={14} /> Student Dashboard
+                  </button>
                 )}
                 {currentRole === 'company' && (
                   <button 
@@ -138,16 +129,9 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                     onClick={() => handleNavClick('admin-dash')}
                     style={{ borderColor: '#38bdf8', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
                   >
-                    <Shield size={14} /> Admin
+                    <Shield size={14} /> Admin Dashboard
                   </button>
                 )}
-                <button 
-                  className="btn btn-secondary btn-sm"
-                  onClick={() => { setCurrentRole('visitor'); handleNavClick('home'); }}
-                  style={{ borderColor: 'rgba(239, 68, 68, 0.4)', color: '#fca5a5', background: 'rgba(239, 68, 68, 0.15)', fontSize: '0.8rem', padding: '0.45rem 0.65rem' }}
-                >
-                  <Lock size={13} /> Exit
-                </button>
               </div>
             )}
 
