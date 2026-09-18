@@ -20,7 +20,15 @@ import {
   Search,
   Check,
   X,
-  Lock
+  Lock,
+  Key,
+  Mail,
+  Eye,
+  EyeOff,
+  RefreshCw,
+  AlertCircle,
+  Copy,
+  Clock
 } from 'lucide-react';
 
 export default function AdminDashboard({ 
@@ -81,6 +89,113 @@ export default function AdminDashboard({
   // Filtered lists
   const pendingCompanies = companies.filter(c => c.verificationStatus === 'Pending' || !c.verifiedBadge);
   const pendingListings = internships.filter(i => i.status === 'Pending');
+  const companiesPendingAccess = companies.filter(c => !c.accessGranted);
+
+  // Company Dashboard Access Governance State
+  const [accessModalCompany, setAccessModalCompany] = useState(null);
+  const [companyAccessEmail, setCompanyAccessEmail] = useState('');
+  const [companyAccessPassword, setCompanyAccessPassword] = useState('');
+  const [showAccessPassword, setShowAccessPassword] = useState(false);
+  const [autoNotifyCompany, setAutoNotifyCompany] = useState(true);
+  const [accessError, setAccessError] = useState('');
+  const [recentDispatchedNotice, setRecentDispatchedNotice] = useState(null);
+
+  const generateStrongPassword = () => {
+    const prefixes = ['Comp', 'Partner', 'Corp', 'Nexus', 'Prime', 'Catalyst'];
+    const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+    const num = Math.floor(100 + Math.random() * 900);
+    const specials = ['@', '#', '$', '!', '&', '*'];
+    const special = specials[Math.floor(Math.random() * specials.length)];
+    const suffixes = ['Alpha', 'Secure', 'Gate', 'Vault', 'Tech', 'Pro'];
+    const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+    return `${prefix}${num}${special}${suffix}`;
+  };
+
+  const validatePasswordStrength = (pass) => {
+    if (!pass || pass.length < 8) {
+      return 'Password must be at least 8 characters long.';
+    }
+    if (!/[A-Z]/.test(pass)) {
+      return 'Password must contain at least one capital letter (A-Z).';
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(pass)) {
+      return 'Password must contain at least one special character (e.g. @, #, $, !).';
+    }
+    return null;
+  };
+
+  const handleOpenGrantAccessModal = (comp) => {
+    setAccessModalCompany(comp);
+    setCompanyAccessEmail(comp.businessEmail || `${comp.name.toLowerCase().replace(/[^a-z0-9]/g, '')}@company.com`);
+    setCompanyAccessPassword(comp.loginPassword || generateStrongPassword());
+    setShowAccessPassword(false);
+    setAutoNotifyCompany(true);
+    setAccessError('');
+  };
+
+  const handleGrantCompanyAccess = (e) => {
+    e.preventDefault();
+    if (!companyAccessEmail.trim() || !companyAccessEmail.includes('@')) {
+      setAccessError('Please enter a valid corporate email address.');
+      return;
+    }
+    const passError = validatePasswordStrength(companyAccessPassword);
+    if (passError) {
+      setAccessError(passError);
+      return;
+    }
+
+    const updatedCompany = {
+      ...accessModalCompany,
+      accessGranted: true,
+      businessEmail: companyAccessEmail.trim(),
+      loginPassword: companyAccessPassword.trim(),
+      connectionStatus: 'Connected - Access Active',
+      accessGrantedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
+      accessGrantedBy: 'Admin (admin@interncatalyst.org)'
+    };
+
+    const updatedCompanies = companies.map(c => c.id === accessModalCompany.id ? updatedCompany : c);
+    onUpdateCompanies(updatedCompanies);
+
+    onAddAuditLog(
+      'GRANT_COMPANY_ACCESS',
+      `Admin granted Company Dashboard access to '${accessModalCompany.name}'. Login Email: '${companyAccessEmail.trim()}' with credentials issued.`
+    );
+
+    onAddToast(`🎉 Dashboard access granted to ${accessModalCompany.name}! Login email & password issued.`, 'success');
+
+    setRecentDispatchedNotice({
+      companyName: accessModalCompany.name,
+      email: companyAccessEmail.trim(),
+      password: companyAccessPassword.trim(),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    });
+
+    setAccessModalCompany(null);
+  };
+
+  const handleRevokeCompanyAccess = (companyId) => {
+    const compObj = companies.find(c => c.id === companyId);
+    if (!compObj) return;
+
+    const updatedCompanies = companies.map(c => 
+      c.id === companyId 
+        ? { 
+            ...c, 
+            accessGranted: false, 
+            connectionStatus: 'Connected - Pending Admin Access' 
+          }
+        : c
+    );
+    onUpdateCompanies(updatedCompanies);
+
+    onAddAuditLog(
+      'REVOKE_COMPANY_ACCESS',
+      `Admin revoked Company Dashboard access for '${compObj.name}'. Company cannot log in until re-authorized.`
+    );
+    onAddToast(`🚫 Dashboard access revoked for ${compObj.name}.`, 'danger');
+  };
 
   // Candidate Matcher Handler
   const handleRunMatcher = () => {
@@ -274,7 +389,7 @@ export default function AdminDashboard({
               gap: '0.35rem'
             }}
           >
-            <ShieldCheck size={14} /> Employer Verification ({pendingCompanies.length})
+            <Building2 size={14} /> Connected Companies & Access ({companiesPendingAccess.length} Pending)
           </button>
 
           <button 
@@ -468,68 +583,470 @@ export default function AdminDashboard({
           </button>
         </div>
 
-        {/* Tab 1: Company Employer Verification Audit */}
+        {/* Tab 1: Connected Companies & Dashboard Access Governance */}
         {adminTab === 'verifications' && (
-          <div className="glass-card">
-            <h3 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.5rem' }}>
-              Employer Verification Badge System (Verify Companies)
-            </h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
-              Handwritten Instruction: Verify companies and grant/revoke verification badges. Never list unverified companies as confirmed.
-            </p>
+          <div>
+            {/* Header Card */}
+            <div className="glass-card" style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Building2 size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ color: '#0f172a', fontSize: '1.25rem', fontWeight: '800', margin: 0 }}>
+                        Connected Companies & Dashboard Access Governance
+                      </h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '2px 0 0' }}>
+                        Admin must give access to company with email and password after connecting to our website.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span className="badge" style={{ background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', padding: '0.35rem 0.75rem', fontWeight: '700' }}>
+                    <Lock size={13} /> Strict Access Protocol
+                  </span>
+                </div>
+              </div>
 
-            <div className="data-table-container">
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>Company Name</th>
-                    <th>Business Email</th>
-                    <th>Contact Person</th>
-                    <th>Legal Audit Doc</th>
-                    <th>Current Status</th>
-                    <th>Admin Verification Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {companies.map(c => (
-                    <tr key={c.id}>
-                      <td><strong style={{ color: '#fff' }}>{c.name}</strong></td>
-                      <td>{c.businessEmail}</td>
-                      <td>{c.contactPerson}</td>
-                      <td>
-                        <span style={{ fontSize: '0.8rem', color: '#38bdf8', textDecoration: 'underline', cursor: 'pointer' }}>
-                          {c.verificationDocument}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`badge ${c.verifiedBadge ? 'badge-verified' : 'badge-pending'}`}>
-                          {c.verifiedBadge ? 'Verified Badge ✓' : 'Unverified / Pending'}
-                        </span>
-                      </td>
-                      <td>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                          {!c.verifiedBadge ? (
+              {/* Access Metrics Grid */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '1rem',
+                marginTop: '1.25rem',
+                paddingTop: '1.25rem',
+                borderTop: '1px solid var(--border-color)'
+              }}>
+                <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: '600' }}>Connected to Site</span>
+                    <Building2 size={16} style={{ color: '#2563eb' }} />
+                  </div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginTop: '0.25rem' }}>
+                    {companies.length}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '2px' }}>
+                    Total registered partners
+                  </div>
+                </div>
+
+                <div style={{ background: '#f0fdf4', padding: '1rem', borderRadius: '10px', border: '1px solid #bbf7d0' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '0.8rem', color: '#166534', fontWeight: '600' }}>Access Granted</span>
+                    <CheckCircle size={16} style={{ color: '#16a34a' }} />
+                  </div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#15803d', marginTop: '0.25rem' }}>
+                    {companies.filter(c => c.accessGranted).length}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#166534', marginTop: '2px' }}>
+                    Authorized with Email & Password
+                  </div>
+                </div>
+
+                <div style={{ background: '#fffbeb', padding: '1rem', borderRadius: '10px', border: '1px solid #fde68a' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '0.8rem', color: '#92400e', fontWeight: '600' }}>Pending Admin Access</span>
+                    <Clock size={16} style={{ color: '#d97706' }} />
+                  </div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#b45309', marginTop: '0.25rem' }}>
+                    {companiesPendingAccess.length}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#92400e', marginTop: '2px' }}>
+                    Requires Admin action
+                  </div>
+                </div>
+
+                <div style={{ background: '#fdf4ff', padding: '1rem', borderRadius: '10px', border: '1px solid #f5d0fe' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '0.8rem', color: '#86198f', fontWeight: '600' }}>Verified Badges</span>
+                    <ShieldCheck size={16} style={{ color: '#a21caf' }} />
+                  </div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#86198f', marginTop: '0.25rem' }}>
+                    {companies.filter(c => c.verifiedBadge).length}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#a21caf', marginTop: '2px' }}>
+                    GST / Legal audit verified
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Recently Dispatched Credentials Alert Notice */}
+            {recentDispatchedNotice && (
+              <div style={{
+                background: '#f0fdf4',
+                border: '1px solid #86efac',
+                borderRadius: '12px',
+                padding: '1.25rem 1.5rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '1rem'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}>
+                    <CheckCircle size={22} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: '800', color: '#166534', fontSize: '1rem' }}>
+                      ✓ Dashboard Access Credentials Issued & Dispatched!
+                    </div>
+                    <div style={{ fontSize: '0.875rem', color: '#15803d', marginTop: '3px' }}>
+                      Company: <strong>{recentDispatchedNotice.companyName}</strong> | Login Email: <strong>{recentDispatchedNotice.email}</strong> | Password: <code style={{ background: '#dcfce7', padding: '2px 6px', borderRadius: '4px', fontWeight: '700' }}>{recentDispatchedNotice.password}</code> (Dispatched at {recentDispatchedNotice.time})
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText(`InternCatalyst Company Dashboard Access\nEmail: ${recentDispatchedNotice.email}\nPassword: ${recentDispatchedNotice.password}`);
+                      onAddToast('Credentials copied to clipboard!', 'info');
+                    }}
+                    style={{ borderColor: '#86efac', color: '#166534' }}
+                  >
+                    <Copy size={13} /> Copy Credentials
+                  </button>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => setRecentDispatchedNotice(null)}
+                    style={{ borderColor: '#86efac', color: '#166534' }}
+                  >
+                    <X size={13} /> Dismiss
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Companies Access Management Table */}
+            <div className="glass-card">
+              <div className="data-table-container">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Connected Company</th>
+                      <th>Website & Contact</th>
+                      <th>Dashboard Access Status</th>
+                      <th>Corporate Login Credentials</th>
+                      <th>Verification Badge</th>
+                      <th>Admin Access Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {companies.map(c => (
+                      <tr key={c.id}>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <img 
+                              src={c.logo} 
+                              alt={c.name}
+                              style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover', background: '#fff', border: '1px solid #e2e8f0' }}
+                            />
+                            <div>
+                              <strong style={{ color: '#0f172a', fontSize: '0.925rem', display: 'block' }}>{c.name}</strong>
+                              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                                {c.industry} • {c.location}
+                              </span>
+                              <div style={{ marginTop: '2px' }}>
+                                <span className="badge" style={{ background: '#f1f5f9', color: '#475569', fontSize: '0.675rem', padding: '1px 6px' }}>
+                                  Connected to website
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div>
+                            <a 
+                              href={c.website} 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              style={{ fontSize: '0.8rem', color: '#2563eb', fontWeight: '600', textDecoration: 'none' }}
+                            >
+                              {c.website?.replace('https://', '')}
+                            </a>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '2px' }}>
+                              {c.contactPerson} ({c.phone})
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          {c.accessGranted ? (
+                            <div>
+                              <span className="badge" style={{ background: '#ecfdf5', color: '#059669', border: '1px solid #a7f3d0' }}>
+                                <CheckCircle size={12} /> Access Granted ✓
+                              </span>
+                              <div style={{ fontSize: '0.725rem', color: 'var(--text-muted)', marginTop: '3px' }}>
+                                Authorized by: {c.accessGrantedBy || 'Central Admin'}
+                              </div>
+                            </div>
+                          ) : (
+                            <div>
+                              <span className="badge" style={{ background: '#fffbeb', color: '#d97706', border: '1px solid #fde68a' }}>
+                                <Clock size={12} /> Pending Admin Access ⏳
+                              </span>
+                              <div style={{ fontSize: '0.725rem', color: '#dc2626', marginTop: '3px', fontWeight: '600' }}>
+                                Blocked until Admin sets credentials
+                              </div>
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          {c.accessGranted ? (
+                            <div>
+                              <div style={{ fontSize: '0.825rem', fontWeight: '700', color: '#0f172a' }}>
+                                {c.businessEmail}
+                              </div>
+                              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
+                                <Key size={12} style={{ color: '#2563eb' }} />
+                                <span style={{ fontFamily: 'monospace', fontWeight: '700', letterSpacing: '0.5px' }}>
+                                  {c.loginPassword || '••••••••'}
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div style={{ fontSize: '0.775rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                              Not set (Cannot log in)
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                            <span className={`badge ${c.verifiedBadge ? 'badge-verified' : 'badge-pending'}`} style={{ width: 'fit-content' }}>
+                              {c.verifiedBadge ? 'Verified Badge ✓' : 'Unverified / Pending'}
+                            </span>
+                            {!c.verifiedBadge ? (
+                              <button 
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => handleToggleCompanyVerification(c.id, 'Verified')}
+                                style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem', width: 'fit-content' }}
+                              >
+                                <Check size={11} /> Grant Badge
+                              </button>
+                            ) : (
+                              <button 
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => handleToggleCompanyVerification(c.id, 'Pending')}
+                                style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem', width: 'fit-content', color: '#dc2626' }}
+                              >
+                                <X size={11} /> Revoke
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                        <td>
+                          {!c.accessGranted ? (
                             <button 
                               className="btn btn-emerald btn-sm"
-                              onClick={() => handleToggleCompanyVerification(c.id, 'Verified')}
+                              onClick={() => handleOpenGrantAccessModal(c)}
+                              style={{ fontWeight: '700', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
                             >
-                              <Check size={13} /> Grant Verification Badge
+                              <Key size={13} /> Give Access (Email & Pass)
                             </button>
                           ) : (
-                            <button 
-                              className="btn btn-danger btn-sm"
-                              onClick={() => handleToggleCompanyVerification(c.id, 'Pending')}
-                            >
-                              <X size={13} /> Revoke Badge
-                            </button>
+                            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                              <button 
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => handleOpenGrantAccessModal(c)}
+                                title="Edit Email & Password"
+                                style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem' }}
+                              >
+                                <Edit size={12} /> Edit
+                              </button>
+                              <button 
+                                className="btn btn-danger btn-sm"
+                                onClick={() => handleRevokeCompanyAccess(c.id)}
+                                title="Revoke Dashboard Access"
+                                style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem' }}
+                              >
+                                <X size={12} /> Revoke
+                              </button>
+                            </div>
                           )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
+
+            {/* Grant / Edit Access Modal */}
+            {accessModalCompany && (
+              <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(15, 23, 42, 0.65)',
+                backdropFilter: 'blur(4px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 9999,
+                padding: '1rem'
+              }}>
+                <div style={{
+                  background: '#ffffff',
+                  borderRadius: '16px',
+                  maxWidth: '540px',
+                  width: '100%',
+                  padding: '2rem',
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                  border: '1px solid #e2e8f0',
+                  maxHeight: '90vh',
+                  overflowY: 'auto'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Key size={20} />
+                      </div>
+                      <div>
+                        <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+                          {accessModalCompany.accessGranted ? 'Edit Company Access Credentials' : 'Give Company Dashboard Access'}
+                        </h3>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+                          Admin authorizes company with corporate email and password.
+                        </p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => setAccessModalCompany(null)}
+                      style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', padding: '4px' }}
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+
+                  <div style={{ background: '#f8fafc', padding: '0.85rem 1rem', borderRadius: '10px', marginBottom: '1.25rem', border: '1px solid #e2e8f0' }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Connected Company:</div>
+                    <div style={{ fontSize: '1.05rem', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '2px' }}>
+                      <Building2 size={16} style={{ color: '#2563eb' }} /> {accessModalCompany.name}
+                    </div>
+                    <div style={{ fontSize: '0.775rem', color: 'var(--text-dim)', marginTop: '2px' }}>
+                      Contact: {accessModalCompany.contactPerson} • {accessModalCompany.phone} • {accessModalCompany.location}
+                    </div>
+                  </div>
+
+                  {accessError && (
+                    <div style={{
+                      background: '#fef2f2',
+                      border: '1px solid #fecaca',
+                      color: '#dc2626',
+                      padding: '0.75rem 1rem',
+                      borderRadius: '8px',
+                      fontSize: '0.825rem',
+                      marginBottom: '1rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}>
+                      <AlertCircle size={16} /> {accessError}
+                    </div>
+                  )}
+
+                  <form onSubmit={handleGrantCompanyAccess}>
+                    {/* Corporate Email Input */}
+                    <div className="form-group" style={{ marginBottom: '1.25rem' }}>
+                      <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>
+                        Authorized Corporate Login Email <span className="required">*</span>
+                      </label>
+                      <div style={{ position: 'relative' }}>
+                        <Mail size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                        <input 
+                          type="email"
+                          className="form-input"
+                          style={{ paddingLeft: '2.5rem' }}
+                          value={companyAccessEmail}
+                          onChange={(e) => setCompanyAccessEmail(e.target.value)}
+                          placeholder="e.g. hr@company.io"
+                          required
+                        />
+                      </div>
+                      <span style={{ fontSize: '0.725rem', color: 'var(--text-muted)', marginTop: '3px', display: 'block' }}>
+                        The company will log into the Company Dashboard using this email address.
+                      </span>
+                    </div>
+
+                    {/* Password Input */}
+                    <div className="form-group" style={{ marginBottom: '1.25rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                        <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700', margin: 0 }}>
+                          Company Dashboard Password <span className="required">*</span>
+                        </label>
+                        <button 
+                          type="button"
+                          onClick={() => setCompanyAccessPassword(generateStrongPassword())}
+                          style={{ background: 'none', border: 'none', color: '#2563eb', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}
+                        >
+                          <RefreshCw size={12} /> Auto-Generate Strong Password
+                        </button>
+                      </div>
+                      <div style={{ position: 'relative' }}>
+                        <Key size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                        <input 
+                          type={showAccessPassword ? 'text' : 'password'}
+                          className="form-input"
+                          style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', fontFamily: showAccessPassword ? 'inherit' : 'monospace' }}
+                          value={companyAccessPassword}
+                          onChange={(e) => setCompanyAccessPassword(e.target.value)}
+                          placeholder="Assign strong corporate password"
+                          required
+                        />
+                        <button 
+                          type="button"
+                          onClick={() => setShowAccessPassword(!showAccessPassword)}
+                          style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
+                        >
+                          {showAccessPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
+                      <div style={{ fontSize: '0.725rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                        Rule: Minimum 8 characters with at least 1 capital letter and 1 special character (!@#$%&*).
+                      </div>
+                    </div>
+
+                    {/* Auto Notify Checkbox */}
+                    <div style={{ marginBottom: '1.5rem', background: '#eff6ff', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid #bfdbfe' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.825rem', color: '#1e40af', cursor: 'pointer', fontWeight: '600' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={autoNotifyCompany} 
+                          onChange={(e) => setAutoNotifyCompany(e.target.checked)} 
+                          style={{ accentColor: '#2563eb' }} 
+                        />
+                        Dispatch access activation credentials automatically to corporate email
+                      </label>
+                    </div>
+
+                    {/* Actions */}
+                    <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                      <button 
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() => setAccessModalCompany(null)}
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        type="submit"
+                        className="btn btn-emerald"
+                        style={{ fontWeight: '800' }}
+                      >
+                        <Key size={15} /> {accessModalCompany.accessGranted ? 'Save & Update Credentials' : 'Give Access & Dispatch Credentials'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

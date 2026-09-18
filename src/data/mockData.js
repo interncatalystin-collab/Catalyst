@@ -2,7 +2,68 @@
 
 export const INITIAL_INTERNSHIPS = [];
 
-export const INITIAL_COMPANIES = [];
+export const INITIAL_COMPANIES = [
+  {
+    id: "comp-101",
+    name: "Nexus Tech Solutions",
+    businessEmail: "hr@nexustech.io",
+    loginPassword: "CompanyPass@2026",
+    contactPerson: "Dr. Rajesh V. Sharma",
+    phone: "+91 98765 43210",
+    logo: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80",
+    website: "https://nexustech.io",
+    industry: "Software & IT",
+    location: "Bangalore, Karnataka",
+    size: "50-200 Employees",
+    verifiedBadge: true,
+    verificationStatus: "Verified",
+    connectionStatus: "Connected",
+    accessGranted: true,
+    accessGrantedAt: "2026-08-15 11:20:14",
+    accessGrantedBy: "Admin (admin@interncatalyst.org)",
+    description: "Enterprise cloud and full-stack software development partner."
+  },
+  {
+    id: "comp-102",
+    name: "CloudScale Global Systems",
+    businessEmail: "careers@cloudscale.io",
+    loginPassword: "",
+    contactPerson: "Priya Sundaram",
+    phone: "+91 98123 45678",
+    logo: "https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=120&q=80",
+    website: "https://cloudscale.io",
+    industry: "Cloud & DevOps",
+    location: "Hyderabad, Telangana",
+    size: "200-500 Employees",
+    verifiedBadge: false,
+    verificationStatus: "Pending",
+    connectionStatus: "Connected - Pending Admin Access",
+    accessGranted: false,
+    accessGrantedAt: null,
+    accessGrantedBy: null,
+    description: "Multi-cloud architecture, Kubernetes and high-scale DevOps automation partner."
+  },
+  {
+    id: "comp-103",
+    name: "CyberShield Defence Labs",
+    businessEmail: "recruiting@cybershield.in",
+    loginPassword: "",
+    contactPerson: "Vikramaditya Roy",
+    phone: "+91 98334 11223",
+    logo: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=120&q=80",
+    website: "https://cybershield.in",
+    industry: "Cybersecurity & InfoSec",
+    location: "Pune, Maharashtra",
+    size: "100-250 Employees",
+    verifiedBadge: false,
+    verificationStatus: "Pending",
+    connectionStatus: "Connected - Pending Admin Access",
+    accessGranted: false,
+    accessGrantedAt: null,
+    accessGrantedBy: null,
+    description: "Cybersecurity assessment, penetration testing, and security operations partner."
+  }
+];
 
 export const INITIAL_STUDENT_PROFILE = {
   id: "std-8821",

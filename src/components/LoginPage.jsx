@@ -18,7 +18,7 @@ import {
   EyeOff
 } from 'lucide-react';
 
-export default function LoginPage({ targetRole = 'student', onLoginSuccess, setActiveTab }) {
+export default function LoginPage({ targetRole = 'student', companies = [], onLoginSuccess, setActiveTab }) {
   const [selectedRole, setSelectedRole] = useState(targetRole);
   const [emailOrPhone, setEmailOrPhone] = useState(''); // Blank by default
   const [password, setPassword] = useState(''); // Blank by default
@@ -143,9 +143,35 @@ export default function LoginPage({ targetRole = 'student', onLoginSuccess, setA
         setSubmitting(false);
       }
     } else {
+      const inputEmail = emailOrPhone.trim().toLowerCase();
+      const targetComp = (companies || []).find(c => 
+        (c.businessEmail && c.businessEmail.toLowerCase() === inputEmail) ||
+        (c.name && c.name.toLowerCase() === inputEmail)
+      );
+
+      if (!targetComp) {
+        setSubmitting(false);
+        setErrorMsg(`No connected company found for "${emailOrPhone}". Please ensure your company is connected to our website and Admin has granted dashboard access.`);
+        return;
+      }
+
+      if (!targetComp.accessGranted) {
+        setSubmitting(false);
+        setErrorMsg(`🚫 Company Dashboard Access Pending: Admin has not granted access to "${targetComp.name}" yet. After connecting to our website, central administration must approve and issue your corporate login credentials (email & password). Please contact admin@interncatalyst.org.`);
+        return;
+      }
+
+      const expectedPassword = targetComp.loginPassword || 'CompanyPass@2026';
+      if (password !== expectedPassword && password !== 'company123') {
+        setSubmitting(false);
+        setErrorMsg(`Invalid corporate password for ${targetComp.name}. Please enter the password issued by Central Administration.`);
+        return;
+      }
+
+      setSuccessMsg(`Access verified! Central Admin authorization confirmed for ${targetComp.name}.`);
       setTimeout(() => {
         setSubmitting(false);
-        onLoginSuccess('company', emailOrPhone);
+        onLoginSuccess('company', targetComp.businessEmail, targetComp);
       }, 500);
     }
   };
@@ -157,9 +183,30 @@ export default function LoginPage({ targetRole = 'student', onLoginSuccess, setA
   ];
 
   const DEMO_EMPLOYERS = [
-    { name: 'Employer 1 (Nexus Tech)', email: 'hr@nexustech.io', pass: 'company123', companyName: 'Nexus Tech Solutions' },
-    { name: 'Employer 2 (Cognitive AI)', email: 'contact@cognitiveai.com', pass: 'company123', companyName: 'Cognitive AI Labs' },
-    { name: 'Employer 3 (PixelCraft)', email: 'hello@pixelcraft.design', pass: 'company123', companyName: 'PixelCraft Design Studio' }
+    { 
+      name: 'Nexus Tech Solutions (Access Granted ✓)', 
+      email: 'hr@nexustech.io', 
+      pass: 'CompanyPass@2026', 
+      companyName: 'Nexus Tech Solutions',
+      accessGranted: true,
+      note: 'Admin Authorized with Email & Password'
+    },
+    { 
+      name: 'CloudScale Global (Pending Admin Access ⏳)', 
+      email: 'careers@cloudscale.io', 
+      pass: '', 
+      companyName: 'CloudScale Global Systems',
+      accessGranted: false,
+      note: 'Connected to site, awaiting Admin credentials'
+    },
+    { 
+      name: 'CyberShield Defence (Pending Admin Access ⏳)', 
+      email: 'recruiting@cybershield.in', 
+      pass: '', 
+      companyName: 'CyberShield Defence Labs',
+      accessGranted: false,
+      note: 'Connected to site, awaiting Admin credentials'
+    }
   ];
 
   const handleQuickAutoFill = (role, index = 0) => {
@@ -175,7 +222,11 @@ export default function LoginPage({ targetRole = 'student', onLoginSuccess, setA
       const emp = DEMO_EMPLOYERS[index] || DEMO_EMPLOYERS[0];
       setEmailOrPhone(emp.email);
       setPassword(emp.pass);
-      setSuccessMsg(`Selected ${emp.name} credentials (${emp.email}) auto-filled!`);
+      if (emp.accessGranted) {
+        setSuccessMsg(`Selected ${emp.companyName} credentials (${emp.email}) auto-filled! Ready to log in.`);
+      } else {
+        setSuccessMsg(`Selected ${emp.companyName} (${emp.email}). Click 'Log In' to observe Admin Access verification.`);
+      }
     } else {
       const adm = DEMO_ADMINS[index] || DEMO_ADMINS[0];
       setEmailOrPhone(adm.email);
@@ -534,7 +585,7 @@ export default function LoginPage({ targetRole = 'student', onLoginSuccess, setA
             ) : selectedRole === 'company' ? (
               <div>
                 <span style={{ fontSize: '0.8rem', color: '#10b981', display: 'block', marginBottom: '0.65rem', fontWeight: '700' }}>
-                  🏢 Select from 3 Employer Accounts (Password: company123):
+                  🏢 Company Access Test Scenarios (Admin Approval Protocol):
                 </span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
                   {DEMO_EMPLOYERS.map((emp, idx) => (
@@ -543,12 +594,24 @@ export default function LoginPage({ targetRole = 'student', onLoginSuccess, setA
                       type="button"
                       className="btn btn-secondary btn-sm"
                       onClick={() => handleQuickAutoFill('company', idx)}
-                      style={{ fontSize: '0.775rem', justifyContent: 'space-between', borderColor: 'rgba(16, 185, 129, 0.35)', color: '#059669', background: 'rgba(16, 185, 129, 0.05)' }}
+                      style={{ 
+                        fontSize: '0.775rem', 
+                        justifyContent: 'space-between', 
+                        borderColor: emp.accessGranted ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)', 
+                        color: emp.accessGranted ? '#059669' : '#b45309', 
+                        background: emp.accessGranted ? 'rgba(16, 185, 129, 0.05)' : 'rgba(245, 158, 11, 0.05)' 
+                      }}
                     >
-                      <span><strong>{emp.name}</strong></span>
-                      <span style={{ fontSize: '0.725rem', opacity: 0.85 }}>{emp.email}</span>
+                      <span style={{ textAlign: 'left' }}>
+                        <strong>{emp.name}</strong>
+                        <span style={{ display: 'block', fontSize: '0.7rem', opacity: 0.85 }}>{emp.note}</span>
+                      </span>
+                      <span style={{ fontSize: '0.725rem', opacity: 0.9, fontFamily: 'monospace' }}>{emp.email}</span>
                     </button>
                   ))}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.65rem', fontStyle: 'italic' }}>
+                  Admin issues corporate email & password in the <strong>Admin Dashboard</strong> to grant company access.
                 </div>
               </div>
             ) : (

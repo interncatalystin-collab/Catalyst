@@ -40,6 +40,7 @@ export default function App() {
   // Application Datasets State
   const [internships, setInternships] = useState(INITIAL_INTERNSHIPS);
   const [companies, setCompanies] = useState(INITIAL_COMPANIES);
+  const [currentLoggedInCompanyId, setCurrentLoggedInCompanyId] = useState('comp-101');
   const [studentProfile, setStudentProfile] = useState(INITIAL_STUDENT_PROFILE);
   const [students, setStudents] = useState(INITIAL_STUDENTS_LIST);
   const [applications, setApplications] = useState(INITIAL_APPLICATIONS);
@@ -143,6 +144,12 @@ export default function App() {
       }
       setActiveTab('student-dash');
     } else if (role === 'company') {
+      if (userObj && userObj.id) {
+        setCurrentLoggedInCompanyId(userObj.id);
+      } else {
+        const found = companies.find(c => c.businessEmail && c.businessEmail.toLowerCase() === (userEmail || '').toLowerCase());
+        if (found) setCurrentLoggedInCompanyId(found.id);
+      }
       setActiveTab('company-dash');
     } else {
       setActiveTab('admin-dash');
@@ -524,12 +531,12 @@ export default function App() {
         )}
 
         {activeTab === 'login' && (
-          <LoginPage targetRole="student" onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
+          <LoginPage targetRole="student" companies={companies} onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
         )}
 
         {(activeTab === 'student-dash' || activeTab === 'student-profile' || activeTab === 'student-register' || activeTab === 'register') && (
           !authenticatedRoles.student ? (
-            <LoginPage targetRole="student" onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
+            <LoginPage targetRole="student" companies={companies} onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
           ) : (
             <StudentDashboard 
               profile={studentProfile}
@@ -551,10 +558,10 @@ export default function App() {
 
         {(activeTab === 'company-dash' || activeTab === 'for-companies') && (
           !authenticatedRoles.company ? (
-            <LoginPage targetRole="company" onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
+            <LoginPage targetRole="company" companies={companies} onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
           ) : (
             <CompanyDashboard 
-              company={companies[0] || DEFAULT_COMPANY}
+              company={companies.find(c => c.id === currentLoggedInCompanyId) || companies[0] || DEFAULT_COMPANY}
               onUpdateCompany={(updated) => setCompanies(prev => prev.map(c => c.id === updated.id ? updated : c))}
               internships={internships}
               onAddInternship={handleAddInternship}
@@ -568,7 +575,7 @@ export default function App() {
 
         {activeTab === 'admin-dash' && (
           !authenticatedRoles.admin ? (
-            <LoginPage targetRole="admin" onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
+            <LoginPage targetRole="admin" companies={companies} onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
           ) : (
             <AdminDashboard 
               students={students}

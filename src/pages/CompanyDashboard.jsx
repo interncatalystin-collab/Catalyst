@@ -21,7 +21,8 @@ import {
   BadgeCheck,
   Zap,
   Check,
-  ArrowRight
+  ArrowRight,
+  Key
 } from 'lucide-react';
 import { SUBSCRIPTION_PLANS } from '../data/mockData';
 
@@ -176,6 +177,37 @@ export default function CompanyDashboard({
     onAddToast('Verification document uploaded! Admin compliance team will verify your business.', 'success');
   };
 
+  if (company && company.accessGranted === false) {
+    return (
+      <div style={{ padding: '4rem 0 6rem', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="container" style={{ maxWidth: '640px' }}>
+          <div className="glass-card" style={{ textAlign: 'center', padding: '3rem 2rem', borderRadius: '16px', border: '1px solid #fed7aa', background: '#fff' }}>
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#fffbeb', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+              <Lock size={32} />
+            </div>
+            <h2 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.75rem' }}>
+              Company Dashboard Access Restricted
+            </h2>
+            <div className="badge" style={{ background: '#fffbeb', color: '#b45309', border: '1px solid #fde68a', marginBottom: '1.25rem', padding: '0.4rem 0.8rem', width: 'fit-content', margin: '0 auto 1.25rem' }}>
+              <Clock size={13} /> Pending Central Admin Access Approval
+            </div>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>
+              <strong>{company.name}</strong> is connected to our website, but Central Administration has not yet granted dashboard access credentials (corporate email & password).
+            </p>
+            <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '10px', textAlign: 'left', marginBottom: '1.5rem', border: '1px solid #e2e8f0', fontSize: '0.85rem' }}>
+              <div style={{ fontWeight: '700', color: '#0f172a', marginBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Key size={15} style={{ color: '#2563eb' }} /> Access Authorization Process:
+              </div>
+              <div style={{ color: 'var(--text-dim)', lineHeight: '1.5' }}>
+                Central Administrators review connected companies and grant dashboard access with a designated corporate email and secure password in the <strong>Admin Dashboard &rarr; Connected Companies & Access</strong> panel.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ padding: '3rem 0' }}>
       <div className="container">
@@ -185,11 +217,14 @@ export default function CompanyDashboard({
             <img 
               src={company.logo} 
               alt={company.name}
-              style={{ width: '70px', height: '70px', borderRadius: '14px', objectFit: 'cover', background: '#fff' }}
+              style={{ width: '70px', height: '70px', borderRadius: '14px', objectFit: 'cover', background: '#fff', border: '1px solid #e2e8f0' }}
             />
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
                 <h1 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#0f172a' }}>{company.name}</h1>
+                <span className="badge" style={{ background: '#ecfdf5', color: '#059669', border: '1px solid #a7f3d0' }}>
+                  <Key size={12} /> Admin-Authorized Access Active ✓
+                </span>
                 {company.verifiedBadge ? (
                   <span className="badge badge-verified"><ShieldCheck size={13} /> Verified Employer ✓</span>
                 ) : (
@@ -199,8 +234,10 @@ export default function CompanyDashboard({
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '2px' }}>
                 {company.industry} • {company.location} • Plan: <strong style={{ color: '#2563eb' }}>{company.subscriptionPlan}</strong>
               </p>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginTop: '4px' }}>
-                Contact Person: {company.contactPerson} ({company.businessEmail}) • Placements Left: <strong>{company.placementsRemaining}</strong>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span>Authorized Login Email: <strong style={{ color: '#0f172a' }}>{company.businessEmail}</strong></span>
+                <span>•</span>
+                <span>Contact Person: {company.contactPerson} ({company.phone})</span>
               </div>
             </div>
           </div>
