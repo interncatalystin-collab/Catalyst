@@ -18,17 +18,27 @@ export const seedAdmins = async () => {
       {
         username: 'admin-1',
         email: 'admin1@interncatalyst.org',
-        password: process.env.ADMIN1_PASSWORD || 'admin123'
+        password: process.env.ADMIN1_PASSWORD || 'Admin1@Catalyst2026'
       },
       {
         username: 'admin-2',
         email: 'admin2@interncatalyst.org',
-        password: process.env.ADMIN2_PASSWORD || 'admin123'
+        password: process.env.ADMIN2_PASSWORD || 'Admin2@Catalyst2026'
       },
       {
         username: 'admin-3',
         email: 'admin3@interncatalyst.org',
-        password: process.env.ADMIN3_PASSWORD || 'admin123'
+        password: process.env.ADMIN3_PASSWORD || 'Admin3@Catalyst2026'
+      },
+      {
+        username: 'admin-4',
+        email: 'admin4@interncatalyst.org',
+        password: process.env.ADMIN4_PASSWORD || 'Admin4@Catalyst2026'
+      },
+      {
+        username: 'admin-5',
+        email: 'admin5@interncatalyst.org',
+        password: process.env.ADMIN5_PASSWORD || 'Admin5@Catalyst2026'
       }
     ];
 

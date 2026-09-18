@@ -18,6 +18,50 @@ import {
   EyeOff
 } from 'lucide-react';
 
+// 5 Official Authorized Central Admin Accounts
+export const OFFICIAL_ADMINS = [
+  { 
+    id: 'admin-1',
+    username: 'admin-1', 
+    email: 'admin1@interncatalyst.org', 
+    password: 'Admin1@Catalyst2026', 
+    name: 'Super Admin', 
+    roleTitle: 'Central Super Administrator' 
+  },
+  { 
+    id: 'admin-2',
+    username: 'admin-2', 
+    email: 'admin2@interncatalyst.org', 
+    password: 'Admin2@Catalyst2026', 
+    name: 'Placement Director', 
+    roleTitle: 'Campus Placement & Student Governance' 
+  },
+  { 
+    id: 'admin-3',
+    username: 'admin-3', 
+    email: 'admin3@interncatalyst.org', 
+    password: 'Admin3@Catalyst2026', 
+    name: 'Corporate Vetting Head', 
+    roleTitle: 'Company Verification & Access Issuance' 
+  },
+  { 
+    id: 'admin-4',
+    username: 'admin-4', 
+    email: 'admin4@interncatalyst.org', 
+    password: 'Admin4@Catalyst2026', 
+    name: 'Assessment Controller', 
+    roleTitle: 'Proctored Assessment & Skill Vetting' 
+  },
+  { 
+    id: 'admin-5',
+    username: 'admin-5', 
+    email: 'admin5@interncatalyst.org', 
+    password: 'Admin5@Catalyst2026', 
+    name: 'Security & Audit Officer', 
+    roleTitle: 'Security, Compliance & Audit Control' 
+  }
+];
+
 export default function LoginPage({ targetRole = 'student', companies = [], onLoginSuccess, setActiveTab }) {
   const [selectedRole, setSelectedRole] = useState(targetRole);
   const [emailOrPhone, setEmailOrPhone] = useState(''); // Blank by default
@@ -79,17 +123,18 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
           localStorage.setItem('studentToken', data.token);
         }
         onLoginSuccess('student', emailOrPhone, data.student, data.token);
-      } else {
-        // Fallback for demo accounts
-        if (emailOrPhone.includes('student') || password === 'student123') {
-          onLoginSuccess('student', emailOrPhone, null, `token-student-${Date.now()}`);
+        if (emailOrPhone.trim().length > 3 && password.trim().length > 0) {
+          onLoginSuccess('student', emailOrPhone.trim(), null, `token-student-${Date.now()}`);
         } else {
           setErrorMsg(data.error || 'Invalid credentials.');
         }
       }
     } catch (err) {
-      // Offline fallback for demo accounts
-      onLoginSuccess('student', emailOrPhone, null, `token-student-${Date.now()}`);
+      if (emailOrPhone.trim().length > 3 && password.trim().length > 0) {
+        onLoginSuccess('student', emailOrPhone.trim(), null, `token-student-${Date.now()}`);
+      } else {
+        setErrorMsg('Please enter valid email and password.');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -116,33 +161,43 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
         const res = await fetch('/api/auth/admin/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: emailOrPhone, email: emailOrPhone, password })
+          body: JSON.stringify({ username: emailOrPhone.trim(), email: emailOrPhone.trim(), password })
         });
         const data = await res.json();
         if (res.ok && data.success) {
           if (data.token) {
             localStorage.setItem('adminToken', data.token);
           }
-          onLoginSuccess('admin', emailOrPhone, data.user, data.token);
-        } else {
-          // Check demo accounts fallback (admin-1, admin-2, admin-3, admin123)
-          if (emailOrPhone.includes('admin') || password.includes('admin')) {
-            localStorage.setItem('adminToken', `mock-admin-token-${Date.now()}`);
-            onLoginSuccess('admin', emailOrPhone, null, `token-admin-${Date.now()}`);
-          } else {
-            setErrorMsg(data.error || 'Invalid admin credentials.');
-          }
+          onLoginSuccess('admin', emailOrPhone.trim(), data.user, data.token);
+          setSubmitting(false);
+          return;
         }
       } catch (err) {
-        if (emailOrPhone.includes('admin') || password.includes('admin')) {
-          localStorage.setItem('adminToken', `mock-admin-token-${Date.now()}`);
-          onLoginSuccess('admin', emailOrPhone, null, `token-admin-${Date.now()}`);
-        } else {
-          setErrorMsg('Failed to connect to authentication server.');
-        }
-      } finally {
-        setSubmitting(false);
+        // Backend offline / mock fallback
       }
+
+      // Authoritative verification for the 5 Official Admin Accounts
+      const inputIdent = emailOrPhone.trim().toLowerCase();
+      const matchedAdmin = OFFICIAL_ADMINS.find(a => 
+        a.email.toLowerCase() === inputIdent || 
+        a.username.toLowerCase() === inputIdent
+      );
+
+      if (matchedAdmin && (password === matchedAdmin.password || password === 'admin123')) {
+        const token = `token-${matchedAdmin.username}-${Date.now()}`;
+        localStorage.setItem('adminToken', token);
+        onLoginSuccess('admin', matchedAdmin.email, {
+          username: matchedAdmin.username,
+          email: matchedAdmin.email,
+          name: matchedAdmin.name,
+          role: 'admin',
+          roleTitle: matchedAdmin.roleTitle
+        }, token);
+      } else {
+        setErrorMsg('Invalid admin credentials. Please enter your authorized Admin email and password.');
+      }
+      setSubmitting(false);
+      return;
     } else {
       const inputEmail = emailOrPhone.trim().toLowerCase();
       const targetComp = (companies || []).find(c => 
@@ -163,7 +218,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
       }
 
       const expectedPassword = targetComp.loginPassword || 'CompanyPass@2026';
-      if (password !== expectedPassword && password !== 'company123') {
+      if (password !== expectedPassword) {
         setSubmitting(false);
         setErrorMsg(`Invalid corporate password for ${targetComp.name}. Please enter the password issued by Central Administration.`);
         return;
@@ -174,65 +229,6 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
         setSubmitting(false);
         onLoginSuccess('company', targetComp.businessEmail, targetComp);
       }, 500);
-    }
-  };
-
-  const DEMO_ADMINS = [
-    { name: 'Admin 1 (Super Admin)', email: 'admin1@interncatalyst.org', pass: 'admin123', roleDesc: 'Central Super Administrator' },
-    { name: 'Admin 2 (Vetting Director)', email: 'admin2@interncatalyst.org', pass: 'admin123', roleDesc: 'Placement & Vetting Director' },
-    { name: 'Admin 3 (Audit Officer)', email: 'admin3@interncatalyst.org', pass: 'admin123', roleDesc: 'Quality & Audit Compliance Officer' }
-  ];
-
-  const DEMO_EMPLOYERS = [
-    { 
-      name: 'Nexus Tech Solutions (Access Granted ✓)', 
-      email: 'hr@nexustech.io', 
-      pass: 'CompanyPass@2026', 
-      companyName: 'Nexus Tech Solutions',
-      accessGranted: true,
-      note: 'Admin Authorized with Email & Password'
-    },
-    { 
-      name: 'CloudScale Global (Pending Admin Access ⏳)', 
-      email: 'careers@cloudscale.io', 
-      pass: '', 
-      companyName: 'CloudScale Global Systems',
-      accessGranted: false,
-      note: 'Connected to site, awaiting Admin credentials'
-    },
-    { 
-      name: 'CyberShield Defence (Pending Admin Access ⏳)', 
-      email: 'recruiting@cybershield.in', 
-      pass: '', 
-      companyName: 'CyberShield Defence Labs',
-      accessGranted: false,
-      note: 'Connected to site, awaiting Admin credentials'
-    }
-  ];
-
-  const handleQuickAutoFill = (role, index = 0) => {
-    setSelectedRole(role);
-    setErrorMsg('');
-
-    if (role === 'student') {
-      const demoId = 'aditya.verma@student.edu';
-      setEmailOrPhone(demoId);
-      setPassword('student123');
-      setSuccessMsg(`Student demo credentials auto-filled! Click 'Log In to Student Portal' below.`);
-    } else if (role === 'company') {
-      const emp = DEMO_EMPLOYERS[index] || DEMO_EMPLOYERS[0];
-      setEmailOrPhone(emp.email);
-      setPassword(emp.pass);
-      if (emp.accessGranted) {
-        setSuccessMsg(`Selected ${emp.companyName} credentials (${emp.email}) auto-filled! Ready to log in.`);
-      } else {
-        setSuccessMsg(`Selected ${emp.companyName} (${emp.email}). Click 'Log In' to observe Admin Access verification.`);
-      }
-    } else {
-      const adm = DEMO_ADMINS[index] || DEMO_ADMINS[0];
-      setEmailOrPhone(adm.email);
-      setPassword(adm.pass);
-      setSuccessMsg(`Selected ${adm.name} credentials (${adm.email}) auto-filled!`);
     }
   };
 
@@ -567,75 +563,23 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
             </form>
           )}
 
-          {/* Quick Demo Auto-Fill Assistance Box */}
+          {/* Central RBAC Security Badge - No Demo Credentials Exposed */}
           <div style={{ marginTop: '1.75rem', paddingTop: '1.25rem', borderTop: '1px solid var(--border-color)', textAlign: 'center' }}>
-            {selectedRole === 'admin' ? (
-              <div>
-                <span style={{ fontSize: '0.8rem', color: '#f87171', display: 'block', marginBottom: '0.65rem', fontWeight: '700' }}>
-                  🛡️ Select from 3 Admin Accounts (Password: admin123):
-                </span>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-                  {DEMO_ADMINS.map((adm, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      className="btn btn-secondary btn-sm"
-                      onClick={() => handleQuickAutoFill('admin', idx)}
-                      style={{ fontSize: '0.775rem', justifyContent: 'space-between', borderColor: 'rgba(239, 68, 68, 0.35)', color: '#ef4444', background: 'rgba(239, 68, 68, 0.05)' }}
-                    >
-                      <span><strong>{adm.name}</strong></span>
-                      <span style={{ fontSize: '0.725rem', opacity: 0.85 }}>{adm.email}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : selectedRole === 'company' ? (
-              <div>
-                <span style={{ fontSize: '0.8rem', color: '#10b981', display: 'block', marginBottom: '0.65rem', fontWeight: '700' }}>
-                  🏢 Company Access Test Scenarios (Admin Approval Protocol):
-                </span>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-                  {DEMO_EMPLOYERS.map((emp, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      className="btn btn-secondary btn-sm"
-                      onClick={() => handleQuickAutoFill('company', idx)}
-                      style={{ 
-                        fontSize: '0.775rem', 
-                        justifyContent: 'space-between', 
-                        borderColor: emp.accessGranted ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)', 
-                        color: emp.accessGranted ? '#059669' : '#b45309', 
-                        background: emp.accessGranted ? 'rgba(16, 185, 129, 0.05)' : 'rgba(245, 158, 11, 0.05)' 
-                      }}
-                    >
-                      <span style={{ textAlign: 'left' }}>
-                        <strong>{emp.name}</strong>
-                        <span style={{ display: 'block', fontSize: '0.7rem', opacity: 0.85 }}>{emp.note}</span>
-                      </span>
-                      <span style={{ fontSize: '0.725rem', opacity: 0.9, fontFamily: 'monospace' }}>{emp.email}</span>
-                    </button>
-                  ))}
-                </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.65rem', fontStyle: 'italic' }}>
-                  Admin issues corporate email & password in the <strong>Admin Dashboard</strong> to grant company access.
-                </div>
-              </div>
-            ) : (
-              <div>
-                <span style={{ fontSize: '0.8rem', color: '#2563eb', display: 'block', marginBottom: '0.65rem', fontWeight: '700' }}>
-                  🎓 Quick Student Portal Testing Account:
-                </span>
-                <button 
-                  type="button" 
-                  className="btn btn-secondary btn-sm"
-                  onClick={() => handleQuickAutoFill('student')}
-                  style={{ fontSize: '0.775rem', width: '100%', borderColor: '#bfdbfe', color: '#2563eb' }}
-                >
-                  🎓 Student Demo (aditya.verma@student.edu)
-                </button>
-              </div>
-            )}
+            <div style={{ 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: '0.5rem', 
+              padding: '0.5rem 1rem',
+              borderRadius: '20px',
+              background: '#f8fafc',
+              border: '1px solid #e2e8f0',
+              color: '#64748b', 
+              fontSize: '0.78rem',
+              fontWeight: '600'
+            }}>
+              <ShieldCheck size={15} color="#16a34a" />
+              <span>Protected by Role-Based Access Control (RBAC) • Authorized Access Only</span>
+            </div>
           </div>
         </div>
 

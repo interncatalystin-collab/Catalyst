@@ -20,9 +20,11 @@ When deploying to Vercel or any cloud provider, set the following environment va
 | `EMAIL_USER` | Sender email address | `your-email@gmail.com` |
 | `EMAIL_PASS` | Google 16-character App Password | `abcd efgh ijkl mnop` |
 | `EMAIL_FROM` | Outgoing email display name | `InternCatalyst <no-reply@interncatalyst.org>` |
-| `ADMIN1_PASSWORD` | Initial admin seed password | `AdminSecurePass1` |
-| `ADMIN2_PASSWORD` | Admin 2 seed password | `AdminSecurePass2` |
-| `ADMIN3_PASSWORD` | Admin 3 seed password | `AdminSecurePass3` |
+| `ADMIN1_PASSWORD` | Initial admin seed password | `Admin1@Catalyst2026` |
+| `ADMIN2_PASSWORD` | Admin 2 seed password | `Admin2@Catalyst2026` |
+| `ADMIN3_PASSWORD` | Admin 3 seed password | `Admin3@Catalyst2026` |
+| `ADMIN4_PASSWORD` | Admin 4 seed password | `Admin4@Catalyst2026` |
+| `ADMIN5_PASSWORD` | Admin 5 seed password | `Admin5@Catalyst2026` |
 
 > [!IMPORTANT]
 > **MongoDB Atlas IP Whitelist (`0.0.0.0/0`)**:

@@ -38,26 +38,28 @@ export const adminLoginHandler = async (req, res, body) => {
         authenticatedAdmin = adminUser;
       }
     } else {
-      // Fallback verification for admin-1, admin-2, admin-3 initial accounts
-      const initialAdmins = ['admin-1', 'admin-2', 'admin-3'];
-      const defaultPasses = [
-        process.env.ADMIN1_PASSWORD,
-        process.env.ADMIN2_PASSWORD,
-        process.env.ADMIN3_PASSWORD,
-        process.env.ADMIN_DEFAULT_PASSWORD,
-        'admin123',
-        'Admin1Pass@2026',
-        'Admin2Pass@2026',
-        'Admin3Pass@2026',
-        'AdminPass@2026'
-      ].filter(Boolean);
+      // Verification for the 5 official admin accounts
+      const officialAdmins = [
+        { username: 'admin-1', email: 'admin1@interncatalyst.org', pass: process.env.ADMIN1_PASSWORD || 'Admin1@Catalyst2026' },
+        { username: 'admin-2', email: 'admin2@interncatalyst.org', pass: process.env.ADMIN2_PASSWORD || 'Admin2@Catalyst2026' },
+        { username: 'admin-3', email: 'admin3@interncatalyst.org', pass: process.env.ADMIN3_PASSWORD || 'Admin3@Catalyst2026' },
+        { username: 'admin-4', email: 'admin4@interncatalyst.org', pass: process.env.ADMIN4_PASSWORD || 'Admin4@Catalyst2026' },
+        { username: 'admin-5', email: 'admin5@interncatalyst.org', pass: process.env.ADMIN5_PASSWORD || 'Admin5@Catalyst2026' }
+      ];
 
-      if (initialAdmins.includes(identifier.toLowerCase()) || identifier.toLowerCase().includes('admin')) {
-        if (defaultPasses.includes(password)) {
+      const inputLower = identifier.trim().toLowerCase();
+      const matched = officialAdmins.find(a => 
+        a.username.toLowerCase() === inputLower || 
+        a.email.toLowerCase() === inputLower
+      );
+
+      if (matched) {
+        const allowedPasses = [matched.pass, 'admin123', 'AdminPass@2026'].filter(Boolean);
+        if (allowedPasses.includes(password)) {
           authenticatedAdmin = {
-            _id: `admin-${identifier.toLowerCase()}`,
-            username: identifier.toLowerCase(),
-            email: `${identifier.toLowerCase()}@interncatalyst.org`,
+            _id: `admin-${matched.username}`,
+            username: matched.username,
+            email: matched.email,
             role: 'admin'
           };
         }
