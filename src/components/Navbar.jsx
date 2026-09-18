@@ -119,7 +119,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                       onClick={() => handleNavClick('student-profile')}
                       style={{ borderColor: '#38bdf8', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
                     >
-                      <User size={14} /> Profile Form
+                      <User size={14} /> Profile
                     </button>
                   </div>
                 )}

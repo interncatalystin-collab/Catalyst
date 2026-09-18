@@ -470,7 +470,7 @@ export default function StudentDashboard({
               boxShadow: activeTab === 'profile' ? 'var(--shadow-glow)' : 'none'
             }}
           >
-            <User size={16} /> Student Profile & Registration Form
+            <User size={16} /> Student Profile
             <span style={{
               background: activeTab === 'profile' ? '#ffffff' : '#e0e7ff',
               color: activeTab === 'profile' ? '#1d4ed8' : '#3730a3',
@@ -479,7 +479,7 @@ export default function StudentDashboard({
               padding: '0.15rem 0.45rem',
               borderRadius: '10px'
             }}>
-              Profile Form
+              Profile
             </span>
           </button>
 
@@ -573,7 +573,7 @@ export default function StudentDashboard({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                     <strong style={{ fontSize: '0.92rem', color: '#0f172a' }}>{name}</strong>
-                    <span className="badge badge-verified" style={{ fontSize: '0.7rem' }}>✓ Registration Profile Form Active</span>
+                    <span className="badge badge-verified" style={{ fontSize: '0.7rem' }}>✓ Profile Active</span>
                   </div>
                   <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                     Phone: {phone} • {institution} ({degree})
@@ -590,7 +590,7 @@ export default function StudentDashboard({
                 }}
                 style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: '700', fontSize: '0.825rem' }}
               >
-                <User size={14} /> Edit Profile Form & Photo
+                <User size={14} /> Edit Profile & Photo
               </button>
             </div>
 
@@ -1171,7 +1171,7 @@ export default function StudentDashboard({
                     transition: 'all 0.15s'
                   }}
                 >
-                  <FileText size={15} /> 📝 Registration Profile Form
+                  <FileText size={15} /> 📝 Student Profile
                 </button>
                 <button 
                   type="button"
@@ -1353,7 +1353,7 @@ export default function StudentDashboard({
                       className="btn btn-primary btn-sm"
                       style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: '700' }}
                     >
-                      <FileText size={14} /> Open Profile Form
+                      <FileText size={14} /> Open Profile
                     </button>
                     <button 
                       type="button" 
