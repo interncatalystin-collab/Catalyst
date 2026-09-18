@@ -15,6 +15,7 @@ export const registerStudentHandler = async (req, res, body) => {
       email,
       password,
       phone,
+      avatar,
       dateOfBirth,
       gender,
       collegeName,
@@ -38,6 +39,15 @@ export const registerStudentHandler = async (req, res, body) => {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ 
         error: 'Missing required fields. Full Name, Email, Password, Phone, College, Degree, and Branch are required.' 
+      }));
+      return;
+    }
+
+    // Password Complexity: Min 8 chars, at least 1 uppercase letter and 1 special character
+    if (password.length < 8 || !/[A-Z]/.test(password) || !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password)) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ 
+        error: 'Password must be at least 8 characters long and contain at least one capital letter and one special character.' 
       }));
       return;
     }
@@ -67,6 +77,7 @@ export const registerStudentHandler = async (req, res, body) => {
       email: normalizedEmail,
       password: hashedPassword,
       phone: phone.trim(),
+      avatar: avatar || '',
       dateOfBirth: dateOfBirth || '',
       gender: gender || '',
       collegeName: collegeName.trim(),

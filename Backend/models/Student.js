@@ -22,6 +22,10 @@ const studentSchema = new mongoose.Schema({
     required: [true, 'Phone Number is required'],
     trim: true
   },
+  avatar: {
+    type: String,
+    default: ''
+  },
   dateOfBirth: {
     type: String,
     default: ''

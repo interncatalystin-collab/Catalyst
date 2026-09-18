@@ -45,12 +45,13 @@ export default function Footer({ setActiveTab }) {
             </ul>
           </div>
 
-          {/* Col 3: For Employers */}
+          {/* Col 3: For Companies */}
           <div>
-            <h4 style={{ color: '#fff', fontSize: '1rem', fontWeight: '700', marginBottom: '1.2rem' }}>For Employers</h4>
+            <h4 style={{ color: '#fff', fontSize: '1rem', fontWeight: '700', marginBottom: '1.2rem' }}>For Companies</h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+              <li><button onClick={() => handleTabClick('company-dash')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>Company Dashboard</button></li>
               <li><button onClick={() => handleTabClick('company-dash')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>Post Internship Opportunity</button></li>
-              <li><button onClick={() => handleTabClick('company-dash')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>Employer Verification Badge</button></li>
+              <li><button onClick={() => handleTabClick('company-dash')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>Company Verification Badge</button></li>
               <li><button onClick={() => handleTabClick('company-dash')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>Subscription Pricing Plans</button></li>
               <li><button onClick={() => handleTabClick('admin-dash')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>Admin Governance</button></li>
             </ul>

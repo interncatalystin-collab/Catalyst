@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Logo from '../components/Logo';
 import { 
   GraduationCap, 
@@ -19,16 +19,21 @@ import {
   Globe,
   FileText,
   Eye,
-  EyeOff
+  EyeOff,
+  Camera,
+  Upload,
+  Image
 } from 'lucide-react';
 
 export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUpdateProfile, onAddToast, isEmbeddedInDashboard = false }) {
+  const photoInputRef = useRef(null);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
     confirmPassword: '',
     phone: '',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
     dateOfBirth: '',
     gender: 'Male',
     collegeName: '',
@@ -47,6 +52,40 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
     internshipPreference: 'Remote / Online'
   });
 
+  const PRESET_AVATARS = [
+    { id: 'reg-av-1', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80', label: 'Candidate 1' },
+    { id: 'reg-av-2', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80', label: 'Candidate 2' },
+    { id: 'reg-av-3', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80', label: 'Candidate 3' },
+    { id: 'reg-av-4', url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80', label: 'Candidate 4' },
+    { id: 'reg-av-5', url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80', label: 'Candidate 5' },
+    { id: 'reg-av-6', url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80', label: 'Candidate 6' },
+  ];
+
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      if (onAddToast) onAddToast('Invalid file format: Please select a valid image file (PNG, JPG, WEBP).', 'danger');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      if (onAddToast) onAddToast('File size limit exceeded: Photo must be under 5MB.', 'danger');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      const dataUrl = uploadEvent.target?.result;
+      if (dataUrl) {
+        setFormData(prev => ({ ...prev, avatar: dataUrl }));
+        if (onAddToast) onAddToast('📸 Candidate photo uploaded successfully!', 'success');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -63,16 +102,30 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
       name: studentData.fullName || formData.fullName,
       email: studentData.email || formData.email,
       phone: studentData.phone || formData.phone,
+      avatar: studentData.avatar || formData.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
       institution: studentData.collegeName || formData.collegeName,
+      collegeName: studentData.collegeName || formData.collegeName,
       degree: studentData.degree || formData.degree,
       branch: studentData.branch || formData.branch,
       yearOfStudy: studentData.currentYearOrSemester || formData.currentYearOrSemester,
+      currentYearOrSemester: studentData.currentYearOrSemester || formData.currentYearOrSemester,
       cgpa: studentData.cgpaOrPercentage || formData.cgpaOrPercentage,
+      cgpaOrPercentage: studentData.cgpaOrPercentage || formData.cgpaOrPercentage,
+      graduationYear: studentData.graduationYear || formData.graduationYear,
+      dateOfBirth: studentData.dateOfBirth || formData.dateOfBirth,
+      gender: studentData.gender || formData.gender,
+      city: studentData.city || formData.city,
+      state: studentData.state || formData.state,
+      internshipPreference: studentData.internshipPreference || formData.internshipPreference,
       domain: studentData.preferredDomain || formData.preferredDomain,
+      preferredDomain: studentData.preferredDomain || formData.preferredDomain,
       skills: Array.isArray(studentData.skills) ? studentData.skills : (formData.skills ? formData.skills.split(',').map(s => s.trim()) : ['React', 'JavaScript']),
       resumeUrl: formData.resumeLink || 'https://resume.interncatalyst.org/view',
+      resumeLink: formData.resumeLink || 'https://resume.interncatalyst.org/view',
       linkedinUrl: formData.linkedin || '',
-      githubUrl: formData.github || ''
+      linkedin: formData.linkedin || '',
+      githubUrl: formData.github || '',
+      github: formData.github || ''
     };
 
     if (onUpdateProfile) {
@@ -106,8 +159,16 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
       setErrorMsg('Please enter a valid 10-digit phone number.');
       return;
     }
-    if (!formData.password || formData.password.length < 6) {
-      setErrorMsg('Password must be at least 6 characters long.');
+    if (!formData.password || formData.password.length < 8) {
+      setErrorMsg('Password must be at least 8 characters long.');
+      return;
+    }
+    if (!/[A-Z]/.test(formData.password)) {
+      setErrorMsg('Password must contain at least one capital letter (A-Z).');
+      return;
+    }
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(formData.password)) {
+      setErrorMsg('Password must contain at least one special character (e.g. !@#$%^&*).');
       return;
     }
     if (formData.password !== formData.confirmPassword) {
@@ -221,8 +282,111 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
           {/* SECTION 1: PERSONAL INFORMATION */}
           <div style={{ marginBottom: '2rem' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-              <User size={18} style={{ color: '#2563eb' }} /> 1. Personal Information
+              <User size={18} style={{ color: '#2563eb' }} /> 1. Personal Information & Photo
             </h3>
+
+            {/* Candidate Photo Upload Station */}
+            <input 
+              type="file" 
+              ref={photoInputRef} 
+              accept="image/*" 
+              onChange={handlePhotoUpload} 
+              style={{ display: 'none' }} 
+            />
+            <div style={{
+              background: '#f8fafc',
+              border: '2px dashed #93c5fd',
+              borderRadius: '12px',
+              padding: '1.25rem',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '1.25rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                <div style={{ position: 'relative' }}>
+                  <img 
+                    src={formData.avatar} 
+                    alt="Candidate Preview" 
+                    style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '3px solid #2563eb',
+                      boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)'
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => photoInputRef.current?.click()}
+                    title="Upload candidate photo"
+                    style={{
+                      position: 'absolute',
+                      bottom: '0',
+                      right: '0',
+                      background: '#2563eb',
+                      color: '#ffffff',
+                      border: '2px solid #ffffff',
+                      borderRadius: '50%',
+                      width: '26px',
+                      height: '26px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <Camera size={13} />
+                  </button>
+                </div>
+                <div>
+                  <label style={{ fontSize: '0.875rem', fontWeight: '800', color: '#0f172a', display: 'block', marginBottom: '2px' }}>
+                    Candidate Photo
+                  </label>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+                    Upload your candidate photo (JPG, PNG, WEBP, max 5MB).
+                  </span>
+                  <button 
+                    type="button" 
+                    onClick={() => photoInputRef.current?.click()}
+                    className="btn btn-primary btn-sm"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', padding: '0.35rem 0.75rem' }}
+                  >
+                    <Upload size={13} /> Upload Photo
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '4px' }}>
+                  Or pick preset headshot:
+                </span>
+                <div style={{ display: 'flex', gap: '0.4rem' }}>
+                  {PRESET_AVATARS.map(preset => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => setFormData(p => ({ ...p, avatar: preset.url }))}
+                      title={preset.label}
+                      style={{
+                        border: formData.avatar === preset.url ? '2px solid #2563eb' : '1px solid #cbd5e1',
+                        borderRadius: '50%',
+                        padding: 0,
+                        cursor: 'pointer',
+                        background: 'none',
+                        transform: formData.avatar === preset.url ? 'scale(1.1)' : 'scale(1)',
+                        transition: 'all 0.15s'
+                      }}
+                    >
+                      <img src={preset.url} alt={preset.label} style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover', display: 'block' }} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
               <div>
@@ -273,10 +437,52 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
                 <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>Password <span className="required">*</span></label>
                 <div style={{ position: 'relative' }}>
                   <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
-                  <input type={showPassword ? 'text' : 'password'} name="password" className="form-input" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }} placeholder="Min 6 characters" value={formData.password} onChange={handleChange} required />
+                  <input 
+                    type={showPassword ? 'text' : 'password'} 
+                    name="password" 
+                    className="form-input" 
+                    style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }} 
+                    placeholder="Min 8 chars, 1 capital & 1 special char" 
+                    value={formData.password} 
+                    onChange={handleChange} 
+                    required 
+                  />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}>
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
+                </div>
+                {/* Live Password Requirement Chips */}
+                <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginTop: '6px' }}>
+                  <span style={{
+                    fontSize: '0.72rem',
+                    padding: '0.15rem 0.45rem',
+                    borderRadius: '4px',
+                    fontWeight: '600',
+                    background: (formData.password?.length >= 8) ? '#dcfce7' : '#f1f5f9',
+                    color: (formData.password?.length >= 8) ? '#15803d' : '#64748b'
+                  }}>
+                    {formData.password?.length >= 8 ? '✓' : '○'} Min 8 chars
+                  </span>
+                  <span style={{
+                    fontSize: '0.72rem',
+                    padding: '0.15rem 0.45rem',
+                    borderRadius: '4px',
+                    fontWeight: '600',
+                    background: /[A-Z]/.test(formData.password || '') ? '#dcfce7' : '#f1f5f9',
+                    color: /[A-Z]/.test(formData.password || '') ? '#15803d' : '#64748b'
+                  }}>
+                    {/[A-Z]/.test(formData.password || '') ? '✓' : '○'} 1 Capital letter
+                  </span>
+                  <span style={{
+                    fontSize: '0.72rem',
+                    padding: '0.15rem 0.45rem',
+                    borderRadius: '4px',
+                    fontWeight: '600',
+                    background: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(formData.password || '') ? '#dcfce7' : '#f1f5f9',
+                    color: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(formData.password || '') ? '#15803d' : '#64748b'
+                  }}>
+                    {/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(formData.password || '') ? '✓' : '○'} 1 Special char
+                  </span>
                 </div>
               </div>
 
@@ -286,6 +492,16 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
                   <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
                   <input type={showPassword ? 'text' : 'password'} name="confirmPassword" className="form-input" style={{ paddingLeft: '2.5rem' }} placeholder="Re-enter password" value={formData.confirmPassword} onChange={handleChange} required />
                 </div>
+                {formData.confirmPassword && (
+                  <div style={{
+                    fontSize: '0.72rem',
+                    marginTop: '6px',
+                    fontWeight: '600',
+                    color: formData.password === formData.confirmPassword ? '#15803d' : '#dc2626'
+                  }}>
+                    {formData.password === formData.confirmPassword ? '✓ Passwords match' : '✗ Passwords do not match'}
+                  </div>
+                )}
               </div>
             </div>
           </div>

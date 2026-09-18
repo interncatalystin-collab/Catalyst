@@ -257,7 +257,7 @@ export default function LoginPage({ targetRole = 'student', onLoginSuccess, setA
                 transition: 'all 0.2s ease'
               }}
             >
-              <Building2 size={15} /> Employer
+              <Building2 size={15} /> Company
             </button>
             <button
               type="button"
@@ -509,7 +509,7 @@ export default function LoginPage({ targetRole = 'student', onLoginSuccess, setA
                 style={{ width: '100%', padding: '0.85rem', fontWeight: '800', fontSize: '0.95rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
                 disabled={submitting}
               >
-                {submitting ? 'Authenticating Credentials...' : `Log In to ${selectedRole === 'admin' ? 'Central Admin Panel' : 'Employer Portal'}`}
+                {submitting ? 'Authenticating Credentials...' : `Log In to ${selectedRole === 'admin' ? 'Central Admin Panel' : 'Company Dashboard'}`}
                 {!submitting && <ArrowRight size={18} />}
               </button>
             </form>

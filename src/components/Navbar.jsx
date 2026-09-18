@@ -133,7 +133,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                     onClick={() => handleNavClick('company-dash')}
                     style={{ background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
                   >
-                    <Building2 size={14} /> Employer
+                    <Building2 size={14} /> Company Dashboard
                   </button>
                 )}
                 {currentRole === 'admin' && (
