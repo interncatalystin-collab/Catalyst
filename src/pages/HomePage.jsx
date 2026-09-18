@@ -4,7 +4,6 @@ import {
   Search, 
   ShieldCheck, 
   GraduationCap, 
-  Building2, 
   ArrowRight, 
   Sparkles, 
   Users, 
@@ -90,7 +89,7 @@ export default function HomePage({
             Accelerate your career with 100% verified IT internships, ATS resume tools, and direct corporate hiring.
           </p>
 
-          {/* Dual Main Buttons */}
+          {/* Main Action Button */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
             <button 
               className="btn btn-primary" 
@@ -98,14 +97,6 @@ export default function HomePage({
               onClick={() => setActiveTab('browse')}
             >
               <Search size={18} /> Find Internships <ArrowRight size={18} />
-            </button>
-
-            <button 
-              className="btn btn-emerald" 
-              style={{ padding: '0.9rem 2rem', fontSize: '1.05rem' }}
-              onClick={() => { setCurrentRole('company'); setActiveTab('for-companies'); }}
-            >
-              <Building2 size={18} /> Post an Internship
             </button>
           </div>
 
@@ -166,9 +157,9 @@ export default function HomePage({
               }}>
                 <GraduationCap size={24} />
               </div>
-              <h3 style={{ fontSize: '1.2rem', color: '#0f172a', marginBottom: '0.5rem' }}>For Students</h3>
+              <h3 style={{ fontSize: '1.2rem', color: '#0f172a', marginBottom: '0.5rem' }}>For Students & Freshers</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>
-                Build an authenticated profile, upload resumes, specify work mode (Online/Offline) and stipend expectations, and apply to 100% verified opportunities.
+                Build an authenticated profile, upload ATS resumes, specify work mode (Online/Offline) and stipend expectations, and apply to 100% verified opportunities.
               </p>
               <button 
                 onClick={() => { setCurrentRole('student'); setActiveTab('student-dash'); }}
@@ -178,29 +169,28 @@ export default function HomePage({
               </button>
             </div>
 
-            {/* Box 2: Companies */}
+            {/* Box 2: Domain-Based Career Tracks */}
             <div className="glass-card">
               <div style={{
                 width: '48px', height: '48px', borderRadius: '12px', background: '#f0fdf4',
                 color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem'
               }}>
-                <Building2 size={24} />
+                <Briefcase size={24} />
               </div>
-              <h3 style={{ fontSize: '1.2rem', color: '#0f172a', marginBottom: '0.5rem' }}>For Employers & Startups</h3>
+              <h3 style={{ fontSize: '1.2rem', color: '#0f172a', marginBottom: '0.5rem' }}>Domain Placement Tracks</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>
-                Verify business email & company identity to earn the Verified Employer Badge (✓). Post roles, set application deadlines, and access AI candidate matching.
+                Apply once for your specialized domain track and get pooled across verified hiring partners with guaranteed stipends and proctored assessment credentials.
               </p>
               <button 
-                onClick={() => { setCurrentRole('company'); setActiveTab('for-companies'); }}
+                onClick={() => setActiveTab('browse')}
                 style={{ background: 'none', border: 'none', color: '#16a34a', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}
               >
-                Post Opportunities & Get Badge <ArrowRight size={14} />
+                Explore Domain Roles <ArrowRight size={14} />
               </button>
             </div>
           </div>
         </div>
       </section>
-
 
       {/* Verified Employer Badge Commitment Banner */}
       <section style={{ padding: '3.5rem 0' }}>
@@ -229,7 +219,7 @@ export default function HomePage({
             </div>
             <button 
               className="btn btn-emerald"
-              onClick={() => setActiveTab('for-companies')}
+              onClick={() => setActiveTab('how-it-works')}
             >
               Learn About Verification <ArrowRight size={16} />
             </button>

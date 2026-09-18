@@ -396,7 +396,7 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
               Create Your Profile Now <ArrowRight size={16} />
             </button>
           ) : (
-            <button className="btn btn-emerald" onClick={() => { setCurrentRole('company'); setActiveTab('for-companies'); }}>
+            <button className="btn btn-emerald" onClick={() => { setCurrentRole('company'); setActiveTab('company-dash'); }}>
               Register Employer Account <ArrowRight size={16} />
             </button>
           )}

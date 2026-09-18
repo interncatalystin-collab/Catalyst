@@ -17,8 +17,13 @@ import {
   DollarSign,
   Calendar,
   Sparkles,
-  Lock
+  Lock,
+  BadgeCheck,
+  Zap,
+  Check,
+  ArrowRight
 } from 'lucide-react';
+import { SUBSCRIPTION_PLANS } from '../data/mockData';
 
 export default function CompanyDashboard({ 
   company, 
@@ -328,7 +333,7 @@ export default function CompanyDashboard({
               gap: '0.4rem'
             }}
           >
-            <CreditCard size={15} /> Subscription & Placements
+            <CreditCard size={15} /> Partner Benefits & Plans
           </button>
         </div>
 
@@ -984,43 +989,263 @@ export default function CompanyDashboard({
           </div>
         )}
 
-        {/* Tab 5: Subscription & Renew Placements */}
+        {/* Tab 5: Corporate Partner Benefits & Subscription Plans */}
         {activeTab === 'subscription' && (
-          <div className="glass-card" style={{ maxWidth: '650px' }}>
-            <h3 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.5rem' }}>
-              Renew Subscription & Placement Packs
-            </h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-              Handwritten Requirement: Renew an annual subscription / monthly or buy additional placements.
-            </p>
+          <div>
+            {/* Header Banner */}
+            <div className="glass-card" style={{
+              padding: '2rem 2.5rem',
+              marginBottom: '2rem',
+              background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(37, 99, 235, 0.08) 100%)',
+              border: '1px solid var(--border-color)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.5rem' }}>
+                <div style={{ maxWidth: '720px' }}>
+                  <div className="badge badge-verified" style={{ marginBottom: '0.75rem', background: '#10b981', color: '#fff' }}>
+                    <ShieldCheck size={14} /> Corporate & Startup Partner Portal
+                  </div>
+                  <h2 style={{ fontSize: '1.85rem', fontWeight: '800', color: '#fff', marginBottom: '0.65rem' }}>
+                    Hire Pre-Vetted Interns & Build Your <span className="text-gradient-emerald">Talent Pipeline</span>
+                  </h2>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem', lineHeight: '1.6' }}>
+                    InternCatalyst connects verified corporate partners with pre-screened engineering, design, and IT candidates. Manage your active subscription, placement quotas, and partnership credentials.
+                  </p>
+                </div>
 
-            <div style={{ background: 'rgba(15,23,42,0.8)', padding: '1.25rem', borderRadius: '8px', border: '1px solid var(--border-color)', marginBottom: '1.5rem' }}>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-dim)' }}>Active Plan</div>
-              <h4 style={{ color: '#fff', fontSize: '1.3rem', fontWeight: '800' }}>{company.subscriptionPlan}</h4>
-              <div style={{ color: '#10b981', fontSize: '0.9rem', fontWeight: '700', marginTop: '0.25rem' }}>
-                {company.placementsRemaining} Placement Posts Remaining
+                {/* Current Active Plan Status Widget */}
+                <div style={{
+                  background: 'rgba(15, 23, 42, 0.95)',
+                  border: '1px solid var(--border-highlight)',
+                  borderRadius: '12px',
+                  padding: '1.25rem 1.75rem',
+                  minWidth: '260px'
+                }}>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    Current Corporate Tier
+                  </span>
+                  <h3 style={{ color: '#fff', fontSize: '1.35rem', fontWeight: '800', marginTop: '3px' }}>
+                    {company.subscriptionPlan || 'Growth Monthly'}
+                  </h3>
+                  <div style={{ color: '#10b981', fontWeight: '700', fontSize: '0.9rem', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <Sparkles size={14} /> {company.placementsRemaining ?? 10} Placement Posts Remaining
+                  </div>
+                  <div style={{ marginTop: '0.6rem', fontSize: '0.75rem', color: company.verifiedBadge ? '#34d399' : '#fbbf24', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                    <BadgeCheck size={13} /> {company.verifiedBadge ? 'Verified Partner Badge Active (✓)' : 'Pending Document Audit'}
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="grid-2" style={{ gap: '1rem' }}>
+            {/* 3 Core Value Pillars Grid (From For Companies section) */}
+            <div style={{ marginBottom: '3rem' }}>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: '800', color: '#fff', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Sparkles size={18} style={{ color: '#38bdf8' }} /> Corporate Partner Benefits & Features
+              </h3>
+              <div className="grid-3" style={{ gap: '1.5rem' }}>
+                <div className="glass-card" style={{ padding: '1.5rem' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+                    <BadgeCheck size={26} />
+                  </div>
+                  <h4 style={{ color: '#fff', fontSize: '1.15rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+                    Verified Employer Badge (✓)
+                  </h4>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.5' }}>
+                    Stand out to top-tier candidates. Earning the Verified Employer Badge signals authenticity, corporate email verification, and genuine stipend commitments.
+                  </p>
+                </div>
+
+                <div className="glass-card" style={{ padding: '1.5rem' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+                    <Zap size={26} />
+                  </div>
+                  <h4 style={{ color: '#fff', fontSize: '1.15rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+                    Smart AI Candidate Matcher
+                  </h4>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.5' }}>
+                    Our proprietary matching algorithm filters student skill portfolios, year of study, and hardware-proctored assessment scores to deliver candidates with a 90%+ match score.
+                  </p>
+                </div>
+
+                <div className="glass-card" style={{ padding: '1.5rem' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(14, 165, 233, 0.15)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+                    <Users size={26} />
+                  </div>
+                  <h4 style={{ color: '#fff', fontSize: '1.15rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+                    Direct College Access
+                  </h4>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.5' }}>
+                    Partner directly with top college placement cells (including AIET and accredited engineering institutions) for bulk intern hiring, virtual hackathons, and structured campus drives.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 3-Tier Subscription & Placement Plans Matrix */}
+            <div style={{ marginBottom: '3rem' }}>
+              <div style={{ marginBottom: '1.75rem' }}>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#fff', marginBottom: '0.35rem' }}>
+                  Transparent <span className="text-gradient">Subscription & Placement Plans</span>
+                </h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                  Choose the plan that fits your startup or enterprise hiring volume. Instant quota allocation upon activation.
+                </p>
+              </div>
+
+              <div className="grid-3" style={{ gap: '1.5rem' }}>
+                {SUBSCRIPTION_PLANS.map((plan, idx) => {
+                  const isCurrent = company.subscriptionPlan === plan.name;
+                  return (
+                    <div 
+                      key={idx}
+                      className="glass-card" 
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        border: isCurrent 
+                          ? '2px solid #10b981' 
+                          : plan.popular 
+                            ? '1.5px solid #38bdf8' 
+                            : '1px solid var(--border-color)',
+                        position: 'relative',
+                        padding: '1.75rem',
+                        background: isCurrent ? 'rgba(16, 185, 129, 0.06)' : 'var(--bg-card)'
+                      }}
+                    >
+                      {isCurrent ? (
+                        <span style={{
+                          position: 'absolute',
+                          top: '-12px',
+                          right: '1.5rem',
+                          background: '#10b981',
+                          color: '#fff',
+                          fontWeight: '800',
+                          fontSize: '0.72rem',
+                          padding: '0.2rem 0.65rem',
+                          borderRadius: '10px',
+                          textTransform: 'uppercase'
+                        }}>
+                          Current Plan
+                        </span>
+                      ) : plan.popular ? (
+                        <span style={{
+                          position: 'absolute',
+                          top: '-12px',
+                          right: '1.5rem',
+                          background: '#38bdf8',
+                          color: '#0f172a',
+                          fontWeight: '800',
+                          fontSize: '0.72rem',
+                          padding: '0.2rem 0.65rem',
+                          borderRadius: '10px',
+                          textTransform: 'uppercase'
+                        }}>
+                          Most Popular
+                        </span>
+                      ) : null}
+
+                      <h4 style={{ fontSize: '1.25rem', color: '#fff', fontWeight: '700', marginBottom: '0.4rem' }}>
+                        {plan.name}
+                      </h4>
+                      <div style={{ marginBottom: '1.25rem' }}>
+                        <span style={{ fontSize: '2.2rem', fontWeight: '800', color: isCurrent ? '#34d399' : '#fff' }}>
+                          {plan.price}
+                        </span>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginLeft: '0.35rem' }}>
+                          {plan.period}
+                        </span>
+                      </div>
+
+                      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '2rem', flex: 1 }}>
+                        {plan.features.map((feat, i) => (
+                          <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-dim)' }}>
+                            <Check size={15} style={{ color: isCurrent ? '#34d399' : '#38bdf8', flexShrink: 0 }} />
+                            {feat}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button 
+                        className={isCurrent ? 'btn btn-secondary' : plan.popular ? 'btn btn-emerald' : 'btn btn-primary'}
+                        onClick={() => {
+                          let added = plan.name.includes('Starter') ? 2 : plan.name.includes('Growth') ? 10 : 50;
+                          let willVerify = !plan.name.includes('Starter');
+                          onUpdateCompany({
+                            ...company,
+                            subscriptionPlan: plan.name,
+                            placementsRemaining: (company.placementsRemaining || 0) + added,
+                            verifiedBadge: company.verifiedBadge || willVerify,
+                            verificationStatus: willVerify ? 'Verified' : company.verificationStatus
+                          });
+                          onAddToast(`🎉 Subscribed to ${plan.name}! Credited +${added} placement posts.`, 'success');
+                        }}
+                        style={{ width: '100%', fontWeight: '700' }}
+                      >
+                        {isCurrent ? '✓ Current Plan (Renew & Add Quota)' : `${plan.cta} →`}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Quick Add-On Placement Packs */}
+            <div className="glass-card" style={{ padding: '1.75rem', marginBottom: '2rem' }}>
+              <h4 style={{ color: '#fff', fontSize: '1.15rem', fontWeight: '700', marginBottom: '0.4rem' }}>
+                Need Additional Placement Quota Immediately?
+              </h4>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1.25rem' }}>
+                Purchase top-up packs without altering your billing cycle or renew enterprise access.
+              </p>
+
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <button 
+                  className="btn btn-emerald"
+                  onClick={() => {
+                    onUpdateCompany({ ...company, placementsRemaining: (company.placementsRemaining || 0) + 10 });
+                    onAddToast('Added +10 Placement Posts to company balance!', 'success');
+                  }}
+                >
+                  <PlusCircle size={15} /> Buy +10 Placements Pack (₹4,999)
+                </button>
+
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => {
+                    onUpdateCompany({ ...company, subscriptionPlan: 'Pro Annual Plan', placementsRemaining: (company.placementsRemaining || 0) + 50, verifiedBadge: true });
+                    onAddToast('Renewed Annual Pro Subscription (+50 Placements)!', 'success');
+                  }}
+                >
+                  <Sparkles size={15} /> Renew Annual Pro Plan (₹19,999)
+                </button>
+              </div>
+            </div>
+
+            {/* Post Opportunity Callout */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(14, 165, 233, 0.12) 100%)',
+              border: '1px solid rgba(56, 189, 248, 0.3)',
+              borderRadius: 'var(--radius-xl)',
+              padding: '2rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1.5rem',
+              flexWrap: 'wrap'
+            }}>
+              <div>
+                <h3 style={{ color: '#fff', fontSize: '1.35rem', fontWeight: '800', marginBottom: '0.35rem' }}>
+                  Ready to Post Your Next Internship Opportunity?
+                </h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                  Create a new role opening in 2 minutes to start receiving vetted candidate applications.
+                </p>
+              </div>
               <button 
                 className="btn btn-emerald"
-                onClick={() => {
-                  onUpdateCompany({ ...company, placementsRemaining: company.placementsRemaining + 10 });
-                  onAddToast('Added +10 Placement Posts to company balance!', 'success');
-                }}
+                onClick={() => setActiveTab('post-role')}
+                style={{ padding: '0.75rem 1.5rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
               >
-                Buy +10 Placements Pack (₹4,999)
-              </button>
-
-              <button 
-                className="btn btn-primary"
-                onClick={() => {
-                  onUpdateCompany({ ...company, subscriptionPlan: 'Pro Annual Plan', placementsRemaining: company.placementsRemaining + 50 });
-                  onAddToast('Renewed Annual Pro Subscription!', 'success');
-                }}
-              >
-                Renew Annual Pro Plan (₹19,999)
+                Launch Post Role Wizard <ArrowRight size={16} />
               </button>
             </div>
           </div>

@@ -74,12 +74,6 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               <FileText size={14} /> Resume Templates
             </button>
             <button 
-              onClick={() => handleNavClick('for-companies')}
-              className={`nav-link-btn ${activeTab === 'for-companies' ? 'active' : ''}`}
-            >
-              For Companies
-            </button>
-            <button 
               onClick={() => handleNavClick('about')}
               className={`nav-link-btn ${activeTab === 'about' ? 'active' : ''}`}
             >
@@ -247,13 +241,6 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
             onClick={() => handleNavClick('resume-templates')}
           >
             Resume Templates
-          </button>
-          <button 
-            className="btn btn-secondary" 
-            style={{ background: '#ffffff', color: '#0f172a', fontWeight: '800', border: '1.5px solid #cbd5e1', padding: '0.7rem 1rem', fontSize: '0.9rem' }} 
-            onClick={() => handleNavClick('for-companies')}
-          >
-            For Companies
           </button>
           <button 
             className="btn btn-secondary" 

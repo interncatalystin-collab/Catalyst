@@ -5,7 +5,6 @@ import HomePage from './pages/HomePage';
 import BrowseInternshipsPage from './pages/BrowseInternshipsPage';
 import HowItWorksPage from './pages/HowItWorksPage';
 import ResumeTemplatesPage from './pages/ResumeTemplatesPage';
-import ForCompaniesPage from './pages/ForCompaniesPage';
 import AboutUsPage from './pages/AboutUsPage';
 import StudentDashboard from './pages/StudentDashboard';
 import CompanyDashboard from './pages/CompanyDashboard';
@@ -508,12 +507,6 @@ export default function App() {
           <ResumeTemplatesPage />
         )}
 
-        {activeTab === 'for-companies' && (
-          <ForCompaniesPage 
-            setActiveTab={setActiveTab} 
-            setCurrentRole={setCurrentRole} 
-          />
-        )}
 
         {activeTab === 'about' && (
           <AboutUsPage />
@@ -554,7 +547,7 @@ export default function App() {
           )
         )}
 
-        {activeTab === 'company-dash' && (
+        {(activeTab === 'company-dash' || activeTab === 'for-companies') && (
           !authenticatedRoles.company ? (
             <LoginPage targetRole="company" onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
           ) : (
