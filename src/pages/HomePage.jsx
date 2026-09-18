@@ -162,10 +162,10 @@ export default function HomePage({
                 Build an authenticated profile, upload ATS resumes, specify work mode (Online/Offline) and stipend expectations, and apply to 100% verified opportunities.
               </p>
               <button 
-                onClick={() => { setCurrentRole('student'); setActiveTab('student-dash'); }}
+                onClick={() => { setCurrentRole('student'); setActiveTab('student-profile'); }}
                 style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}
               >
-                Create Student Profile <ArrowRight size={14} />
+                Create Student Profile & Registration <ArrowRight size={14} />
               </button>
             </div>
 

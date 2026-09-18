@@ -87,7 +87,10 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               <div style={{ display: 'flex', gap: '0.4rem' }}>
                 <button 
                   className="btn btn-secondary btn-sm nav-reg-btn"
-                  onClick={() => handleNavClick('student-register')}
+                  onClick={() => {
+                    if (setCurrentRole) setCurrentRole('student');
+                    handleNavClick('student-profile');
+                  }}
                   style={{ 
                     borderColor: '#38bdf8', 
                     color: '#38bdf8', 
@@ -96,7 +99,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                     fontSize: '0.8rem'
                   }}
                 >
-                  <GraduationCap size={14} /> Register
+                  <GraduationCap size={14} /> Register / Profile Form
                 </button>
                 <button 
                   className="btn btn-primary btn-sm nav-login-btn"
@@ -119,13 +122,22 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 {currentRole === 'student' && (
-                  <button 
-                    className="btn btn-primary btn-sm"
-                    onClick={() => handleNavClick('student-dash')}
-                    style={{ background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 100%)', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
-                  >
-                    <GraduationCap size={14} /> Dashboard
-                  </button>
+                  <div style={{ display: 'flex', gap: '0.4rem' }}>
+                    <button 
+                      className="btn btn-primary btn-sm"
+                      onClick={() => handleNavClick('student-dash')}
+                      style={{ background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 100%)', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
+                    >
+                      <GraduationCap size={14} /> Dashboard
+                    </button>
+                    <button 
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => handleNavClick('student-profile')}
+                      style={{ borderColor: '#38bdf8', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
+                    >
+                      <User size={14} /> Profile Form
+                    </button>
+                  </div>
                 )}
                 {currentRole === 'company' && (
                   <button 
@@ -209,9 +221,12 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               padding: '0.75rem 1rem',
               fontSize: '0.925rem'
             }} 
-            onClick={() => handleNavClick('student-register')}
+            onClick={() => {
+              if (setCurrentRole) setCurrentRole('student');
+              handleNavClick('student-profile');
+            }}
           >
-            <GraduationCap size={16} style={{ color: '#2563eb' }} /> Student Registration Form
+            <GraduationCap size={16} style={{ color: '#2563eb' }} /> Student Profile & Registration Form
           </button>
           <hr style={{ borderColor: 'rgba(255,255,255,0.15)', margin: '0.25rem 0' }} />
           <button 

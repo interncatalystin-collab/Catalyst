@@ -528,12 +528,21 @@ export default function App() {
           <LoginPage targetRole="student" onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
         )}
 
-        {(activeTab === 'student-register' || activeTab === 'register') && (
-          <StudentRegisterPage 
-            onLoginSuccess={handleLoginSuccess}
-            setActiveTab={setActiveTab}
+        {(activeTab === 'student-register' || activeTab === 'register' || activeTab === 'student-profile') && (
+          <StudentDashboard 
+            profile={studentProfile}
             onUpdateProfile={handleUpdateStudentProfile}
+            applications={applications}
+            internships={internships}
+            companies={companies}
+            onApplyDomainRole={handleApplyDomainRole}
+            onCompleteAssessment={handleCompleteAssessment}
+            onWithdrawApplication={handleWithdrawApplication}
+            onDeleteAccount={handleDeleteStudentAccount}
             onAddToast={addToast}
+            onLogout={() => handleLogoutRole('student')}
+            onLoginSuccess={handleLoginSuccess}
+            initialTab="profile"
           />
         )}
 
@@ -554,7 +563,7 @@ export default function App() {
               onAddToast={addToast}
               onLogout={() => handleLogoutRole('student')}
               onLoginSuccess={handleLoginSuccess}
-              initialTab="domain-role"
+              initialTab="profile"
             />
           )
         )}

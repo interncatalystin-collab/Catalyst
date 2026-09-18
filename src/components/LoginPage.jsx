@@ -432,10 +432,10 @@ export default function LoginPage({ targetRole = 'student', onLoginSuccess, setA
               <div style={{ textAlign: 'center' }}>
                 <button
                   type="button"
-                  onClick={() => setActiveTab('student-register')}
+                  onClick={() => setActiveTab('student-profile')}
                   style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer' }}
                 >
-                  Don't have a student account? <u>Register Now</u>
+                  Don't have a student account? <u>Register Now (Profile Form)</u>
                 </button>
               </div>
             </form>

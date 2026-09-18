@@ -38,6 +38,7 @@ import {
   Globe,
   RefreshCw,
   Eye,
+  EyeOff,
   AlertCircle
 } from 'lucide-react';
 import { DOMAIN_ROLES_DATA, getDomainRoleForStudent } from '../data/domainRolesData';
@@ -54,11 +55,19 @@ export default function StudentDashboard({
   onDeleteAccount,
   onAddToast,
   onLogout,
-  initialTab = 'domain-role'
+  initialTab = 'profile'
 }) {
-  const [activeTab, setActiveTab] = useState(initialTab === 'register' ? 'profile' : initialTab);
-  const [isEditing, setIsEditing] = useState(false);
+  const [activeTab, setActiveTab] = useState(
+    (initialTab === 'register' || initialTab === 'profile' || initialTab === 'student-profile') ? 'profile' : initialTab
+  );
+  const [profileViewMode, setProfileViewMode] = useState('form'); // 'form' (default - directly show registration form) or 'preview'
+  const [isEditing, setIsEditing] = useState(true);
   const [selectedDomainId, setSelectedDomainId] = useState(null);
+
+  // Security Credentials (Password) State for Registration Profile Form
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   // Proctored Assessment State (Camera, Mic, Screen & Fullscreen)
   const [activeAssessmentApp, setActiveAssessmentApp] = useState(null);
@@ -77,8 +86,14 @@ export default function StudentDashboard({
   const safeProfile = profile || {};
 
   useEffect(() => {
-    if (initialTab && initialTab !== 'register') {
-      setActiveTab(initialTab);
+    if (initialTab) {
+      if (initialTab === 'register' || initialTab === 'profile' || initialTab === 'student-profile') {
+        setActiveTab('profile');
+        setProfileViewMode('form');
+        setIsEditing(true);
+      } else {
+        setActiveTab(initialTab);
+      }
     }
   }, [initialTab]);
 
@@ -221,9 +236,28 @@ export default function StudentDashboard({
       if (onAddToast) onAddToast('Branch / Specialization is required.', 'danger');
       return;
     }
+    if (password) {
+      if (password.length < 8) {
+        if (onAddToast) onAddToast('Password Requirement: Password must be at least 8 characters long.', 'danger');
+        return;
+      }
+      if (!/[A-Z]/.test(password)) {
+        if (onAddToast) onAddToast('Password Requirement: Password must contain at least one capital letter (A-Z).', 'danger');
+        return;
+      }
+      if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password)) {
+        if (onAddToast) onAddToast('Password Requirement: Password must contain at least one special character (!@#$%^&*).', 'danger');
+        return;
+      }
+      if (password !== confirmPassword) {
+        if (onAddToast) onAddToast('Password Mismatch: Passwords do not match.', 'danger');
+        return;
+      }
+    }
 
     const updated = {
       ...safeProfile,
+      ...(password ? { password } : {}),
       name: name.trim(),
       fullName: name.trim(),
       email: email.trim(),
@@ -403,10 +437,12 @@ export default function StudentDashboard({
               className="btn btn-secondary btn-sm"
               onClick={() => {
                 setActiveTab('profile');
+                setProfileViewMode('form');
                 setIsEditing(true);
               }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: '700' }}
             >
-              <User size={14} /> Edit Profile & Photo
+              <FileText size={14} /> Profile Registration Form
             </button>
             {onLogout && (
               <button 
@@ -429,7 +465,41 @@ export default function StudentDashboard({
           marginBottom: '2rem',
           overflowX: 'auto'
         }}>
-          {/* Tab 1: Domain Role & Vacancies */}
+          {/* Tab 1: Student Profile & Registration Form */}
+          <button 
+            onClick={() => {
+              setActiveTab('profile');
+              setProfileViewMode('form');
+            }}
+            style={{
+              background: activeTab === 'profile' ? 'var(--primary)' : '#ffffff',
+              border: activeTab === 'profile' ? 'none' : '1px solid var(--border-color)',
+              color: activeTab === 'profile' ? '#ffffff' : 'var(--text-main)',
+              padding: '0.65rem 1.25rem',
+              borderRadius: 'var(--radius-md)',
+              fontWeight: '700',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              boxShadow: activeTab === 'profile' ? 'var(--shadow-glow)' : 'none'
+            }}
+          >
+            <User size={16} /> Student Profile & Registration Form
+            <span style={{
+              background: activeTab === 'profile' ? '#ffffff' : '#e0e7ff',
+              color: activeTab === 'profile' ? '#1d4ed8' : '#3730a3',
+              fontSize: '0.7rem',
+              fontWeight: '800',
+              padding: '0.15rem 0.45rem',
+              borderRadius: '10px'
+            }}>
+              Profile Form
+            </span>
+          </button>
+
+          {/* Tab 2: Domain Role & Vacancies */}
           <button 
             onClick={() => setActiveTab('domain-role')}
             style={{
@@ -460,7 +530,7 @@ export default function StudentDashboard({
             </span>
           </button>
 
-          {/* Tab 2: My Applications */}
+          {/* Tab 3: My Applications */}
           <button 
             onClick={() => setActiveTab('applications')}
             style={{
@@ -489,33 +559,57 @@ export default function StudentDashboard({
               {applications.length}
             </span>
           </button>
-
-          {/* Tab 3: Candidate Profile */}
-          <button 
-            onClick={() => setActiveTab('profile')}
-            style={{
-              background: activeTab === 'profile' ? 'var(--primary)' : '#ffffff',
-              border: activeTab === 'profile' ? 'none' : '1px solid var(--border-color)',
-              color: activeTab === 'profile' ? '#ffffff' : 'var(--text-main)',
-              padding: '0.65rem 1.25rem',
-              borderRadius: 'var(--radius-md)',
-              fontWeight: '700',
-              fontSize: '0.9rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}
-          >
-            <User size={16} /> Candidate Profile & Registration
-          </button>
         </div>
 
         {/* ======================================================== */}
-        {/* TAB 1: DOMAIN ROLE & VACANCIES (PRIMARY CORE FEATURE)    */}
+        {/* TAB 2: DOMAIN ROLE & VACANCIES (CENTRAL PLACEMENT)       */}
         {/* ======================================================== */}
         {activeTab === 'domain-role' && (
           <div>
+            {/* Quick Profile Registration Status Strip */}
+            <div style={{
+              background: '#f8fafc',
+              border: '1px solid #cbd5e1',
+              borderRadius: 'var(--radius-lg)',
+              padding: '0.85rem 1.25rem',
+              marginBottom: '1.25rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '0.75rem',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <img 
+                  src={avatar} 
+                  alt="Candidate Photo" 
+                  style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #2563eb' }} 
+                />
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <strong style={{ fontSize: '0.92rem', color: '#0f172a' }}>{name}</strong>
+                    <span className="badge badge-verified" style={{ fontSize: '0.7rem' }}>✓ Registration Profile Form Active</span>
+                  </div>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    Phone: {phone} • {institution} ({degree})
+                  </span>
+                </div>
+              </div>
+              <button 
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={() => {
+                  setActiveTab('profile');
+                  setProfileViewMode('form');
+                  setIsEditing(true);
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: '700', fontSize: '0.825rem' }}
+              >
+                <User size={14} /> Edit Profile Form & Photo
+              </button>
+            </div>
+
             {/* Domain Switcher & Notice Bar */}
             <div style={{
               background: '#ffffff',
@@ -1063,33 +1157,69 @@ export default function StudentDashboard({
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                {isEditing ? (
-                  <button 
-                    type="button"
-                    className="btn btn-secondary btn-sm"
-                    onClick={() => setIsEditing(false)}
-                    style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: '700' }}
-                  >
-                    <Eye size={15} /> View Profile Summary
-                  </button>
-                ) : (
-                  <button 
-                    type="button"
-                    className="btn btn-primary btn-sm"
-                    onClick={() => setIsEditing(true)}
-                    style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: '700' }}
-                  >
-                    <FileText size={15} /> Edit Registration Form
-                  </button>
-                )}
+              {/* Subview Segmented Pills */}
+              <div style={{
+                background: '#f1f5f9',
+                padding: '4px',
+                borderRadius: '10px',
+                display: 'inline-flex',
+                gap: '4px'
+              }}>
+                <button 
+                  type="button"
+                  onClick={() => {
+                    setProfileViewMode('form');
+                    setIsEditing(true);
+                  }}
+                  style={{
+                    background: profileViewMode === 'form' ? '#ffffff' : 'transparent',
+                    color: profileViewMode === 'form' ? '#2563eb' : '#64748b',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.45rem 0.95rem',
+                    fontSize: '0.85rem',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    boxShadow: profileViewMode === 'form' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
+                    transition: 'all 0.15s'
+                  }}
+                >
+                  <FileText size={15} /> 📝 Registration Profile Form
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => {
+                    setProfileViewMode('preview');
+                    setIsEditing(false);
+                  }}
+                  style={{
+                    background: profileViewMode === 'preview' ? '#ffffff' : 'transparent',
+                    color: profileViewMode === 'preview' ? '#2563eb' : '#64748b',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.45rem 0.95rem',
+                    fontSize: '0.85rem',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    boxShadow: profileViewMode === 'preview' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
+                    transition: 'all 0.15s'
+                  }}
+                >
+                  <Eye size={15} /> 👁️ Profile Summary
+                </button>
               </div>
             </div>
 
             {/* ======================================================== */}
-            {/* VIEW MODE: RICH CANDIDATE PROFILE OVERVIEW                */}
+            {/* VIEW MODE CONDITIONAL RENDERING (DEFAULT IS FORM)         */}
             {/* ======================================================== */}
-            {!isEditing ? (
+            {profileViewMode === 'preview' ? (
               <div>
                 {/* Hero Candidate Card */}
                 <div style={{
@@ -1232,11 +1362,22 @@ export default function StudentDashboard({
                     </button>
                     <button 
                       type="button"
-                      onClick={() => setIsEditing(true)}
+                      onClick={() => {
+                        setProfileViewMode('form');
+                        setIsEditing(true);
+                      }}
                       className="btn btn-primary btn-sm"
                       style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: '700' }}
                     >
-                      <FileText size={14} /> Edit Registration Form
+                      <FileText size={14} /> Open Profile Form
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setActiveTab('domain-role')}
+                      className="btn btn-emerald btn-sm"
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: '700' }}
+                    >
+                      <Briefcase size={14} /> Domain Roles ({currentDomainRole.totalVacancies} Seats) →
                     </button>
                   </div>
                 </div>
@@ -1669,10 +1810,86 @@ export default function StudentDashboard({
                     </div>
                   </div>
 
-                  {/* SECTION 2: EDUCATION INFORMATION */}
+                  {/* SECTION 2: ACCOUNT SECURITY & PASSWORD (MIN 8, CAPITAL LETTER, SPECIAL CHARACTER) */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <BookOpen size={18} style={{ color: '#2563eb' }} /> 2. Education Information
+                      <Lock size={18} style={{ color: '#2563eb' }} /> 2. Security & Account Credentials
+                    </h4>
+
+                    <div className="grid-2">
+                      <div className="form-group">
+                        <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span>Candidate Password</span>
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', fontSize: '0.75rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '3px' }}
+                          >
+                            {showPassword ? <EyeOff size={13} /> : <Eye size={13} />}
+                            {showPassword ? 'Hide' : 'Show'}
+                          </button>
+                        </label>
+                        <input 
+                          type={showPassword ? 'text' : 'password'}
+                          className="form-input" 
+                          value={password} 
+                          onChange={(e) => setPassword(e.target.value)} 
+                          placeholder="Min 8 chars, e.g. Catalyst@2026"
+                        />
+                        {/* Live password policy indicators (minimum 8, capital letter, special character) */}
+                        <div style={{ display: 'flex', gap: '0.6rem', marginTop: '6px', flexWrap: 'wrap', fontSize: '0.74rem' }}>
+                          <span style={{ 
+                            color: password.length >= 8 ? '#16a34a' : '#94a3b8',
+                            fontWeight: password.length >= 8 ? '700' : '500',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '2px'
+                          }}>
+                            {password.length >= 8 ? '✓' : '○'} Min 8 chars
+                          </span>
+                          <span style={{ 
+                            color: /[A-Z]/.test(password) ? '#16a34a' : '#94a3b8',
+                            fontWeight: /[A-Z]/.test(password) ? '700' : '500',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '2px'
+                          }}>
+                            {/[A-Z]/.test(password) ? '✓' : '○'} Capital letter
+                          </span>
+                          <span style={{ 
+                            color: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password) ? '#16a34a' : '#94a3b8',
+                            fontWeight: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password) ? '700' : '500',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '2px'
+                          }}>
+                            {/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password) ? '✓' : '○'} Special character
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Confirm Password</label>
+                        <input 
+                          type={showPassword ? 'text' : 'password'}
+                          className="form-input" 
+                          value={confirmPassword} 
+                          onChange={(e) => setConfirmPassword(e.target.value)} 
+                          placeholder="Re-enter your password"
+                        />
+                        {confirmPassword && (
+                          <div style={{ marginTop: '6px', fontSize: '0.74rem', fontWeight: '700', color: password === confirmPassword ? '#16a34a' : '#ef4444' }}>
+                            {password === confirmPassword ? '✓ Passwords match' : '✕ Passwords do not match'}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SECTION 3: EDUCATION INFORMATION */}
+                  <div style={{ marginBottom: '2rem' }}>
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
+                      <BookOpen size={18} style={{ color: '#2563eb' }} /> 3. Education Information
                     </h4>
 
                     <div className="form-group">
@@ -1753,10 +1970,10 @@ export default function StudentDashboard({
                     </div>
                   </div>
 
-                  {/* SECTION 3: DOMAIN & PROFESSIONAL PROFILE */}
+                  {/* SECTION 4: DOMAIN & PROFESSIONAL PROFILE */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <Code size={18} style={{ color: '#2563eb' }} /> 3. Domain & Professional Profile
+                      <Code size={18} style={{ color: '#2563eb' }} /> 4. Domain & Professional Profile
                     </h4>
 
                     <div className="grid-2">
@@ -1796,7 +2013,7 @@ export default function StudentDashboard({
                         className="form-input" 
                         value={skillsInput} 
                         onChange={(e) => setSkillsInput(e.target.value)} 
-                        placeholder="e.g. React, Node.js, JavaScript, Python, MongoDB, SQL"
+                        placeholder="e.g. React, Node.js, JavaScript, Python, MongoDB, SQL" 
                       />
                     </div>
 
@@ -1824,10 +2041,10 @@ export default function StudentDashboard({
                     </div>
                   </div>
 
-                  {/* SECTION 4: LOCATION & WORK PREFERENCES */}
+                  {/* SECTION 5: LOCATION & WORK PREFERENCES */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <MapPin size={18} style={{ color: '#2563eb' }} /> 4. Location & Work Preferences
+                      <MapPin size={18} style={{ color: '#2563eb' }} /> 5. Location & Work Preferences
                     </h4>
 
                     <div className="grid-2">
@@ -1870,22 +2087,36 @@ export default function StudentDashboard({
                   </div>
 
                   {/* Submit Actions */}
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem' }}>
                     <button 
                       type="button" 
-                      className="btn btn-secondary" 
-                      onClick={() => setIsEditing(false)}
-                      style={{ fontWeight: '700' }}
+                      className="btn btn-emerald"
+                      onClick={() => setActiveTab('domain-role')}
+                      style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
                     >
-                      Cancel
+                      <Briefcase size={15} /> Proceed to Domain Roles ({currentDomainRole.totalVacancies} Seats) →
                     </button>
-                    <button 
-                      type="submit" 
-                      className="btn btn-primary"
-                      style={{ padding: '0.75rem 2rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                    >
-                      <CheckCircle2 size={16} /> Save Registration Profile
-                    </button>
+
+                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                      <button 
+                        type="button" 
+                        className="btn btn-secondary" 
+                        onClick={() => {
+                          setProfileViewMode('preview');
+                          setIsEditing(false);
+                        }}
+                        style={{ fontWeight: '700' }}
+                      >
+                        View Profile Summary
+                      </button>
+                      <button 
+                        type="submit" 
+                        className="btn btn-primary"
+                        style={{ padding: '0.75rem 2rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                      >
+                        <CheckCircle2 size={16} /> Save Registration Profile
+                      </button>
+                    </div>
                   </div>
                 </form>
               </div>
