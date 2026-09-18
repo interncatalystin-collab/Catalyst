@@ -5,7 +5,7 @@
 
 import { sendOtpHandler, verifyOtpHandler, passwordLoginHandler } from './controllers/authController.js';
 import { getInternshipsHandler, createInternshipHandler } from './controllers/internshipController.js';
-import { getApplicationsHandler, submitApplicationHandler, forwardApplicationHandler, employerSelectApplicationHandler } from './controllers/applicationController.js';
+import { getApplicationsHandler, submitApplicationHandler, forwardApplicationHandler, employerSelectApplicationHandler, submitAssessmentHandler } from './controllers/applicationController.js';
 import { registerStudentHandler, loginStudentHandler, getStudentProfileHandler } from './controllers/studentAuthController.js';
 import { adminLoginHandler, getAdminDashboardMetricsHandler, getAllStudentsHandler, getStudentByIdHandler } from './controllers/adminController.js';
 import { exportStudentsExcelHandler } from './controllers/excelController.js';
@@ -154,6 +154,12 @@ export const routeDispatcher = async (req, res, pathname) => {
   if (req.method === 'POST' && pathname === '/api/applications/select') {
     const body = await parseJson(req);
     employerSelectApplicationHandler(req, res, body);
+    return true;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/applications/assessment') {
+    const body = await parseJson(req);
+    await submitAssessmentHandler(req, res, body);
     return true;
   }
 

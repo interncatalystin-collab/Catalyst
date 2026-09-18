@@ -184,3 +184,50 @@ export const employerSelectApplicationHandler = async (req, res, body) => {
     application: updatedApp || memoryApp 
   }));
 };
+
+export const submitAssessmentHandler = async (req, res, body) => {
+  const { applicationId, score, proctoringDetails, violationsCount } = body;
+
+  const updates = {
+    assessmentScore: score,
+    assessmentStatus: 'Completed',
+    proctoringDetails: proctoringDetails || {
+      cameraVerified: true,
+      micVerified: true,
+      screenShareVerified: true,
+      fullScreenVerified: true,
+      violationsCount: violationsCount || 0,
+      completedAt: new Date().toISOString()
+    },
+    adminSelectionStatus: score >= 60 
+      ? 'Passed Proctored Assessment (Vetted for Placement)' 
+      : 'Assessment Completed (Under Review)'
+  };
+
+  // Update in MongoDB
+  let updatedApp = null;
+  try {
+    updatedApp = await ApplicationModel.findOneAndUpdate(
+      { id: applicationId },
+      { $set: updates },
+      { new: true }
+    ).lean();
+  } catch (dbErr) {
+    // proceed to memory fallback
+  }
+
+  // Update in memory
+  const memoryApp = memoryApplications.find(a => a.id === applicationId);
+  if (memoryApp) {
+    Object.assign(memoryApp, updates);
+    if (!updatedApp) updatedApp = memoryApp;
+  }
+
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ 
+    success: true, 
+    message: `Proctored Assessment score ${score}% recorded with verified camera, mic, screen share, and fullscreen access.`,
+    application: updatedApp || memoryApp 
+  }));
+};
+

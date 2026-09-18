@@ -38,6 +38,19 @@ const applicationSchema = new mongoose.Schema({
   coverNote: { type: String },
   
   // Admin & Employer Workflow
+  domain: { type: String },
+  isDomainApplication: { type: Boolean, default: false },
+  connectedCompanies: [{ type: String }],
+  assessmentScore: { type: Number },
+  assessmentStatus: { type: String, default: 'Pending Assessment' },
+  proctoringDetails: {
+    cameraVerified: { type: Boolean, default: false },
+    micVerified: { type: Boolean, default: false },
+    screenShareVerified: { type: Boolean, default: false },
+    fullScreenVerified: { type: Boolean, default: false },
+    violationsCount: { type: Number, default: 0 },
+    completedAt: { type: String }
+  },
   forwardedToEmployer: { type: Boolean, default: false },
   adminSelectionStatus: { type: String, default: 'Pending Admin Selection' },
   employerDecision: { type: String, default: 'Awaiting Admin Selection' },

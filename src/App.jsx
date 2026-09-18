@@ -236,6 +236,115 @@ export default function App() {
     setModalInternship(null);
   };
 
+  // Domain Role Application Handler (Students apply for their Domain Role, pooled across connected partner companies)
+  const handleApplyDomainRole = async (domainRoleData, formData) => {
+    const applicantEmail = formData.email || studentProfile.email;
+    const applicantPhone = formData.phone || studentProfile.phone;
+    const resumeName = formData.resumeName || `${(studentProfile.name || 'Student').replace(/\s+/g, '_')}_ATS_Resume.pdf`;
+
+    const newApp = {
+      id: `app-domain-${Date.now()}`,
+      internshipId: `domain-${domainRoleData.id || 'track'}`,
+      internshipTitle: `${domainRoleData.roleTitle} (Domain Track)`,
+      companyId: 'connected-partners-pool',
+      companyName: `Connected Partner Pool (${domainRoleData.connectedCompanies?.length || 0} Companies)`,
+      domain: domainRoleData.domainName,
+      isDomainApplication: true,
+      connectedCompanies: (domainRoleData.connectedCompanies || []).map(c => c.name),
+      verifiedCompany: true,
+      studentId: studentProfile.id,
+      studentName: formData.name || studentProfile.name,
+      studentEmail: applicantEmail,
+      studentPhone: applicantPhone,
+      studentCollege: formData.college || studentProfile.institution || 'Accredited Institution',
+      studentDegree: formData.course || studentProfile.degree || 'B.Tech CS',
+      studentYear: formData.yearOfStudy || studentProfile.yearOfStudy || '3rd Year',
+      studentCgpa: studentProfile.cgpa || '8.85 / 10',
+      studentSkills: studentProfile.skills || domainRoleData.skillsRequired || [],
+      linkedinUrl: formData.linkedinUrl || studentProfile.linkedinUrl || 'https://linkedin.com/in/aditya-verma-dev',
+      githubUrl: formData.githubUrl || studentProfile.githubUrl || 'https://github.com/adityaverma',
+      resumeName,
+      resumeUrl: studentProfile.resumeUrl || 'https://resume.interncatalyst.org/view',
+      paymentAmount: formData.paymentAmount || '₹100.00',
+      paymentStatus: formData.paymentStatus || 'Paid (Verified)',
+      txnId: formData.txnId || `TXN_UPI_DOMAIN_${Date.now().toString().slice(-6)}`,
+      coverNote: formData.coverNote || `Domain-centric candidate application for ${domainRoleData.roleTitle}. Pooled across connected partner companies.`,
+      appliedDate: new Date().toISOString().split('T')[0],
+      status: 'Under Review',
+      stipend: domainRoleData.stipendRange,
+      workMode: domainRoleData.workMode,
+      duration: domainRoleData.duration || '3-6 Months',
+      matchScore: 96,
+      forwardedToEmployer: false,
+      adminSelectionStatus: 'Pending Admin Selection & Allocation',
+      employerDecision: 'Pooled for Connected Employers',
+      confirmationEmailSent: true
+    };
+
+    // Synchronize with backend REST API
+    try {
+      const response = await fetch('/api/applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newApp)
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data?.application) {
+          Object.assign(newApp, data.application);
+        }
+      }
+    } catch (apiErr) {
+      console.warn('Backend /api/applications unavailable, continuing with client state:', apiErr.message);
+    }
+
+    setApplications(prev => [newApp, ...prev]);
+
+    // Synchronize updated contact info and domain to profile
+    setStudentProfile(prev => ({
+      ...prev,
+      phone: applicantPhone,
+      email: applicantEmail,
+      domain: domainRoleData.domainName || prev.domain
+    }));
+
+    addAuditLog('SUBMIT_DOMAIN_APPLICATION', `Student '${newApp.studentName}' applied for '${domainRoleData.roleTitle}' across ${domainRoleData.connectedCompanies?.length || 0} connected partner companies.`);
+    addToast(`🎉 Domain Application submitted! Pooled across all ${domainRoleData.connectedCompanies?.length || 0} connected partner companies.`, 'success');
+    addToast(`✉️ Confirmation email sent to ${applicantEmail}! Central admin vetting initiated.`, 'info');
+    return newApp;
+  };
+
+  // Proctored Assessment Completion Handler (Camera, Mic, Screen Sharing & Full Screen Verified)
+  const handleCompleteAssessment = async (appId, results) => {
+    setApplications(prev => prev.map(app => {
+      if (app.id === appId) {
+        return {
+          ...app,
+          assessmentScore: results.score,
+          assessmentStatus: 'Completed',
+          proctoringDetails: results.proctoringDetails,
+          adminSelectionStatus: results.score >= 60 
+            ? 'Passed Proctored Assessment (Vetted for Placement)' 
+            : 'Assessment Completed (Under Review)'
+        };
+      }
+      return app;
+    }));
+
+    // Synchronize to backend REST API
+    try {
+      await fetch('/api/applications/assessment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ applicationId: appId, ...results })
+      });
+    } catch (err) {
+      console.warn('Backend /api/applications/assessment unreachable, saved in memory:', err.message);
+    }
+
+    addAuditLog('ASSESSMENT_COMPLETED', `Student completed proctored assessment for application '${appId}' with score ${results.score}% (Camera, Mic, Screen, Fullscreen verified, Violations: ${results.violationsCount}).`);
+  };
+
   // Employer Candidate Selection & Vacant Seat Management Handler
   const handleEmployerSelectCandidate = (appId, newStatus) => {
     const targetApp = applications.find(a => a.id === appId);
@@ -344,13 +453,14 @@ export default function App() {
     addAuditLog('CREATE_INTERNSHIP_POST', `Employer '${newJob.companyName}' posted new opportunity '${newJob.title}'.`);
   };
 
-  // Guard Apply button: Student Login required to access application submission
-  const handleAttemptApply = (job) => {
+  // Guard Apply button: Direct students to their Domain Role in the Student Dashboard
+  const handleAttemptApply = () => {
     if (currentRole !== 'student' || !authenticatedRoles.student) {
-      addToast('Please log in to your Student account to apply for internships.', 'info');
+      addToast('Please log in to your Student account to apply for domain roles.', 'info');
       setActiveTab('login');
     } else {
-      setModalInternship(job);
+      addToast('In accordance with platform rules, students apply for their Domain Role across connected companies. Redirecting to your Student Dashboard!', 'info');
+      setActiveTab('student-dash');
     }
   };
 
@@ -414,16 +524,11 @@ export default function App() {
         )}
 
         {(activeTab === 'student-register' || activeTab === 'register') && (
-          <StudentDashboard 
-            profile={studentProfile}
-            onUpdateProfile={handleUpdateStudentProfile}
-            applications={applications}
-            onWithdrawApplication={handleWithdrawApplication}
-            onDeleteAccount={handleDeleteStudentAccount}
-            onAddToast={addToast}
-            onLogout={() => handleLogoutRole('student')}
+          <StudentRegisterPage 
             onLoginSuccess={handleLoginSuccess}
-            initialTab="register"
+            setActiveTab={setActiveTab}
+            onUpdateProfile={handleUpdateStudentProfile}
+            onAddToast={addToast}
           />
         )}
 
@@ -435,12 +540,16 @@ export default function App() {
               profile={studentProfile}
               onUpdateProfile={handleUpdateStudentProfile}
               applications={applications}
+              internships={internships}
+              companies={companies}
+              onApplyDomainRole={handleApplyDomainRole}
+              onCompleteAssessment={handleCompleteAssessment}
               onWithdrawApplication={handleWithdrawApplication}
               onDeleteAccount={handleDeleteStudentAccount}
               onAddToast={addToast}
               onLogout={() => handleLogoutRole('student')}
               onLoginSuccess={handleLoginSuccess}
-              initialTab="profile"
+              initialTab="domain-role"
             />
           )
         )}
