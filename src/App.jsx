@@ -11,7 +11,6 @@ import CompanyDashboard from './pages/CompanyDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import InternshipModal from './components/InternshipModal';
 import LoginPage from './components/LoginPage';
-import StudentRegisterPage from './pages/StudentRegisterPage';
 
 import { 
   INITIAL_INTERNSHIPS, 
@@ -528,25 +527,7 @@ export default function App() {
           <LoginPage targetRole="student" onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
         )}
 
-        {(activeTab === 'student-register' || activeTab === 'register' || activeTab === 'student-profile') && (
-          <StudentDashboard 
-            profile={studentProfile}
-            onUpdateProfile={handleUpdateStudentProfile}
-            applications={applications}
-            internships={internships}
-            companies={companies}
-            onApplyDomainRole={handleApplyDomainRole}
-            onCompleteAssessment={handleCompleteAssessment}
-            onWithdrawApplication={handleWithdrawApplication}
-            onDeleteAccount={handleDeleteStudentAccount}
-            onAddToast={addToast}
-            onLogout={() => handleLogoutRole('student')}
-            onLoginSuccess={handleLoginSuccess}
-            initialTab="profile"
-          />
-        )}
-
-        {activeTab === 'student-dash' && (
+        {(activeTab === 'student-dash' || activeTab === 'student-profile' || activeTab === 'student-register' || activeTab === 'register') && (
           !authenticatedRoles.student ? (
             <LoginPage targetRole="student" onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
           ) : (

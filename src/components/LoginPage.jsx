@@ -429,14 +429,8 @@ export default function LoginPage({ targetRole = 'student', onLoginSuccess, setA
                 {!submitting && <ArrowRight size={18} />}
               </button>
 
-              <div style={{ textAlign: 'center' }}>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('student-profile')}
-                  style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer' }}
-                >
-                  Don't have a student account? <u>Register Now (Profile Form)</u>
-                </button>
+              <div style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                Candidate registration & profile management is maintained directly inside the <strong>Student Dashboard</strong>.
               </div>
             </form>
           ) : (
