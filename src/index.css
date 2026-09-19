@@ -107,11 +107,11 @@ button, input, select, textarea {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(30, 41, 59, 0.94);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(6, 182, 212, 0.35);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+  background: #0f172a;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #1e293b;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.12);
 }
 
 /* Persona Bar */
@@ -491,10 +491,10 @@ button, input, select, textarea {
 .nav-link-btn {
   background: transparent;
   border: none;
-  color: #cbd5e1;
+  color: #e2e8f0;
   font-weight: 600;
   font-size: 0.875rem;
-  padding: 0.45rem 0.75rem;
+  padding: 0.45rem 0.85rem;
   border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
@@ -506,14 +506,15 @@ button, input, select, textarea {
 }
 
 .nav-link-btn:hover {
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.08);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .nav-link-btn.active {
-  color: #38bdf8;
+  color: #ffffff;
   font-weight: 700;
-  background: rgba(56, 189, 248, 0.12);
+  background: #2563eb;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
 @media (max-width: 1200px) {

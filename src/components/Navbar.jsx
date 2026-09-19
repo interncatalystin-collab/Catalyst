@@ -30,12 +30,10 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
     <header className="nav-header">
       {/* Main Navbar */}
       <nav style={{
-        background: 'rgba(30, 41, 59, 0.94)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(6, 182, 212, 0.35)',
+        background: '#0f172a',
+        borderBottom: '1px solid #1e293b',
         padding: '0.75rem 0',
-        boxShadow: '0 4px 25px rgba(0, 0, 0, 0.3)'
+        boxShadow: '0 4px 20px rgba(15, 23, 42, 0.12)'
       }}>
         <div className="nav-container">
           {/* Logo */}
@@ -89,13 +87,14 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                   className="btn btn-primary btn-sm nav-login-btn"
                   onClick={() => handleNavClick('login')}
                   style={{ 
-                    background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 100%)',
+                    background: '#2563eb',
                     color: '#ffffff',
                     border: 'none',
                     fontWeight: '700', 
-                    padding: '0.45rem 1rem',
+                    padding: '0.45rem 1.15rem',
                     fontSize: '0.85rem',
-                    boxShadow: '0 0 12px rgba(6, 182, 212, 0.35)',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 6px rgba(37, 99, 235, 0.3)',
                     whiteSpace: 'nowrap',
                     flexShrink: 0
                   }}
@@ -109,7 +108,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                   <button 
                     className="btn btn-primary btn-sm"
                     onClick={() => handleNavClick('student-dash')}
-                    style={{ background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 100%)', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
+                    style={{ background: '#2563eb', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '8px' }}
                   >
                     <GraduationCap size={14} /> Student Dashboard
                   </button>
@@ -118,7 +117,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                   <button 
                     className="btn btn-emerald btn-sm"
                     onClick={() => handleNavClick('company-dash')}
-                    style={{ background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
+                    style={{ background: '#16a34a', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '8px' }}
                   >
                     <Building2 size={14} /> Company Dashboard
                   </button>
@@ -127,7 +126,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                   <button 
                     className="btn btn-secondary btn-sm"
                     onClick={() => handleNavClick('admin-dash')}
-                    style={{ borderColor: '#38bdf8', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', fontSize: '0.8rem', padding: '0.45rem 0.75rem' }}
+                    style={{ borderColor: '#6366f1', color: '#ffffff', background: '#4f46e5', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '8px' }}
                   >
                     <Shield size={14} /> Admin Dashboard
                   </button>
@@ -141,8 +140,8 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               style={{
                 display: 'none',
-                background: '#334155',
-                border: '1px solid rgba(6, 182, 212, 0.4)',
+                background: '#1e293b',
+                border: '1px solid #334155',
                 color: '#ffffff',
                 padding: '0.4rem',
                 borderRadius: '8px',
