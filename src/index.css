@@ -661,7 +661,7 @@ button, input, select, textarea {
   }
 
   /* Touch horizontal scrolling for dashboard tab bars */
-  div[style*="overflowX: 'auto'"], div[style*="overflow-x: auto"] {
+  div[style*="overflow-x: auto"] {
     -webkit-overflow-scrolling: touch !important;
     padding-bottom: 0.5rem !important;
   }

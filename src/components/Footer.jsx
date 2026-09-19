@@ -39,7 +39,7 @@ export default function Footer({ setActiveTab }) {
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
               <li><button onClick={() => handleTabClick('browse')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>Browse Internships</button></li>
               <li><button onClick={() => handleTabClick('student-dash')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>Student Profile Builder</button></li>
-              <li><button onClick={() => handleTabClick('resume-templates')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>20+ Professional Resume Templates</button></li>
+              <li><button onClick={() => handleTabClick('resume-templates')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>Professional Resume Templates</button></li>
               <li><button onClick={() => handleTabClick('resume-templates')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>ATS Resume Analyzer & Tips</button></li>
               <li><button onClick={() => handleTabClick('how-it-works')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>Candidate Roadmap</button></li>
             </ul>

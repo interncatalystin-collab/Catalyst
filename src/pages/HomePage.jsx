@@ -308,18 +308,18 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* 20 Professional Resume Templates Section */}
+      {/* Professional Resume Templates Section */}
       <section style={{ padding: '4rem 0' }}>
         <div className="container">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
               <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#0f172a' }}>
-                20 Professional <span className="text-gradient">Resume Templates</span>
+                Professional <span className="text-gradient">Resume Templates</span>
               </h2>
               <p style={{ color: 'var(--text-muted)' }}>ATS-optimized, recruiter-approved single page resume layouts</p>
             </div>
             <button className="btn btn-primary" onClick={() => setActiveTab('resume-templates')}>
-              Browse All 20 Templates <ArrowRight size={16} />
+              Browse All Templates <ArrowRight size={16} />
             </button>
           </div>
 
@@ -342,14 +342,14 @@ export default function HomePage({
                 Land 3x More Interviews With Our Pre-Formatted Candidate CVs
               </h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-                Choose from 20 domain-specific resume formats built for Software Engineers, AI Researchers, Product Designers, Data Analysts, and Campus Freshers.
+                Choose from domain-specific resume formats built for Software Engineers, AI Researchers, Product Designers, Data Analysts, and Campus Freshers.
               </p>
             </div>
             <button 
               className="btn btn-emerald"
               onClick={() => setActiveTab('resume-templates')}
             >
-              Explore 20 Resume Templates <ArrowRight size={16} />
+              Explore Resume Templates <ArrowRight size={16} />
             </button>
           </div>
         </div>
