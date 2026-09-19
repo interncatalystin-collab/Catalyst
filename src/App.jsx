@@ -555,7 +555,11 @@ export default function App() {
           <LoginPage targetRole="student" companies={companies} onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
         )}
 
-        {(activeTab === 'student-dash' || activeTab === 'student-profile' || activeTab === 'student-register' || activeTab === 'register') && (
+        {activeTab === 'register' && !authenticatedRoles.student && (
+          <StudentRegisterPage onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} onUpdateProfile={handleUpdateStudentProfile} onAddToast={addToast} />
+        )}
+
+        {(activeTab === 'student-dash' || activeTab === 'student-profile' || activeTab === 'student-register') && (
           !authenticatedRoles.student ? (
             <LoginPage targetRole="student" companies={companies} onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
           ) : (
