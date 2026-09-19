@@ -155,26 +155,26 @@ export default function StudentDashboard({
   const [avatar, setAvatar] = useState(
     safeProfile.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'
   );
-  const [name, setName] = useState(safeProfile.name || safeProfile.fullName || 'Student Candidate');
+  const [name, setName] = useState(safeProfile.name || safeProfile.fullName || '');
   const [email, setEmail] = useState(safeProfile.email || '');
-  const [phone, setPhone] = useState(safeProfile.phone || '9876543210');
+  const [phone, setPhone] = useState(safeProfile.phone || '');
   const [domain, setDomain] = useState(safeProfile.domain || safeProfile.preferredDomain || 'Software & Full-Stack Web Development');
-  const [institution, setInstitution] = useState(safeProfile.institution || safeProfile.collegeName || "Alva's Institute of Engineering & Technology (AIET)");
+  const [institution, setInstitution] = useState(safeProfile.institution || safeProfile.collegeName || '');
   const [degree, setDegree] = useState(safeProfile.degree || 'B.Tech / B.E.');
   const [branch, setBranch] = useState(safeProfile.branch || 'Computer Science & Engineering');
   const [yearOfStudy, setYearOfStudy] = useState(safeProfile.yearOfStudy || safeProfile.currentYearOrSemester || '4th Year (Final Year)');
-  const [cgpa, setCgpa] = useState(safeProfile.cgpa || safeProfile.cgpaOrPercentage || '8.85 / 10');
+  const [cgpa, setCgpa] = useState(safeProfile.cgpa || safeProfile.cgpaOrPercentage || '');
   const [graduationYear, setGraduationYear] = useState(safeProfile.graduationYear || '2026');
-  const [dateOfBirth, setDateOfBirth] = useState(safeProfile.dateOfBirth || '2004-05-15');
+  const [dateOfBirth, setDateOfBirth] = useState(safeProfile.dateOfBirth || '');
   const [gender, setGender] = useState(safeProfile.gender || 'Male');
-  const [city, setCity] = useState(safeProfile.city || 'Bangalore');
-  const [state, setState] = useState(safeProfile.state || 'Karnataka');
+  const [city, setCity] = useState(safeProfile.city || '');
+  const [state, setState] = useState(safeProfile.state || '');
   const [internshipPreference, setInternshipPreference] = useState(safeProfile.internshipPreference || 'Remote / Online');
-  const [resumeUrl, setResumeUrl] = useState(safeProfile.resumeUrl || safeProfile.resumeLink || 'https://resume.interncatalyst.org/view');
-  const [linkedinUrl, setLinkedinUrl] = useState(safeProfile.linkedinUrl || safeProfile.linkedin || 'https://linkedin.com');
-  const [githubUrl, setGithubUrl] = useState(safeProfile.githubUrl || safeProfile.github || 'https://github.com');
+  const [resumeUrl, setResumeUrl] = useState(safeProfile.resumeUrl || safeProfile.resumeLink || '');
+  const [linkedinUrl, setLinkedinUrl] = useState(safeProfile.linkedinUrl || safeProfile.linkedin || '');
+  const [githubUrl, setGithubUrl] = useState(safeProfile.githubUrl || safeProfile.github || '');
   const [skillsInput, setSkillsInput] = useState(
-    Array.isArray(safeProfile.skills) ? safeProfile.skills.join(', ') : (safeProfile.skills || 'React, Node.js, JavaScript, Python, SQL')
+    Array.isArray(safeProfile.skills) ? safeProfile.skills.join(', ') : (safeProfile.skills || '')
   );
 
   // Sync state if safeProfile prop updates externally
@@ -419,12 +419,14 @@ export default function StudentDashboard({
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
                 <h1 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a' }}>
-                  {safeProfile.name || safeProfile.fullName || 'Student Candidate'}
+                  {safeProfile.name || safeProfile.fullName || name || 'Official Candidate'}
                 </h1>
                 <span className="badge badge-verified"><ShieldCheck size={13} /> Verified Student</span>
               </div>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '2px' }}>
-                {safeProfile.degree || 'B.Tech CS'} • {safeProfile.institution || safeProfile.collegeName || 'Accredited Institution'}
+                {(safeProfile.degree && (safeProfile.institution || safeProfile.collegeName)) 
+                  ? `${safeProfile.degree} • ${safeProfile.institution || safeProfile.collegeName}`
+                  : ((safeProfile.institution || safeProfile.collegeName) || 'Academic Profile Pending Registration')}
               </p>
               
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginTop: '6px', flexWrap: 'wrap' }}>
@@ -857,14 +859,17 @@ export default function StudentDashboard({
         </div>
 
         {/* Clean Dashboard Navigation Tabs (Simplified to 3 Essential Tabs) */}
-        <div style={{
-          display: 'flex',
-          gap: '0.75rem',
-          borderBottom: '1px solid var(--border-color)',
-          paddingBottom: '0.75rem',
-          marginBottom: '2rem',
-          overflowX: 'auto'
-        }}>
+        <div 
+          className="mobile-touch-tabs"
+          style={{
+            display: 'flex',
+            gap: '0.75rem',
+            borderBottom: '1px solid var(--border-color)',
+            paddingBottom: '0.75rem',
+            marginBottom: '2rem',
+            overflowX: 'auto'
+          }}
+        >
           {/* Tab 1: Student Profile & Registration Form */}
           <button 
             onClick={() => {
@@ -2124,7 +2129,7 @@ export default function StudentDashboard({
                           className="form-input" 
                           value={name} 
                           onChange={(e) => setName(e.target.value)} 
-                          placeholder="e.g. Aditya Verma"
+                          placeholder="e.g. Official Candidate Name"
                           required 
                         />
                       </div>

@@ -251,14 +251,17 @@ export default function CompanyDashboard({
         </div>
 
         {/* Navigation Tabs */}
-        <div style={{
-          display: 'flex',
-          gap: '0.5rem',
-          borderBottom: '1px solid var(--border-color)',
-          paddingBottom: '0.75rem',
-          marginBottom: '2rem',
-          overflowX: 'auto'
-        }}>
+        <div 
+          className="mobile-touch-tabs"
+          style={{
+            display: 'flex',
+            gap: '0.5rem',
+            borderBottom: '1px solid var(--border-color)',
+            paddingBottom: '0.75rem',
+            marginBottom: '2rem',
+            overflowX: 'auto'
+          }}
+        >
           <button 
             onClick={() => setActiveTab('post-role')}
             style={{

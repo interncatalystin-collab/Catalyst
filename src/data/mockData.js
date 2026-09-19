@@ -66,51 +66,43 @@ export const INITIAL_COMPANIES = [
 ];
 
 export const INITIAL_STUDENT_PROFILE = {
-  id: "std-8821",
-  name: "Aditya Verma",
-  fullName: "Aditya Verma",
-  email: "aditya.verma@student.edu",
-  phone: "+91 98450 12345", // Mandatory contact number
+  id: null,
+  name: "",
+  fullName: "",
+  email: "",
+  phone: "",
   avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
   domain: "Software & Full-Stack Web Development",
   preferredDomain: "Software & Full-Stack Web Development",
-  institution: "Alva's Institute of Engineering & Technology (AIET)",
-  collegeName: "Alva's Institute of Engineering & Technology (AIET)",
-  degree: "B.Tech in Computer Science & Engineering",
+  institution: "",
+  collegeName: "",
+  degree: "B.Tech / B.E.",
   branch: "Computer Science & Engineering",
   yearOfStudy: "4th Year (Final Year)",
   currentYearOrSemester: "4th Year (Final Year)",
   graduationYear: "2026",
-  cgpa: "8.85 / 10",
-  cgpaOrPercentage: "8.85 / 10",
-  dateOfBirth: "2004-05-15",
+  cgpa: "",
+  cgpaOrPercentage: "",
+  dateOfBirth: "",
   gender: "Male",
-  city: "Bangalore",
-  state: "Karnataka",
-  location: "Bangalore, Karnataka",
+  city: "",
+  state: "",
+  location: "",
   availability: "Immediate (Full-Time 6 Months)",
   internshipPreference: "Remote / Online",
-  skills: ["React.js", "Node.js", "JavaScript (ES6+)", "Python", "MongoDB", "SQL", "Git & GitHub", "Tailwind CSS", "Figma"],
-  projects: [
-    {
-      title: "InternCatalyst Placement Portal",
-      link: "https://github.com/aditya/interncatalyst",
-      desc: "Full-stack React platform matching students to verified companies with role-based access control."
-    }
-  ],
-  certifications: [
-    "AWS Certified Cloud Practitioner",
-    "Meta Front-End Developer Specialization"
-  ],
-  languages: ["English (Fluent)", "Kannada (Native)", "Hindi (Professional)"],
-  interests: ["Web Development", "AI Agents", "Open Source Contributing"],
-  workModePreference: "Online", // Online, Offline, Hybrid
-  stipendPreference: "Paid (Min ₹15,000)",
-  resumeUrl: "https://drive.google.com/file/d/sample-resume-aditya-verma/view",
-  portfolioUrl: "https://adityaverma.dev",
-  githubUrl: "https://github.com/adityaverma",
-  linkedinUrl: "https://linkedin.com/in/aditya-verma-dev",
-  status: "Active" // Active, Suspended
+  skills: [],
+  projects: [],
+  certifications: [],
+  languages: [],
+  interests: [],
+  workModePreference: "Online",
+  stipendPreference: "Paid",
+  resumeUrl: "",
+  portfolioUrl: "",
+  githubUrl: "",
+  linkedinUrl: "",
+  status: "Active",
+  isRegistered: false
 };
 
 export const INITIAL_STUDENTS_LIST = [];
@@ -160,7 +152,7 @@ export const INITIAL_AUDIT_LOGS = [
   {
     id: "log-1003",
     timestamp: "2026-08-14 16:30:22",
-    user: "Student (aditya.verma@student.edu)",
+    user: "Candidate (student@interncatalyst.org)",
     action: "SUBMIT_APPLICATION",
     details: "Applied for 'AI & Machine Learning Research Intern' at Cognitive AI Labs."
   },

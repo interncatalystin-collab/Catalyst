@@ -523,7 +523,7 @@ export default function ProctoredAssessmentModal({
           </div>
 
           {/* 4 Access Permission Cards Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
             
             {/* 1. Camera Access */}
             <div style={{

@@ -166,19 +166,51 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
           gap: '0.75rem',
           boxShadow: '0 10px 25px rgba(0,0,0,0.5)'
         }}>
-          <button 
-            className="btn btn-primary" 
-            style={{ 
-              background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)', 
-              color: '#ffffff', 
-              fontWeight: '800',
-              padding: '0.75rem 1rem',
-              fontSize: '0.925rem'
-            }} 
-            onClick={() => handleNavClick('login')}
-          >
-            <Lock size={16} /> Student & Employer Login
-          </button>
+          {currentRole === 'visitor' ? (
+            <button 
+              className="btn btn-primary" 
+              style={{ 
+                background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)', 
+                color: '#ffffff', 
+                fontWeight: '800',
+                padding: '0.75rem 1rem',
+                fontSize: '0.925rem'
+              }} 
+              onClick={() => handleNavClick('login')}
+            >
+              <Lock size={16} /> Student & Employer Login
+            </button>
+          ) : (
+            <>
+              {currentRole === 'student' && (
+                <button 
+                  className="btn btn-primary" 
+                  style={{ background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 100%)', color: '#ffffff', fontWeight: '800', padding: '0.75rem 1rem', fontSize: '0.925rem' }} 
+                  onClick={() => handleNavClick('student-dash')}
+                >
+                  <GraduationCap size={16} /> Student Dashboard
+                </button>
+              )}
+              {currentRole === 'company' && (
+                <button 
+                  className="btn btn-emerald" 
+                  style={{ background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)', color: '#ffffff', fontWeight: '800', padding: '0.75rem 1rem', fontSize: '0.925rem' }} 
+                  onClick={() => handleNavClick('company-dash')}
+                >
+                  <Building2 size={16} /> Company Dashboard
+                </button>
+              )}
+              {currentRole === 'admin' && (
+                <button 
+                  className="btn btn-secondary" 
+                  style={{ borderColor: '#38bdf8', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', fontWeight: '800', padding: '0.75rem 1rem', fontSize: '0.925rem' }} 
+                  onClick={() => handleNavClick('admin-dash')}
+                >
+                  <Shield size={16} /> Admin Dashboard
+                </button>
+              )}
+            </>
+          )}
           <hr style={{ borderColor: 'rgba(255,255,255,0.15)', margin: '0.25rem 0' }} />
           <button 
             className="btn btn-secondary" 

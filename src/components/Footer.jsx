@@ -67,17 +67,6 @@ export default function Footer({ setActiveTab }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Phone size={15} style={{ color: '#818cf8' }} /> +91 9148762124
               </div>
-              <div style={{
-                background: 'rgba(245, 158, 11, 0.1)',
-                border: '1px solid rgba(245, 158, 11, 0.25)',
-                color: '#fbbf24',
-                padding: '0.65rem 0.85rem',
-                borderRadius: '8px',
-                fontSize: '0.78rem',
-                marginTop: '0.5rem'
-              }}>
-                <strong>Notice:</strong> InternCatalyst does not charge candidates any fees. Please report any suspicious postings.
-              </div>
             </div>
           </div>
         </div>

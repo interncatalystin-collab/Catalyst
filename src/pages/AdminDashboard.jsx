@@ -418,14 +418,17 @@ export default function AdminDashboard({
         </div>
 
         {/* Admin Navigation Tabs Grid */}
-        <div style={{
-          display: 'flex',
-          gap: '0.5rem',
-          borderBottom: '1px solid var(--border-color)',
-          paddingBottom: '0.75rem',
-          marginBottom: '2rem',
-          overflowX: 'auto'
-        }}>
+        <div 
+          className="mobile-touch-tabs"
+          style={{
+            display: 'flex',
+            gap: '0.5rem',
+            borderBottom: '1px solid var(--border-color)',
+            paddingBottom: '0.75rem',
+            marginBottom: '2rem',
+            overflowX: 'auto'
+          }}
+        >
           <button 
             onClick={() => setAdminTab('verifications')}
             style={{
