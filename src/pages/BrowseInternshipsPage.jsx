@@ -217,17 +217,6 @@ export default function BrowseInternshipsPage({
               <option value="Part-time" style={{ background: '#ffffff' }}>🌓 Part-Time (20 hrs/wk)</option>
             </select>
 
-            {/* Compensation Filter (Paid Stipend vs Free) */}
-            <select 
-              className="form-select"
-              value={selectedStipend}
-              onChange={(e) => setSelectedStipend(e.target.value)}
-              style={{ width: 'auto', padding: '0.4rem 0.85rem', fontSize: '0.85rem', fontWeight: '600' }}
-            >
-              <option value="All" style={{ background: '#ffffff' }}>Compensation: All</option>
-              <option value="Paid" style={{ background: '#ffffff' }}>💵 Paid Stipend Only</option>
-              <option value="Free" style={{ background: '#ffffff' }}>🎓 Free (Certificate + LOR)</option>
-            </select>
 
             {/* Industry Filter */}
             <select 

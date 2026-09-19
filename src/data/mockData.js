@@ -138,7 +138,60 @@ export const INITIAL_STUDENT_PROFILE = {
 
 export const INITIAL_STUDENTS_LIST = [];
 
-export const INITIAL_APPLICATIONS = [];
+export const INITIAL_APPLICATIONS = [
+  {
+    id: "app-101",
+    studentName: "Adithya S",
+    studentEmail: "adithya@student.edu",
+    studentPhone: "+91 98765 43210",
+    studentCollege: "Alva's Institute of Engineering & Technology",
+    studentDegree: "B.Tech Computer Science & Engineering",
+    studentYear: "4th Year (Final Year)",
+    domain: "Software & Full-Stack Web Development",
+    internshipId: "int-101",
+    internshipTitle: "Full-Stack Web Development Intern",
+    companyName: "Nexus Tech Solutions",
+    verifiedCompany: true,
+    appliedDate: "2026-09-18",
+    resumeName: "Adithya_Verma_ATS_Resume.pdf",
+    resumeUrl: "#",
+    txnId: "TXN_UPI_100_982341",
+    matchScore: 94,
+    assessmentStatus: "Completed",
+    assessmentScore: 92,
+    adminScreened: true,
+    forwardedToEmployer: true,
+    status: "Forwarded to Employer",
+    companyStatus: "Under Recruiter Review",
+    adminSelectionStatus: "Top Candidate Selected & Sent to Company"
+  },
+  {
+    id: "app-102",
+    studentName: "Adithya S",
+    studentEmail: "adithya@student.edu",
+    studentPhone: "+91 98765 43210",
+    studentCollege: "Alva's Institute of Engineering & Technology",
+    studentDegree: "B.Tech Computer Science & Engineering",
+    studentYear: "4th Year (Final Year)",
+    domain: "Artificial Intelligence & Machine Learning",
+    internshipId: "int-102",
+    internshipTitle: "AI & Machine Learning Research Intern",
+    companyName: "Cognitive AI Labs",
+    verifiedCompany: true,
+    appliedDate: "2026-09-19",
+    resumeName: "Adithya_Verma_ATS_Resume.pdf",
+    resumeUrl: "#",
+    txnId: "TXN_UPI_100_982342",
+    matchScore: 88,
+    assessmentStatus: "Pending",
+    assessmentScore: 0,
+    adminScreened: false,
+    forwardedToEmployer: false,
+    status: "Pending Admin Screening",
+    companyStatus: "Queued in Admin Dashboard",
+    adminSelectionStatus: "Registered in Admin Dashboard"
+  }
+];
 
 export const INITIAL_COMPLAINTS = [
   {

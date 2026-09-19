@@ -87,9 +87,9 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
                 <UserCheck size={24} />
               </div>
-              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>1. Build Profile & Resume</h3>
+              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>1. Sign Up & Complete Profile</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                Register using email/phone, add education, skills, projects, and portfolio links. Specify mandatory contact number and work mode preferences (Online/Offline).
+                Create your student account with Name, Gmail, and Password. Fill in mandatory contact number, branch, GPA, and upload your ATS resume.
               </p>
             </div>
 
@@ -100,7 +100,7 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
               </div>
               <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>2. Search Verified Roles</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                Filter opportunities by skills, stipend, location, and Verified Employer Badges (✓). Review supervisor details and transparent deadlines.
+                Explore specialized domain tracks (Full-Stack, Data, UI/UX, AI, Cyber) backed by Employer Verification Badges (✓) and supervisor contacts.
               </p>
             </div>
 
@@ -109,9 +109,9 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#f5f3ff', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
                 <Send size={24} />
               </div>
-              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>3. 1-Click Application</h3>
+              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>3. Apply with Registration Fee</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                Submit applications directly with mandatory contact details. Track real-time recruiter updates (Shortlisted, Interview Scheduled, Offer).
+                Submit your profile for your chosen verified role by paying the nominal ₹100 registration fee via UPI or Debit/Credit Card.
               </p>
             </div>
 
@@ -120,9 +120,9 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#f0fdf4', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
                 <Award size={24} />
               </div>
-              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>4. Completion & Feedback</h3>
+              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>4. Application Confirmation Mail</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                Complete the internship, receive stipends, give authentic feedback about the employer, and boost your college placement transcript.
+                Instantly receive an official email confirmation with your Application ID, proctored assessment link, and real-time status tracking.
               </p>
             </div>
           </div>
@@ -169,9 +169,9 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#fffbeb', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
                 <Sparkles size={24} />
               </div>
-              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>4. AI Match & Hire</h3>
+              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>4. Manual Resume Screening & Online Assessment</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                Use InternCatalyst candidate matching engine to filter student skill profiles, review portfolios, schedule interviews, and finalize placements.
+                Perform manual resume screening and evaluate candidate proctored online assessment results on their applied domain tracks to finalize top internship hires.
               </p>
             </div>
           </div>
@@ -200,9 +200,9 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
                 </div>
                 <span className="badge badge-verified" style={{ background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe' }}>Step 01</span>
               </div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>1. Student Registration & Resume Verification</h3>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>1. Student Registration & Manual Resume Screening</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6', marginTop: 'auto' }}>
-                Candidates register with verified mobile number OTP and upload authentic resumes. Background credentials, branch, and GPA are validated before profile activation.
+                Candidates register with verified contact numbers and upload authentic resumes. Academic credentials, branch, and GPA undergo manual resume screening before profile activation.
               </p>
             </div>
 
@@ -214,9 +214,9 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
                 </div>
                 <span className="badge badge-verified" style={{ background: '#f0f9ff', color: '#0284c7', border: '1px solid #bae6fd' }}>Step 02</span>
               </div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>2. Domain-Based Candidate Matching</h3>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>2. Domain Matching & Proctored Online Assessment</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6', marginTop: 'auto' }}>
-                Matches students with relevant internship openings based on technical domains (Full-Stack, Data, UI/UX, AI), work mode (Online/Offline), and stipend preferences.
+                Matches students with specialized internship openings across technical domains (Full-Stack, Data, UI/UX, AI, Cyber) and unlocks hardware-proctored online assessments on the applied domain.
               </p>
             </div>
 
@@ -230,7 +230,7 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
               </div>
               <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>3. Shortlisting Students for Companies</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6', marginTop: 'auto' }}>
-                Recruiters review AI-ranked candidate shortlists, inspect portfolio projects, and select top applicants based on verified skill badges.
+                Recruiters review shortlisted candidate profiles with verified manual resume screening reports and proctored online assessment domain scores.
               </p>
             </div>
 

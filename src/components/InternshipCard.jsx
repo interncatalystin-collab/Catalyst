@@ -84,16 +84,8 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
         color: 'var(--text-muted)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <DollarSign size={14} style={{ color: (internship.stipendType || 'Paid') === 'Paid' ? '#059669' : '#d97706' }} />
-          <span>
-            {(internship.stipendType || 'Paid') === 'Paid' ? (
-              <strong style={{ color: '#059669' }}>{internship.stipendAmount}</strong>
-            ) : (
-              <span className="badge badge-verified" style={{ background: '#fffbe8', color: '#b45309', borderColor: '#fde68a', fontSize: '0.7rem' }}>
-                🎓 Free (Certificate + LOR)
-              </span>
-            )}
-          </span>
+          <Calendar size={14} style={{ color: '#7c3aed' }} />
+          <span>Apply by {internship.deadline || 'Sept 30'}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
           <Clock size={14} style={{ color: '#2563eb' }} />

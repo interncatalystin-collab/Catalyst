@@ -153,9 +153,9 @@ export default function InternshipModal({
           fontSize: '0.875rem'
         }}>
           <div>
-            <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem', display: 'block' }}>Compensation</span>
-            <span style={{ fontWeight: '700', color: (internship.stipendType || 'Paid') === 'Paid' ? '#16a34a' : '#d97706', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-              <DollarSign size={15} /> {internship.stipendAmount}
+            <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem', display: 'block' }}>Verification</span>
+            <span style={{ fontWeight: '700', color: '#16a34a', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+              <ShieldCheck size={15} /> Verified Corporate Listing
             </span>
           </div>
           <div>

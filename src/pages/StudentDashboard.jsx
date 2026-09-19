@@ -1202,13 +1202,13 @@ export default function StudentDashboard({
 
                 <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                    <DollarSign size={14} style={{ color: '#16a34a' }} /> STIPEND RANGE
+                    <ShieldCheck size={14} style={{ color: '#16a34a' }} /> EVALUATION & SCREENING
                   </span>
-                  <strong style={{ fontSize: '1.25rem', color: '#0f172a', display: 'block', marginTop: '4px' }}>
-                    {currentDomainRole.stipendRange}
+                  <strong style={{ fontSize: '1.15rem', color: '#0f172a', display: 'block', marginTop: '4px' }}>
+                    Verified Screening
                   </strong>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    Guaranteed stipend payout
+                  <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: '600' }}>
+                    Manual Resume & Online Assessment
                   </span>
                 </div>
 
@@ -1333,8 +1333,8 @@ export default function StudentDashboard({
                           <span>{comp.location} • <strong>{comp.workMode}</strong></span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                          <DollarSign size={13} style={{ color: '#16a34a' }} />
-                          <span style={{ color: '#16a34a', fontWeight: '700' }}>{comp.stipend}</span>
+                          <ShieldCheck size={13} style={{ color: '#16a34a' }} />
+                          <span style={{ color: '#16a34a', fontWeight: '600' }}>Verified Corporate Partner</span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                           <Mail size={13} style={{ color: 'var(--text-muted)' }} />
@@ -1409,91 +1409,137 @@ export default function StudentDashboard({
                   </thead>
                   <tbody>
                     {applications.map(app => (
-                      <tr key={app.id}>
-                        <td>
-                          <strong style={{ color: '#0f172a', display: 'block' }}>{app.internshipTitle}</strong>
-                          <span style={{ fontSize: '0.78rem', color: '#2563eb', fontWeight: '600' }}>
-                            {app.domain || 'Domain Track'}
-                          </span>
-                          <span style={{ display: 'block', fontSize: '0.72rem', color: '#16a34a', marginTop: '2px' }}>
-                            ✓ ₹100 Fee Verified ({app.txnId || 'TXN_VERIFIED'})
-                          </span>
-                        </td>
-                        <td>
-                          <div style={{ fontSize: '0.85rem', color: '#0f172a', fontWeight: '600' }}>
-                            {app.companyName}
-                          </div>
-                          {Array.isArray(app.connectedCompanies) && app.connectedCompanies.length > 0 && (
-                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                              Covers: {app.connectedCompanies.slice(0, 3).join(', ')}
-                              {app.connectedCompanies.length > 3 && ` +${app.connectedCompanies.length - 3} more`}
+                      <React.Fragment key={app.id}>
+                        <tr>
+                          <td>
+                            <strong style={{ color: '#0f172a', display: 'block' }}>{app.internshipTitle}</strong>
+                            <span style={{ fontSize: '0.78rem', color: '#2563eb', fontWeight: '600' }}>
+                              {app.domain || 'Domain Track'}
+                            </span>
+                            <span style={{ display: 'block', fontSize: '0.72rem', color: '#16a34a', marginTop: '2px' }}>
+                              ✓ ₹100 Fee Verified ({app.txnId || 'TXN_VERIFIED'})
+                            </span>
+                          </td>
+                          <td>
+                            <div style={{ fontSize: '0.85rem', color: '#0f172a', fontWeight: '600' }}>
+                              {app.companyName}
                             </div>
-                          )}
-                        </td>
-                        <td>
-                          <div style={{ fontSize: '0.85rem' }}>{app.appliedDate}</div>
-                          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                            Ref: {app.id?.slice(0, 12)}
-                          </span>
-                        </td>
-                        <td>
-                          {app.assessmentStatus === 'Completed' ? (
-                            <div>
-                              <span className="badge badge-verified" style={{ background: (app.assessmentScore || 0) >= 60 ? '#16a34a' : '#2563eb', color: '#fff', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem' }}>
-                                <Award size={12} /> Score: {app.assessmentScore}%
+                            {Array.isArray(app.connectedCompanies) && app.connectedCompanies.length > 0 && (
+                              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                                Covers: {app.connectedCompanies.slice(0, 3).join(', ')}
+                                {app.connectedCompanies.length > 3 && ` +${app.connectedCompanies.length - 3} more`}
+                              </div>
+                            )}
+                          </td>
+                          <td>
+                            <div style={{ fontSize: '0.85rem' }}>{app.appliedDate}</div>
+                            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                              Ref: {app.id?.slice(0, 12)}
+                            </span>
+                          </td>
+                          <td>
+                            {app.assessmentStatus === 'Completed' ? (
+                              <div>
+                                <span className="badge badge-verified" style={{ background: (app.assessmentScore || 0) >= 60 ? '#16a34a' : '#2563eb', color: '#fff', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem' }}>
+                                  <Award size={12} /> Score: {app.assessmentScore}%
+                                </span>
+                                <div style={{ fontSize: '0.72rem', color: '#16a34a', marginTop: '3px', fontWeight: '600' }}>
+                                  ✓ Cam, Mic & Screen Verified
+                                </div>
+                              </div>
+                            ) : (
+                              <div>
+                                <span className="badge badge-pending" style={{ background: '#fef3c7', color: '#b45309', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', marginBottom: '4px' }}>
+                                  <Clock size={11} /> Required
+                                </span>
+                                <button 
+                                  className="btn btn-primary btn-sm"
+                                  onClick={() => setActiveAssessmentApp(app)}
+                                  style={{ fontSize: '0.72rem', padding: '0.25rem 0.6rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}
+                                >
+                                  <Play size={10} /> Take Assessment
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                          <td>
+                            {app.status === 'Selected' || app.status === 'Hired' ? (
+                              <span className="badge badge-verified" style={{ background: '#16a34a', color: '#fff' }}>
+                                🎉 Selected by Employer! Offer Dispatched
                               </span>
-                              <div style={{ fontSize: '0.72rem', color: '#16a34a', marginTop: '3px', fontWeight: '600' }}>
-                                ✓ Cam, Mic & Screen Verified
+                            ) : app.status === 'Forwarded to Employer' || app.forwardedToEmployer ? (
+                              <span className="badge badge-verified" style={{ background: '#e0f2fe', color: '#0284c7' }}>
+                                <ShieldCheck size={12} /> Vetted & Sent to Company
+                              </span>
+                            ) : app.status === 'Withdrawn' ? (
+                              <span className="badge badge-pill">Withdrawn</span>
+                            ) : (
+                              <span className="badge badge-pending" style={{ background: '#fef3c7', color: '#b45309' }}>
+                                <Clock size={12} /> {app.adminSelectionStatus || 'Registered in Admin Dashboard'}
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                              {app.status !== 'Withdrawn' && app.status !== 'Selected' && app.status !== 'Hired' && (
+                                <button 
+                                  className="btn btn-danger btn-sm"
+                                  onClick={() => {
+                                    if (onWithdrawApplication) onWithdrawApplication(app.id);
+                                    if (onAddToast) onAddToast(`Application ${app.id} withdrawn.`, 'info');
+                                  }}
+                                >
+                                  Withdraw
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                        {/* 4-Stage Application Progress Stepper */}
+                        <tr>
+                          <td colSpan={6} style={{ padding: '0.75rem 1rem 1.25rem', background: '#fafafa', borderBottom: '2px solid #e2e8f0' }}>
+                            <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '0.85rem 1rem' }}>
+                              <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#334155', marginBottom: '0.65rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                                📍 Live Hiring Pipeline Tracker for {app.domain}
+                              </div>
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', textAlign: 'center' }}>
+                                <div style={{ background: '#f0fdf4', padding: '0.5rem', borderRadius: '8px', border: '1px solid #bbf7d0' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#16a34a', display: 'block' }}>STAGE 1 ✓</span>
+                                  <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>Admin Registered</strong>
+                                  <span style={{ fontSize: '0.68rem', color: '#166534' }}>Application & Fee Received</span>
+                                </div>
+                                <div style={{ background: app.assessmentStatus === 'Completed' || app.adminScreened ? '#f0fdf4' : '#fffbeb', padding: '0.5rem', borderRadius: '8px', border: app.assessmentStatus === 'Completed' || app.adminScreened ? '1px solid #bbf7d0' : '1px solid #fde68a' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '800', color: app.assessmentStatus === 'Completed' || app.adminScreened ? '#16a34a' : '#d97706', display: 'block' }}>
+                                    STAGE 2 {app.assessmentStatus === 'Completed' || app.adminScreened ? '✓' : '⏳'}
+                                  </span>
+                                  <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>Screening & Test</strong>
+                                  <span style={{ fontSize: '0.68rem', color: app.assessmentStatus === 'Completed' ? '#166534' : '#b45309' }}>
+                                    {app.assessmentStatus === 'Completed' ? `Proctored Score: ${app.assessmentScore}%` : 'Assessment Pending'}
+                                  </span>
+                                </div>
+                                <div style={{ background: app.forwardedToEmployer || app.status === 'Selected' || app.status === 'Hired' ? '#f0fdf4' : '#f8fafc', padding: '0.5rem', borderRadius: '8px', border: app.forwardedToEmployer || app.status === 'Selected' || app.status === 'Hired' ? '1px solid #bbf7d0' : '1px solid #e2e8f0' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '800', color: app.forwardedToEmployer || app.status === 'Selected' || app.status === 'Hired' ? '#16a34a' : '#64748b', display: 'block' }}>
+                                    STAGE 3 {app.forwardedToEmployer || app.status === 'Selected' || app.status === 'Hired' ? '✓' : '🔒'}
+                                  </span>
+                                  <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>Sent to Company</strong>
+                                  <span style={{ fontSize: '0.68rem', color: app.forwardedToEmployer ? '#166534' : '#64748b' }}>
+                                    {app.forwardedToEmployer ? `Top Candidate Sent to ${app.companyName}` : 'Admin Selection Queue'}
+                                  </span>
+                                </div>
+                                <div style={{ background: app.status === 'Selected' || app.status === 'Hired' ? '#f0fdf4' : '#f8fafc', padding: '0.5rem', borderRadius: '8px', border: app.status === 'Selected' || app.status === 'Hired' ? '1px solid #bbf7d0' : '1px solid #e2e8f0' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '800', color: app.status === 'Selected' || app.status === 'Hired' ? '#16a34a' : '#64748b', display: 'block' }}>
+                                    STAGE 4 {app.status === 'Selected' || app.status === 'Hired' ? '🎉' : '⏳'}
+                                  </span>
+                                  <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>Recruiter Contact & Hire</strong>
+                                  <span style={{ fontSize: '0.68rem', color: app.status === 'Selected' || app.status === 'Hired' ? '#166534' : '#64748b' }}>
+                                    {app.status === 'Selected' || app.status === 'Hired' ? 'Offered & Contacted!' : 'Awaiting Recruiter Call'}
+                                  </span>
+                                </div>
                               </div>
                             </div>
-                          ) : (
-                            <div>
-                              <span className="badge badge-pending" style={{ background: '#fef3c7', color: '#b45309', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', marginBottom: '4px' }}>
-                                <Clock size={11} /> Required
-                              </span>
-                              <button 
-                                className="btn btn-primary btn-sm"
-                                onClick={() => setActiveAssessmentApp(app)}
-                                style={{ fontSize: '0.72rem', padding: '0.25rem 0.6rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}
-                              >
-                                <Play size={10} /> Take Assessment
-                              </button>
-                            </div>
-                          )}
-                        </td>
-                        <td>
-                          {app.status === 'Selected' || app.status === 'Hired' ? (
-                            <span className="badge badge-verified" style={{ background: '#16a34a', color: '#fff' }}>
-                              🎉 Selected by Employer! Offer Dispatched
-                            </span>
-                          ) : app.status === 'Forwarded to Employer' || app.forwardedToEmployer ? (
-                            <span className="badge badge-verified" style={{ background: '#e0f2fe', color: '#0284c7' }}>
-                              <ShieldCheck size={12} /> Vetted & Forwarded to Companies
-                            </span>
-                          ) : app.status === 'Withdrawn' ? (
-                            <span className="badge badge-pill">Withdrawn</span>
-                          ) : (
-                            <span className="badge badge-pending" style={{ background: '#fef3c7', color: '#b45309' }}>
-                              <Clock size={12} /> {app.adminSelectionStatus || 'Under Admin Vetting'}
-                            </span>
-                          )}
-                        </td>
-                        <td>
-                          <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                            {app.status !== 'Withdrawn' && app.status !== 'Selected' && app.status !== 'Hired' && (
-                              <button 
-                                className="btn btn-danger btn-sm"
-                                onClick={() => {
-                                  if (onWithdrawApplication) onWithdrawApplication(app.id);
-                                  if (onAddToast) onAddToast(`Application ${app.id} withdrawn.`, 'info');
-                                }}
-                              >
-                                Withdraw
-                              </button>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
+                          </td>
+                        </tr>
+                      </React.Fragment>
                     ))}
                   </tbody>
                 </table>
