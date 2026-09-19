@@ -193,98 +193,98 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
             {/* Step 1 */}
-            <div className="glass-card" style={{ position: 'relative', borderLeft: '4px solid #2563eb' }}>
-              <span className="badge badge-verified" style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}>Step 01</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.85rem' }}>
+            <div className="glass-card" style={{ borderLeft: '4px solid #2563eb', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <UserCheck size={22} />
                 </div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#0f172a' }}>1. Student Registration & Resume Verification</h3>
+                <span className="badge badge-verified" style={{ background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe' }}>Step 01</span>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>1. Student Registration & Resume Verification</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6', marginTop: 'auto' }}>
                 Candidates register with verified mobile number OTP and upload authentic resumes. Background credentials, branch, and GPA are validated before profile activation.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div className="glass-card" style={{ position: 'relative', borderLeft: '4px solid #0284c7' }}>
-              <span className="badge badge-verified" style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}>Step 02</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.85rem' }}>
+            <div className="glass-card" style={{ borderLeft: '4px solid #0284c7', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#f0f9ff', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Sparkles size={22} />
                 </div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#0f172a' }}>2. Domain-Based Candidate Matching</h3>
+                <span className="badge badge-verified" style={{ background: '#f0f9ff', color: '#0284c7', border: '1px solid #bae6fd' }}>Step 02</span>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>2. Domain-Based Candidate Matching</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6', marginTop: 'auto' }}>
                 Matches students with relevant internship openings based on technical domains (Full-Stack, Data, UI/UX, AI), work mode (Online/Offline), and stipend preferences.
               </p>
             </div>
 
             {/* Step 3 */}
-            <div className="glass-card" style={{ position: 'relative', borderLeft: '4px solid #059669' }}>
-              <span className="badge badge-verified" style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}>Step 03</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.85rem' }}>
+            <div className="glass-card" style={{ borderLeft: '4px solid #059669', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#ecfdf5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <CheckCircle size={22} />
                 </div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#0f172a' }}>3. Shortlisting Students for Companies</h3>
+                <span className="badge badge-verified" style={{ background: '#ecfdf5', color: '#059669', border: '1px solid #a7f3d0' }}>Step 03</span>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>3. Shortlisting Students for Companies</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6', marginTop: 'auto' }}>
                 Recruiters review AI-ranked candidate shortlists, inspect portfolio projects, and select top applicants based on verified skill badges.
               </p>
             </div>
 
             {/* Step 4 */}
-            <div className="glass-card" style={{ position: 'relative', borderLeft: '4px solid #7c3aed' }}>
-              <span className="badge badge-verified" style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}>Step 04</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.85rem' }}>
+            <div className="glass-card" style={{ borderLeft: '4px solid #7c3aed', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#f5f3ff', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Send size={22} />
                 </div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#0f172a' }}>4. Communication & Interview Scheduling</h3>
+                <span className="badge badge-verified" style={{ background: '#f5f3ff', color: '#7c3aed', border: '1px solid #ddd6fe' }}>Step 04</span>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>4. Communication & Interview Scheduling</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6', marginTop: 'auto' }}>
                 Integrated messaging hub for employers to invite candidates, schedule online interviews, send SMS/email notifications, and issue formal offer letters.
               </p>
             </div>
 
             {/* Step 5 */}
-            <div className="glass-card" style={{ position: 'relative', borderLeft: '4px solid #d97706' }}>
-              <span className="badge badge-verified" style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}>Step 05</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.85rem' }}>
+            <div className="glass-card" style={{ borderLeft: '4px solid #d97706', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#fffbeb', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FileText size={22} />
                 </div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#0f172a' }}>5. Progress Tracking & Feedback</h3>
+                <span className="badge badge-verified" style={{ background: '#fffbeb', color: '#d97706', border: '1px solid #fde68a' }}>Step 05</span>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>5. Progress Tracking & Feedback</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6', marginTop: 'auto' }}>
                 Real-time milestone tracking for ongoing internships. Designated corporate supervisors log weekly feedback, stipend disbursal, and performance reports.
               </p>
             </div>
 
             {/* Step 6 */}
-            <div className="glass-card" style={{ position: 'relative', borderLeft: '4px solid #0891b2' }}>
-              <span className="badge badge-verified" style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}>Step 06</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.85rem' }}>
+            <div className="glass-card" style={{ borderLeft: '4px solid #0891b2', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#ecfeff', color: '#0891b2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Award size={22} />
                 </div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#0f172a' }}>6. Optional Mentor & Training Support</h3>
+                <span className="badge badge-verified" style={{ background: '#ecfeff', color: '#0891b2', border: '1px solid #a5f3fc' }}>Step 06</span>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>6. Optional Mentor & Training Support</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6', marginTop: 'auto' }}>
                 Dedicated technical mentor sessions, industry skill bootcamps, and mock interview practice to bridge candidate gaps and ensure 100% placement readiness.
               </p>
             </div>
 
             {/* Step 7 */}
-            <div className="glass-card" style={{ position: 'relative', borderLeft: '4px solid #e11d48', gridColumn: '1 / -1' }}>
-              <span className="badge badge-verified" style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}>Step 07</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.85rem' }}>
+            <div className="glass-card" style={{ borderLeft: '4px solid #e11d48', gridColumn: '1 / -1', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#fff1f2', color: '#e11d48', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <GraduationCap size={22} />
                 </div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#0f172a' }}>7. Approaching Students to Share & Support the Website</h3>
+                <span className="badge badge-verified" style={{ background: '#fff1f2', color: '#e11d48', border: '1px solid #fecdd3' }}>Step 07</span>
               </div>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>7. Approaching Students to Share & Support the Website</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6' }}>
                 Campus Ambassador Network & Peer Advocacy: Reaching out directly to student leaders, college TPO cells, and student communities to share platform success stories, drive grassroots website support, and expand career opportunities nationwide.
               </p>

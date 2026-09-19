@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Search, Filter, ShieldCheck, DollarSign, MapPin, Briefcase, RefreshCw } from 'lucide-react';
+import { Search, Filter, ShieldCheck, DollarSign, MapPin, Briefcase, RefreshCw, Sparkles, Layers } from 'lucide-react';
 import InternshipCard from '../components/InternshipCard';
+import { DOMAIN_ROLES_DATA } from '../data/domainRolesData';
 
 export default function BrowseInternshipsPage({ 
   internships, 
@@ -8,6 +9,7 @@ export default function BrowseInternshipsPage({
   onApplyInternship 
 }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDomain, setSelectedDomain] = useState('All');
   const [selectedIndustry, setSelectedIndustry] = useState('All');
   const [selectedWorkMode, setSelectedWorkMode] = useState('All');
   const [selectedType, setSelectedType] = useState('All'); // 'All', 'Full-time', 'Part-time'
@@ -15,7 +17,7 @@ export default function BrowseInternshipsPage({
   const [verifiedOnly, setVerifiedOnly] = useState(false);
 
   // Industries list
-  const industries = ['All', 'Software & IT', 'Artificial Intelligence', 'Design & Media', 'Cybersecurity', 'Marketing & Sales'];
+  const industries = ['All', 'Software & IT', 'Artificial Intelligence', 'Data Science & Analytics', 'UI/UX & Product Design', 'Cybersecurity', 'Marketing & Growth'];
 
   // Filtering Logic
   const filteredInternships = internships.filter(item => {
@@ -25,7 +27,12 @@ export default function BrowseInternshipsPage({
     const matchesSearch = 
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.domain && item.domain.toLowerCase().includes(searchQuery.toLowerCase())) ||
       item.skills.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const matchesDomain = selectedDomain === 'All' || 
+      (item.domain && item.domain.toLowerCase().trim() === selectedDomain.toLowerCase().trim()) ||
+      (item.domain && item.domain.toLowerCase().includes(selectedDomain.toLowerCase()));
 
     const matchesIndustry = selectedIndustry === 'All' || item.industry === selectedIndustry;
     const matchesWorkMode = selectedWorkMode === 'All' || item.workMode === selectedWorkMode;
@@ -33,11 +40,12 @@ export default function BrowseInternshipsPage({
     const matchesStipend = selectedStipend === 'All' || (item.stipendType || 'Paid') === selectedStipend;
     const matchesVerified = !verifiedOnly || item.verified === true;
 
-    return matchesSearch && matchesIndustry && matchesWorkMode && matchesType && matchesStipend && matchesVerified;
+    return matchesSearch && matchesDomain && matchesIndustry && matchesWorkMode && matchesType && matchesStipend && matchesVerified;
   });
 
   const handleResetFilters = () => {
     setSearchQuery('');
+    setSelectedDomain('All');
     setSelectedIndustry('All');
     setSelectedWorkMode('All');
     setSelectedType('All');
@@ -86,6 +94,84 @@ export default function BrowseInternshipsPage({
           </div>
         </div>
 
+        {/* Specialized Domain Tracks List Section */}
+        <div style={{ marginBottom: '2.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Layers size={18} color="#2563eb" />
+              <h2 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+                Specialized Placement Domain Tracks
+              </h2>
+            </div>
+            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '600' }}>
+              Select a domain to filter open opportunities across connected companies
+            </span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.85rem' }}>
+            <button
+              type="button"
+              onClick={() => setSelectedDomain('All')}
+              style={{
+                padding: '0.85rem 1rem',
+                borderRadius: '12px',
+                border: selectedDomain === 'All' ? '2px solid #2563eb' : '1px solid #cbd5e1',
+                background: selectedDomain === 'All' ? '#eff6ff' : '#ffffff',
+                color: selectedDomain === 'All' ? '#1d4ed8' : '#334155',
+                fontWeight: '700',
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                transition: 'all 0.15s ease',
+                boxShadow: selectedDomain === 'All' ? '0 4px 12px rgba(37, 99, 235, 0.12)' : 'none'
+              }}
+            >
+              <span>🌟 All Domain Tracks</span>
+              <span className="badge" style={{ background: selectedDomain === 'All' ? '#2563eb' : '#f1f5f9', color: selectedDomain === 'All' ? '#ffffff' : '#64748b', fontSize: '0.72rem' }}>
+                {internships.filter(i => i.status === 'Approved').length}
+              </span>
+            </button>
+
+            {DOMAIN_ROLES_DATA.map(d => {
+              const count = internships.filter(i => i.status === 'Approved' && i.domain && i.domain.toLowerCase().includes(d.domainName.toLowerCase())).length;
+              const isSelected = selectedDomain.toLowerCase().includes(d.domainName.toLowerCase());
+              return (
+                <button
+                  key={d.id}
+                  type="button"
+                  onClick={() => setSelectedDomain(isSelected ? 'All' : d.domainName)}
+                  style={{
+                    padding: '0.85rem 1rem',
+                    borderRadius: '12px',
+                    border: isSelected ? '2px solid #2563eb' : '1px solid #cbd5e1',
+                    background: isSelected ? '#eff6ff' : '#ffffff',
+                    color: isSelected ? '#1d4ed8' : '#334155',
+                    fontWeight: '700',
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.15s ease',
+                    boxShadow: isSelected ? '0 4px 12px rgba(37, 99, 235, 0.12)' : 'none'
+                  }}
+                >
+                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginRight: '6px' }}>
+                    {d.domainName}
+                  </span>
+                  <span className="badge" style={{ background: isSelected ? '#2563eb' : '#f1f5f9', color: isSelected ? '#ffffff' : '#475569', fontSize: '0.72rem', flexShrink: 0 }}>
+                    {count || d.totalVacancies} seats
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Filter Controls Row */}
         <div style={{
           background: '#f8fafc',
@@ -103,6 +189,21 @@ export default function BrowseInternshipsPage({
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#0f172a', fontSize: '0.875rem', fontWeight: '700' }}>
               <Filter size={16} /> Filters:
             </div>
+
+            {/* Domain Track Filter Dropdown */}
+            <select 
+              className="form-select"
+              value={selectedDomain}
+              onChange={(e) => setSelectedDomain(e.target.value)}
+              style={{ width: 'auto', padding: '0.4rem 0.85rem', fontSize: '0.85rem', fontWeight: '700', color: '#1d4ed8', background: '#eff6ff', border: '1px solid #bfdbfe' }}
+            >
+              <option value="All" style={{ background: '#ffffff', color: '#0f172a' }}>Domain Track: All (6 Domains)</option>
+              {DOMAIN_ROLES_DATA.map(d => (
+                <option key={d.id} value={d.domainName} style={{ background: '#ffffff', color: '#0f172a' }}>
+                  {d.domainName}
+                </option>
+              ))}
+            </select>
 
             {/* Commitment Filter (Full-time vs Part-time) */}
             <select 

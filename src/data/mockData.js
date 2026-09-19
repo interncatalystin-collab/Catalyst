@@ -1,6 +1,37 @@
-// Initial Mock Data for InternCatalyst Platform
+import { DOMAIN_ROLES_DATA } from './domainRolesData';
 
-export const INITIAL_INTERNSHIPS = [];
+// Initial Mock Data for InternCatalyst Platform - Populated with all 6 Domain Tracks
+export const INITIAL_INTERNSHIPS = DOMAIN_ROLES_DATA.flatMap((domainTrack) => {
+  return domainTrack.connectedCompanies.map((company, index) => ({
+    id: `int-${domainTrack.id}-${company.id || index}`,
+    title: `${domainTrack.roleTitle}`,
+    roleTitle: domainTrack.roleTitle,
+    domain: domainTrack.domainName,
+    domainId: domainTrack.id,
+    category: domainTrack.category,
+    companyId: company.id,
+    companyName: company.name,
+    companyLogo: company.logo,
+    industry: company.industry || domainTrack.category,
+    location: company.location,
+    workMode: company.workMode || domainTrack.workMode,
+    internshipType: 'Full-time',
+    stipendType: 'Paid',
+    stipendAmount: company.stipend || domainTrack.stipendRange,
+    duration: domainTrack.duration,
+    openings: company.vacancies || 5,
+    hiredCount: company.hired || 0,
+    verified: company.verified ?? true,
+    status: 'Approved',
+    skills: domainTrack.skillsRequired,
+    eligibility: domainTrack.eligibility,
+    description: `${domainTrack.overview} Key Highlights: ${company.highlights}`,
+    supervisorName: company.supervisor,
+    supervisorTitle: company.supervisorTitle,
+    supervisorEmail: company.supervisorEmail,
+    datePosted: '2026-08-15'
+  }));
+});
 
 export const INITIAL_COMPANIES = [
   {
