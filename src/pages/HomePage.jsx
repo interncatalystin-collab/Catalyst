@@ -52,9 +52,9 @@ export default function HomePage({
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: '#eff6ff',
-            border: '1px solid #bfdbfe',
-            color: '#1d4ed8',
+            background: '#f8fafc',
+            border: '1px solid #cbd5e1',
+            color: '#1e3a8a',
             padding: '0.4rem 1rem',
             borderRadius: '30px',
             fontSize: '0.85rem',
@@ -152,8 +152,8 @@ export default function HomePage({
             {/* Box 1: Students */}
             <div className="glass-card">
               <div style={{
-                width: '48px', height: '48px', borderRadius: '12px', background: '#eff6ff',
-                color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem'
+                width: '48px', height: '48px', borderRadius: '12px', background: '#f1f5f9',
+                color: '#1e3a8a', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem'
               }}>
                 <GraduationCap size={24} />
               </div>
@@ -163,7 +163,7 @@ export default function HomePage({
               </p>
               <button 
                 onClick={() => { setCurrentRole('student'); setActiveTab('student-dash'); }}
-                style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}
+                style={{ background: 'none', border: 'none', color: '#1e3a8a', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}
               >
                 Go to Student Dashboard <ArrowRight size={14} />
               </button>
@@ -173,7 +173,7 @@ export default function HomePage({
             <div className="glass-card">
               <div style={{
                 width: '48px', height: '48px', borderRadius: '12px', background: '#f0fdf4',
-                color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem'
+                color: '#15803d', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem'
               }}>
                 <Briefcase size={24} />
               </div>
@@ -183,7 +183,7 @@ export default function HomePage({
               </p>
               <button 
                 onClick={() => setActiveTab('browse')}
-                style={{ background: 'none', border: 'none', color: '#16a34a', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}
+                style={{ background: 'none', border: 'none', color: '#15803d', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}
               >
                 Explore Domain Roles <ArrowRight size={14} />
               </button>
@@ -196,10 +196,11 @@ export default function HomePage({
       <section style={{ padding: '3.5rem 0' }}>
         <div className="container">
           <div style={{
-            background: 'linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%)',
-            border: '1px solid #bfdbfe',
+            background: '#ffffff',
+            border: '1px solid #e2e8f0',
             borderRadius: 'var(--radius-xl)',
             padding: '2.5rem',
+            boxShadow: '0 1px 4px rgba(15, 23, 42, 0.04)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -324,8 +325,8 @@ export default function HomePage({
           </div>
 
           <div style={{
-            background: 'linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%)',
-            border: '1px solid #bfdbfe',
+            background: '#ffffff',
+            border: '1px solid #cbd5e1',
             borderRadius: 'var(--radius-xl)',
             padding: '2.5rem',
             display: 'flex',
@@ -335,7 +336,7 @@ export default function HomePage({
             flexWrap: 'wrap'
           }}>
             <div style={{ maxWidth: '680px' }}>
-              <span className="badge badge-verified" style={{ marginBottom: '0.75rem', background: '#ffffff', color: '#2563eb', border: '1px solid #bfdbfe' }}>
+              <span className="badge badge-verified" style={{ marginBottom: '0.75rem', background: '#f8fafc', color: '#1e3a8a', border: '1px solid #cbd5e1' }}>
                 100% Free & ATS Compatible (99% Parsing Score)
               </span>
               <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
