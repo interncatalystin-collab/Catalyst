@@ -16,7 +16,8 @@ import {
   Key,
   Eye,
   EyeOff,
-  X
+  X,
+  User
 } from 'lucide-react';
 
 // 5 Official Authorized Central Admin Accounts
@@ -77,37 +78,93 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
   const [successMsg, setSuccessMsg] = useState('');
   const [showAdminAssistNotice, setShowAdminAssistNotice] = useState(false);
   const [showGoogleModal, setShowGoogleModal] = useState(false);
+  const [showCustomGoogleForm, setShowCustomGoogleForm] = useState(false);
   const [googleEmailInput, setGoogleEmailInput] = useState('');
   const [googleNameInput, setGoogleNameInput] = useState('');
   const [googleError, setGoogleError] = useState('');
+
+  // Student Sign Up Form State (Name, Email, Password, Confirm Password)
+  const [signUpName, setSignUpName] = useState('');
+  const [signUpEmail, setSignUpEmail] = useState('');
+  const [signUpPassword, setSignUpPassword] = useState('');
+  const [signUpConfirmPassword, setSignUpConfirmPassword] = useState('');
+  const [showSignUpPassword, setShowSignUpPassword] = useState(false);
+
+  const LOGGED_IN_GOOGLE_ACCOUNTS = [
+    {
+      id: 'g-acc-1',
+      name: 'Adithya S',
+      email: 'adithya.official@gmail.com',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+      badge: 'Active Google Session',
+      institution: 'National Institute of Technology',
+      degree: 'B.Tech / B.E.',
+      branch: 'Computer Science & Engineering',
+      yearOfStudy: '4th Year (Final Year)'
+    },
+    {
+      id: 'g-acc-2',
+      name: 'Adithya (University SSO)',
+      email: 'adithya.student@university.edu',
+      avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=Adithya%20S',
+      badge: 'University SSO Linked',
+      institution: 'State Technological University',
+      degree: 'B.Tech CS',
+      branch: 'Computer Science & Engineering',
+      yearOfStudy: '4th Year'
+    }
+  ];
 
   const handleRoleTabChange = (role) => {
     setSelectedRole(role);
     setAuthMode('signin');
     setEmailOrPhone('');
     setPassword('');
+    setSignUpName('');
+    setSignUpEmail('');
+    setSignUpPassword('');
+    setSignUpConfirmPassword('');
     setOtp('');
     setOtpSent(false);
     setErrorMsg('');
     setSuccessMsg('');
   };
 
-  const handleGoogleLogin = () => {
+  const handleStudentSignUp = (e) => {
+    e.preventDefault();
     setErrorMsg('');
-    setGoogleError('');
-    setShowGoogleModal(true);
-  };
+    setSuccessMsg('');
 
-  const handleQuickGoogleSelect = (name, email) => {
-    setGoogleNameInput(name);
-    setGoogleEmailInput(email);
+    if (!signUpName.trim()) {
+      setErrorMsg('Please enter your full name.');
+      return;
+    }
+
+    const cleanEmail = signUpEmail.trim().toLowerCase();
+    if (!cleanEmail || !cleanEmail.includes('@') || !cleanEmail.includes('.')) {
+      setErrorMsg('Please enter a valid email address (e.g. name@gmail.com).');
+      return;
+    }
+
+    if (!signUpPassword || signUpPassword.length < 6) {
+      setErrorMsg('Password requirement: Password must be at least 6 characters long.');
+      return;
+    }
+
+    if (signUpPassword !== signUpConfirmPassword) {
+      setErrorMsg('Password mismatch: Passwords do not match. Please try again.');
+      return;
+    }
+
+    setSubmitting(true);
+
     const officialStudent = {
-      id: `std-g-${Date.now()}`,
-      name: name,
-      fullName: name,
-      email: email,
-      avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`,
-      googleAuth: true,
+      id: `std-${Date.now()}`,
+      name: signUpName.trim(),
+      fullName: signUpName.trim(),
+      email: cleanEmail,
+      password: signUpPassword,
+      avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(signUpName.trim())}`,
       status: 'Active',
       isRegistered: true,
       degree: 'B.Tech / B.E.',
@@ -117,8 +174,42 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
       preferredDomain: 'Software & Full-Stack Web Development',
       domain: 'Software & Full-Stack Web Development'
     };
+
+    localStorage.setItem('studentToken', `token-student-${Date.now()}`);
+    setSuccessMsg(`🎉 Account created successfully for ${signUpName.trim()}! Authenticating...`);
+    setTimeout(() => {
+      setSubmitting(false);
+      onLoginSuccess('student', cleanEmail, officialStudent, `token-student-${Date.now()}`);
+    }, 400);
+  };
+
+  const handleGoogleLogin = () => {
+    setErrorMsg('');
+    setGoogleError('');
+    setShowCustomGoogleForm(false);
+    setShowGoogleModal(true);
+  };
+
+  const handleSelectGoogleAccount = (acc) => {
+    const officialStudent = {
+      id: `std-g-${Date.now()}`,
+      name: acc.name,
+      fullName: acc.name,
+      email: acc.email,
+      avatar: acc.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(acc.name)}`,
+      googleAuth: true,
+      status: 'Active',
+      isRegistered: true,
+      degree: acc.degree || 'B.Tech / B.E.',
+      branch: acc.branch || 'Computer Science & Engineering',
+      institution: acc.institution || 'Accredited University / Institute',
+      yearOfStudy: acc.yearOfStudy || '4th Year (Final Year)',
+      preferredDomain: 'Software & Full-Stack Web Development',
+      domain: 'Software & Full-Stack Web Development'
+    };
     setShowGoogleModal(false);
-    onLoginSuccess('student', email, officialStudent, `google-token-${Date.now()}`);
+    setShowCustomGoogleForm(false);
+    onLoginSuccess('student', acc.email, officialStudent, `google-token-${Date.now()}`);
   };
 
   const handleConfirmGoogleLogin = (e) => {
@@ -148,6 +239,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
     };
 
     setShowGoogleModal(false);
+    setShowCustomGoogleForm(false);
     onLoginSuccess('student', email, officialStudent, `google-token-${Date.now()}`);
   };
 
@@ -462,10 +554,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    setAuthMode('signup');
-                    if (setActiveTab) setActiveTab('register');
-                  }}
+                  onClick={() => setAuthMode('signup')}
                   style={{
                     flex: 1,
                     padding: '0.45rem',
@@ -486,131 +575,278 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                 </button>
               </div>
 
-              <form onSubmit={handleStudentPasswordLogin}>
-                {/* Google SSO Button */}
-                <button 
-                  type="button" 
-                  onClick={handleGoogleLogin}
-                  disabled={submitting}
-                  style={{ 
-                    width: '100%', 
-                    padding: '0.75rem', 
-                    background: '#ffffff', 
-                    border: '1.5px solid #cbd5e1', 
-                    borderRadius: '10px',
-                    color: '#1e293b',
-                    fontWeight: '700', 
-                    fontSize: '0.925rem', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    gap: '0.65rem',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                    transition: 'all 0.2s ease',
-                    marginBottom: '1.25rem'
-                  }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                  </svg>
-                  Continue with Google
-                </button>
-
-                {/* Divider */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem', color: 'var(--text-muted)', fontSize: '0.78rem', fontWeight: '600' }}>
-                  <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
-                  <span>OR Sign In with Email & Password</span>
-                  <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
-                </div>
-
-                {/* Gmail / Student Email */}
-                <div className="form-group" style={{ marginBottom: '1.25rem' }}>
-                  <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>
-                    Gmail / Student Email Address <span className="required">*</span>
-                  </label>
-                  <div style={{ position: 'relative' }}>
-                    <Mail size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
-                    <input 
-                      type="email" 
-                      className="form-input" 
-                      style={{ paddingLeft: '2.5rem' }}
-                      placeholder="student@university.edu or gmail.com"
-                      value={emailOrPhone}
-                      onChange={(e) => setEmailOrPhone(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Student Password Field */}
-                <div className="form-group" style={{ marginBottom: '1.25rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
-                    <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700', marginBottom: 0 }}>
-                      Student Account Password <span className="required">*</span>
-                    </label>
-                    <span 
-                      style={{ fontSize: '0.75rem', color: '#2563eb', cursor: 'pointer', fontWeight: '600' }}
-                      onClick={() => setShowAdminAssistNotice(true)}
-                    >
-                      Forgot Password?
-                    </span>
-                  </div>
-                  <div style={{ position: 'relative' }}>
-                    <Key size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
-                    <input 
-                      type={showPassword ? 'text' : 'password'}
-                      className="form-input" 
-                      style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
-                      placeholder="Enter account password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                    <button 
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
-                    >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Remember Me */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.825rem', color: 'var(--text-muted)', cursor: 'pointer' }}>
-                    <input type="checkbox" defaultChecked style={{ accentColor: '#2563eb' }} />
-                    Remember login session
-                  </label>
-                </div>
-
-                {/* Submit Button */}
-                <button 
-                  type="submit" 
-                  className="btn btn-primary" 
-                  style={{ width: '100%', padding: '0.85rem', fontWeight: '800', fontSize: '0.95rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}
-                  disabled={submitting}
-                >
-                  {submitting ? 'Authenticating Credentials...' : 'Log In to Student Portal'}
-                  {!submitting && <ArrowRight size={18} />}
-                </button>
-
-                <div style={{ textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                  Don't have an account yet?{' '}
-                  <span 
-                    style={{ color: '#2563eb', fontWeight: '700', cursor: 'pointer', textDecoration: 'underline' }}
-                    onClick={() => {
-                      if (setActiveTab) setActiveTab('register');
+              {authMode === 'signin' ? (
+                <form onSubmit={handleStudentPasswordLogin}>
+                  {/* Google SSO Button */}
+                  <button 
+                    type="button" 
+                    onClick={handleGoogleLogin}
+                    disabled={submitting}
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem', 
+                      background: '#ffffff', 
+                      border: '1.5px solid #cbd5e1', 
+                      borderRadius: '10px',
+                      color: '#1e293b',
+                      fontWeight: '700', 
+                      fontSize: '0.925rem', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      gap: '0.65rem',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+                      transition: 'all 0.2s ease',
+                      marginBottom: '1.25rem'
                     }}
                   >
-                    Create Student Profile (Sign Up)
-                  </span>
-                </div>
-              </form>
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    Continue with Google
+                  </button>
+
+                  {/* Divider */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem', color: 'var(--text-muted)', fontSize: '0.78rem', fontWeight: '600' }}>
+                    <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
+                    <span>OR Sign In with Email & Password</span>
+                    <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
+                  </div>
+
+                  {/* Gmail / Student Email */}
+                  <div className="form-group" style={{ marginBottom: '1.25rem' }}>
+                    <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>
+                      Gmail / Student Email Address <span className="required">*</span>
+                    </label>
+                    <div style={{ position: 'relative' }}>
+                      <Mail size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <input 
+                        type="email" 
+                        className="form-input" 
+                        style={{ paddingLeft: '2.5rem' }}
+                        placeholder="student@university.edu or gmail.com"
+                        value={emailOrPhone}
+                        onChange={(e) => setEmailOrPhone(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Student Password Field */}
+                  <div className="form-group" style={{ marginBottom: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                      <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700', marginBottom: 0 }}>
+                        Student Account Password <span className="required">*</span>
+                      </label>
+                      <span 
+                        style={{ fontSize: '0.75rem', color: '#2563eb', cursor: 'pointer', fontWeight: '600' }}
+                        onClick={() => setShowAdminAssistNotice(true)}
+                      >
+                        Forgot Password?
+                      </span>
+                    </div>
+                    <div style={{ position: 'relative' }}>
+                      <Key size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <input 
+                        type={showPassword ? 'text' : 'password'}
+                        className="form-input" 
+                        style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
+                        placeholder="Enter account password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
+                      <button 
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
+                      >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Remember Me */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.825rem', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                      <input type="checkbox" defaultChecked style={{ accentColor: '#2563eb' }} />
+                      Remember login session
+                    </label>
+                  </div>
+
+                  {/* Submit Button */}
+                  <button 
+                    type="submit" 
+                    className="btn btn-primary" 
+                    style={{ width: '100%', padding: '0.85rem', fontWeight: '800', fontSize: '0.95rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}
+                    disabled={submitting}
+                  >
+                    {submitting ? 'Authenticating Credentials...' : 'Log In to Student Portal'}
+                    {!submitting && <ArrowRight size={18} />}
+                  </button>
+
+                  <div style={{ textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                    Don't have an account yet?{' '}
+                    <span 
+                      style={{ color: '#2563eb', fontWeight: '700', cursor: 'pointer', textDecoration: 'underline' }}
+                      onClick={() => setAuthMode('signup')}
+                    >
+                      Create Student Profile (Sign Up)
+                    </span>
+                  </div>
+                </form>
+              ) : (
+                /* SIGN UP FORM (NAME, MAIL, CREATE PASSWORD) */
+                <form onSubmit={handleStudentSignUp}>
+                  {/* Google SSO Button */}
+                  <button 
+                    type="button" 
+                    onClick={handleGoogleLogin}
+                    disabled={submitting}
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem', 
+                      background: '#ffffff', 
+                      border: '1.5px solid #cbd5e1', 
+                      borderRadius: '10px',
+                      color: '#1e293b',
+                      fontWeight: '700', 
+                      fontSize: '0.925rem', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      gap: '0.65rem',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+                      transition: 'all 0.2s ease',
+                      marginBottom: '1.25rem'
+                    }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    Sign Up with Google
+                  </button>
+
+                  {/* Divider */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem', color: 'var(--text-muted)', fontSize: '0.78rem', fontWeight: '600' }}>
+                    <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
+                    <span>OR Create Account with Email</span>
+                    <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
+                  </div>
+
+                  {/* 1. Full Name */}
+                  <div className="form-group" style={{ marginBottom: '1.1rem' }}>
+                    <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>
+                      Full Name <span className="required">*</span>
+                    </label>
+                    <div style={{ position: 'relative' }}>
+                      <User size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <input 
+                        type="text" 
+                        className="form-input" 
+                        style={{ paddingLeft: '2.5rem' }}
+                        placeholder="Enter your full legal/academic name"
+                        value={signUpName}
+                        onChange={(e) => setSignUpName(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* 2. Email / Gmail Address */}
+                  <div className="form-group" style={{ marginBottom: '1.1rem' }}>
+                    <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>
+                      Gmail / Student Email Address <span className="required">*</span>
+                    </label>
+                    <div style={{ position: 'relative' }}>
+                      <Mail size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <input 
+                        type="email" 
+                        className="form-input" 
+                        style={{ paddingLeft: '2.5rem' }}
+                        placeholder="student@gmail.com or university.edu"
+                        value={signUpEmail}
+                        onChange={(e) => setSignUpEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* 3. Create Account Password */}
+                  <div className="form-group" style={{ marginBottom: '1.1rem' }}>
+                    <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>
+                      Create Account Password <span className="required">*</span>
+                    </label>
+                    <div style={{ position: 'relative' }}>
+                      <Key size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <input 
+                        type={showSignUpPassword ? 'text' : 'password'}
+                        className="form-input" 
+                        style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
+                        placeholder="Create account password (min 6 chars)"
+                        value={signUpPassword}
+                        onChange={(e) => setSignUpPassword(e.target.value)}
+                        required
+                      />
+                      <button 
+                        type="button"
+                        onClick={() => setShowSignUpPassword(!showSignUpPassword)}
+                        style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
+                      >
+                        {showSignUpPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 4. Confirm Account Password */}
+                  <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+                    <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>
+                      Confirm Account Password <span className="required">*</span>
+                    </label>
+                    <div style={{ position: 'relative' }}>
+                      <Lock size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <input 
+                        type={showSignUpPassword ? 'text' : 'password'}
+                        className="form-input" 
+                        style={{ paddingLeft: '2.5rem' }}
+                        placeholder="Re-enter password to confirm"
+                        value={signUpConfirmPassword}
+                        onChange={(e) => setSignUpConfirmPassword(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Submit Button */}
+                  <button 
+                    type="submit" 
+                    className="btn btn-primary" 
+                    style={{ width: '100%', padding: '0.85rem', fontWeight: '800', fontSize: '0.95rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}
+                    disabled={submitting}
+                  >
+                    {submitting ? 'Creating Student Account...' : 'Create Account & Sign Up'}
+                    {!submitting && <ArrowRight size={18} />}
+                  </button>
+
+                  <div style={{ textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                    Already have an account?{' '}
+                    <span 
+                      style={{ color: '#2563eb', fontWeight: '700', cursor: 'pointer', textDecoration: 'underline' }}
+                      onClick={() => setAuthMode('signin')}
+                    >
+                      Sign In to Student Portal
+                    </span>
+                  </div>
+                </form>
+              )}
             </div>
           ) : (
             /* EMPLOYER & ADMIN LOGIN FORM (EMAIL & PASSWORD) */
@@ -776,8 +1012,8 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'rgba(15, 23, 42, 0.7)',
-            backdropFilter: 'blur(5px)',
+            background: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(4px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -789,7 +1025,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
               borderRadius: '20px',
               maxWidth: '460px',
               width: '100%',
-              padding: '2rem',
+              padding: '2.25rem 2rem 1.75rem',
               boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
               border: '1px solid #e2e8f0',
               position: 'relative',
@@ -815,150 +1051,186 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
 
               {/* Google Brand Header */}
               <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-                <svg width="36" height="36" viewBox="0 0 24 24" style={{ marginBottom: '0.75rem' }}>
+                <svg width="36" height="36" viewBox="0 0 24 24" style={{ marginBottom: '0.6rem' }}>
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                 </svg>
-                <h3 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
-                  Sign in with Google
+                <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
+                  Choose an account
                 </h3>
-                <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.35rem', marginBottom: 0 }}>
-                  Enter your official Google Account to access InternCatalyst
+                <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.25rem', marginBottom: 0 }}>
+                  to continue to <strong style={{ color: '#0f172a' }}>InternCatalyst</strong>
                 </p>
               </div>
 
-              {/* Quick Google Account Options */}
-              <div style={{ marginBottom: '1.25rem' }}>
-                <span style={{ fontSize: '0.78rem', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '0.5rem' }}>
-                  Select Google Account:
-                </span>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {!showCustomGoogleForm ? (
+                <>
+                  {/* Active Logged-in Accounts List */}
+                  <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '12px', border: '1px solid #cbd5e1', overflow: 'hidden', marginBottom: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+                    {LOGGED_IN_GOOGLE_ACCOUNTS.map((acc, index) => (
+                      <button
+                        key={acc.id}
+                        type="button"
+                        onClick={() => handleSelectGoogleAccount(acc)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.9rem',
+                          padding: '0.9rem 1rem',
+                          background: '#ffffff',
+                          border: 'none',
+                          borderBottom: index < LOGGED_IN_GOOGLE_ACCOUNTS.length - 1 ? '1px solid #f1f5f9' : 'none',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'all 0.15s ease'
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; }}
+                      >
+                        <img 
+                          src={acc.avatar} 
+                          alt={acc.name} 
+                          style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #cbd5e1' }} 
+                        />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                            <strong style={{ fontSize: '0.925rem', color: '#0f172a', fontWeight: '700', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {acc.name}
+                            </strong>
+                            <span style={{ fontSize: '0.68rem', fontWeight: '700', padding: '1px 6px', borderRadius: '4px', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe' }}>
+                              {acc.badge}
+                            </span>
+                          </div>
+                          <span style={{ fontSize: '0.8rem', color: '#64748b', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {acc.email}
+                          </span>
+                        </div>
+                        <ArrowRight size={16} color="#94a3b8" />
+                      </button>
+                    ))}
+
+                    {/* Use Another Account Button */}
+                    <button
+                      type="button"
+                      onClick={() => setShowCustomGoogleForm(true)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.85rem',
+                        padding: '0.85rem 1rem',
+                        background: '#fafafa',
+                        border: 'none',
+                        borderTop: '1px solid #e2e8f0',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        color: '#2563eb',
+                        fontSize: '0.85rem',
+                        fontWeight: '700',
+                        transition: 'all 0.15s ease'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = '#eff6ff'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = '#fafafa'; }}
+                    >
+                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#475569' }}>
+                        <User size={18} />
+                      </div>
+                      <span style={{ flex: 1 }}>Use another Google account</span>
+                      <ArrowRight size={16} color="#2563eb" />
+                    </button>
+                  </div>
+
+                  <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#94a3b8', lineHeight: 1.45, padding: '0 0.5rem' }}>
+                    To continue, Google will share your name, email address, language preference, and profile picture with <strong>InternCatalyst</strong>.
+                  </div>
+                </>
+              ) : (
+                /* Form to enter official Google identity */
+                <div>
                   <button
                     type="button"
-                    onClick={() => handleQuickGoogleSelect('Alex Morgan', 'student.alex@gmail.com')}
+                    onClick={() => setShowCustomGoogleForm(false)}
                     style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#2563eb',
+                      fontSize: '0.8rem',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      marginBottom: '1rem',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.75rem',
-                      padding: '0.65rem 0.85rem',
-                      background: '#f8fafc',
-                      border: '1px solid #cbd5e1',
-                      borderRadius: '10px',
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      transition: 'all 0.15s'
+                      gap: '0.35rem',
+                      padding: 0
                     }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = '#eff6ff'; e.currentTarget.style.borderColor = '#93c5fd'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.borderColor = '#cbd5e1'; }}
                   >
-                    <img 
-                      src="https://api.dicebear.com/7.x/initials/svg?seed=Alex%20Morgan" 
-                      alt="Alex" 
-                      style={{ width: '32px', height: '32px', borderRadius: '50%' }} 
-                    />
-                    <div style={{ flex: 1 }}>
-                      <strong style={{ fontSize: '0.85rem', color: '#0f172a', display: 'block' }}>Alex Morgan</strong>
-                      <span style={{ fontSize: '0.75rem', color: '#64748b' }}>student.alex@gmail.com</span>
+                    ← Back to choose account
+                  </button>
+
+                  {googleError && (
+                    <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.65rem', borderRadius: '8px', fontSize: '0.8rem', marginBottom: '1rem' }}>
+                      {googleError}
                     </div>
-                    <span style={{ fontSize: '0.75rem', color: '#2563eb', fontWeight: '700' }}>Select ✓</span>
-                  </button>
+                  )}
 
-                  <button
-                    type="button"
-                    onClick={() => handleQuickGoogleSelect('Rohan Sharma', 'rohan.sharma@gmail.com')}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      padding: '0.65rem 0.85rem',
-                      background: '#f8fafc',
-                      border: '1px solid #cbd5e1',
-                      borderRadius: '10px',
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      transition: 'all 0.15s'
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = '#eff6ff'; e.currentTarget.style.borderColor = '#93c5fd'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.borderColor = '#cbd5e1'; }}
-                  >
-                    <img 
-                      src="https://api.dicebear.com/7.x/initials/svg?seed=Rohan%20Sharma" 
-                      alt="Rohan" 
-                      style={{ width: '32px', height: '32px', borderRadius: '50%' }} 
-                    />
-                    <div style={{ flex: 1 }}>
-                      <strong style={{ fontSize: '0.85rem', color: '#0f172a', display: 'block' }}>Rohan Sharma</strong>
-                      <span style={{ fontSize: '0.75rem', color: '#64748b' }}>rohan.sharma@gmail.com</span>
+                  <form onSubmit={handleConfirmGoogleLogin}>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '700', color: '#334155', marginBottom: '0.35rem' }}>
+                        Google Email / Gmail Address <span style={{ color: '#ef4444' }}>*</span>
+                      </label>
+                      <input
+                        type="email"
+                        className="form-input"
+                        placeholder="e.g. yourname@gmail.com"
+                        value={googleEmailInput}
+                        onChange={(e) => setGoogleEmailInput(e.target.value)}
+                        required
+                        style={{ width: '100%' }}
+                        autoFocus
+                      />
                     </div>
-                    <span style={{ fontSize: '0.75rem', color: '#2563eb', fontWeight: '700' }}>Select ✓</span>
-                  </button>
-                </div>
-              </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '1rem 0', color: '#94a3b8', fontSize: '0.75rem', fontWeight: '600' }}>
-                <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }}></div>
-                <span>OR Enter Custom Google Account</span>
-                <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }}></div>
-              </div>
+                    <div style={{ marginBottom: '1.25rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '700', color: '#334155', marginBottom: '0.35rem' }}>
+                        Official Full Name <span style={{ color: '#ef4444' }}>*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-input"
+                        placeholder="e.g. Your Full Legal / Academic Name"
+                        value={googleNameInput}
+                        onChange={(e) => setGoogleNameInput(e.target.value)}
+                        required
+                        style={{ width: '100%' }}
+                      />
+                    </div>
 
-              {/* Form to enter official Google identity */}
-              <form onSubmit={handleConfirmGoogleLogin}>
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '700', color: '#334155', marginBottom: '0.35rem' }}>
-                    Google Email / Gmail Address <span style={{ color: '#ef4444' }}>*</span>
-                  </label>
-                  <input
-                    type="email"
-                    className="form-input"
-                    placeholder="e.g. yourname@gmail.com"
-                    value={googleEmailInput}
-                    onChange={(e) => setGoogleEmailInput(e.target.value)}
-                    required
-                    style={{ width: '100%' }}
-                    autoFocus
-                  />
-                </div>
+                    <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '0.75rem', border: '1px solid #e2e8f0', fontSize: '0.75rem', color: '#64748b', lineHeight: 1.4, marginBottom: '1.5rem' }}>
+                      🔒 Google Identity Services will authenticate and link your official academic profile to <strong>InternCatalyst Placement Portal</strong>.
+                    </div>
 
-                <div style={{ marginBottom: '1.25rem' }}>
-                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '700', color: '#334155', marginBottom: '0.35rem' }}>
-                    Official Full Name <span style={{ color: '#ef4444' }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    placeholder="e.g. Your Full Legal / Academic Name"
-                    value={googleNameInput}
-                    onChange={(e) => setGoogleNameInput(e.target.value)}
-                    required
-                    style={{ width: '100%' }}
-                  />
+                    <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() => setShowGoogleModal(false)}
+                        style={{ padding: '0.65rem 1.25rem', fontSize: '0.88rem' }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        style={{ padding: '0.65rem 1.5rem', fontSize: '0.88rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                      >
+                        <span>Continue with Google</span>
+                        <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  </form>
                 </div>
-
-                <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '0.75rem', border: '1px solid #e2e8f0', fontSize: '0.75rem', color: '#64748b', lineHeight: 1.4, marginBottom: '1.5rem' }}>
-                  🔒 Google Identity Services will authenticate and link your official academic profile to <strong>InternCatalyst Placement Portal</strong>.
-                </div>
-
-                <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setShowGoogleModal(false)}
-                    style={{ padding: '0.65rem 1.25rem', fontSize: '0.88rem' }}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    style={{ padding: '0.65rem 1.5rem', fontSize: '0.88rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                  >
-                    <span>Continue with Google</span>
-                    <ArrowRight size={16} />
-                  </button>
-                </div>
-              </form>
+              )}
             </div>
           </div>
         )}

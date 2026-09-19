@@ -296,15 +296,6 @@ export default function ProctoredAssessmentModal({
     }
   };
 
-  // Simulation / Demo Mode (Ensures evaluation can proceed if test machine has no physical webcam/mic)
-  const enableDemoProctoringMode = () => {
-    setCameraGranted(true);
-    setMicGranted(true);
-    setScreenGranted(true);
-    setFullScreenGranted(true);
-    if (onAddToast) onAddToast('Demo Proctoring Mode enabled: Simulated Camera, Mic, Screen, & Fullscreen verified.', 'info');
-  };
-
   const allPermissionsGranted = cameraGranted && micGranted && screenGranted && fullScreenGranted;
 
   // Begin Proctored Assessment
@@ -677,28 +668,12 @@ export default function ProctoredAssessmentModal({
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-end',
             flexWrap: 'wrap',
             gap: '1rem',
             paddingTop: '1.5rem',
             borderTop: '1px solid rgba(255,255,255,0.1)'
           }}>
-            <button
-              type="button"
-              onClick={enableDemoProctoringMode}
-              style={{
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px dashed #64748b',
-                color: '#94a3b8',
-                fontSize: '0.78rem',
-                padding: '0.45rem 0.85rem',
-                borderRadius: '8px',
-                cursor: 'pointer'
-              }}
-            >
-              Simulate Proctoring Devices (Demo Mode)
-            </button>
-
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <button className="btn btn-secondary" onClick={onClose}>
                 Cancel
