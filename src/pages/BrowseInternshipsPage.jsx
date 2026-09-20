@@ -108,29 +108,28 @@ export default function BrowseInternshipsPage({
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.85rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem' }}>
             <button
               type="button"
               onClick={() => setSelectedDomain('All')}
               style={{
-                padding: '0.85rem 1rem',
-                borderRadius: '12px',
-                border: selectedDomain === 'All' ? '2px solid #2563eb' : '1px solid #cbd5e1',
-                background: selectedDomain === 'All' ? '#eff6ff' : '#ffffff',
-                color: selectedDomain === 'All' ? '#1d4ed8' : '#334155',
+                padding: '0.75rem 0.95rem',
+                borderRadius: '8px',
+                border: selectedDomain === 'All' ? '1px solid #1e3a8a' : '1px solid #e2e8f0',
+                background: selectedDomain === 'All' ? '#1e3a8a' : '#ffffff',
+                color: selectedDomain === 'All' ? '#ffffff' : '#334155',
                 fontWeight: '700',
-                fontSize: '0.875rem',
+                fontSize: '0.85rem',
                 cursor: 'pointer',
                 textAlign: 'left',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                transition: 'all 0.15s ease',
-                boxShadow: selectedDomain === 'All' ? '0 4px 12px rgba(37, 99, 235, 0.12)' : 'none'
+                transition: 'all 0.15s ease'
               }}
             >
-              <span>🌟 All Domain Tracks</span>
-              <span className="badge" style={{ background: selectedDomain === 'All' ? '#2563eb' : '#f1f5f9', color: selectedDomain === 'All' ? '#ffffff' : '#64748b', fontSize: '0.72rem' }}>
+              <span>All Domain Tracks</span>
+              <span className="badge" style={{ background: selectedDomain === 'All' ? 'rgba(255,255,255,0.2)' : '#f1f5f9', color: selectedDomain === 'All' ? '#ffffff' : '#64748b', fontSize: '0.72rem' }}>
                 {internships.filter(i => i.status === 'Approved').length}
               </span>
             </button>
@@ -144,26 +143,25 @@ export default function BrowseInternshipsPage({
                   type="button"
                   onClick={() => setSelectedDomain(isSelected ? 'All' : d.domainName)}
                   style={{
-                    padding: '0.85rem 1rem',
-                    borderRadius: '12px',
-                    border: isSelected ? '2px solid #2563eb' : '1px solid #cbd5e1',
-                    background: isSelected ? '#eff6ff' : '#ffffff',
-                    color: isSelected ? '#1d4ed8' : '#334155',
+                    padding: '0.75rem 0.95rem',
+                    borderRadius: '8px',
+                    border: isSelected ? '1px solid #1e3a8a' : '1px solid #e2e8f0',
+                    background: isSelected ? '#1e3a8a' : '#ffffff',
+                    color: isSelected ? '#ffffff' : '#334155',
                     fontWeight: '700',
-                    fontSize: '0.85rem',
+                    fontSize: '0.825rem',
                     cursor: 'pointer',
                     textAlign: 'left',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    transition: 'all 0.15s ease',
-                    boxShadow: isSelected ? '0 4px 12px rgba(37, 99, 235, 0.12)' : 'none'
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginRight: '6px' }}>
                     {d.domainName}
                   </span>
-                  <span className="badge" style={{ background: isSelected ? '#2563eb' : '#f1f5f9', color: isSelected ? '#ffffff' : '#475569', fontSize: '0.72rem', flexShrink: 0 }}>
+                  <span className="badge" style={{ background: isSelected ? 'rgba(255,255,255,0.2)' : '#f1f5f9', color: isSelected ? '#ffffff' : '#64748b', fontSize: '0.72rem', flexShrink: 0 }}>
                     {count || d.totalVacancies} seats
                   </span>
                 </button>

@@ -6,7 +6,7 @@
 import { sendOtpHandler, verifyOtpHandler, passwordLoginHandler } from './controllers/authController.js';
 import { getInternshipsHandler, createInternshipHandler } from './controllers/internshipController.js';
 import { getApplicationsHandler, submitApplicationHandler, forwardApplicationHandler, employerSelectApplicationHandler, submitAssessmentHandler } from './controllers/applicationController.js';
-import { registerStudentHandler, loginStudentHandler, getStudentProfileHandler } from './controllers/studentAuthController.js';
+import { registerStudentHandler, loginStudentHandler, getStudentProfileHandler, changeStudentPasswordHandler } from './controllers/studentAuthController.js';
 import { adminLoginHandler, getAdminDashboardMetricsHandler, getAllStudentsHandler, getStudentByIdHandler } from './controllers/adminController.js';
 import { exportStudentsExcelHandler } from './controllers/excelController.js';
 
@@ -64,6 +64,12 @@ export const routeDispatcher = async (req, res, pathname) => {
   if (req.method === 'POST' && pathname === '/api/auth/student/login') {
     const body = await parseJson(req);
     await loginStudentHandler(req, res, body);
+    return true;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/auth/student/change-password') {
+    const body = await parseJson(req);
+    await changeStudentPasswordHandler(req, res, body);
     return true;
   }
 

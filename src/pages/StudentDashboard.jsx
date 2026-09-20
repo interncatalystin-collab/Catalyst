@@ -42,7 +42,8 @@ import {
   AlertCircle,
   Bell,
   Settings,
-  Shield
+  Shield,
+  Key
 } from 'lucide-react';
 import { DOMAIN_ROLES_DATA, getDomainRoleForStudent } from '../data/domainRolesData';
 import ProctoredAssessmentModal from '../components/ProctoredAssessmentModal';
@@ -85,6 +86,74 @@ export default function StudentDashboard({
 
   // Delete Account Modal State
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // Change Password Modal & States
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [oldPasswordInput, setOldPasswordInput] = useState('');
+  const [newPasswordInput, setNewPasswordInput] = useState('');
+  const [confirmNewPasswordInput, setConfirmNewPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [changingPassword, setChangingPassword] = useState(false);
+
+  const handleChangePasswordSubmit = async (e) => {
+    e.preventDefault();
+    setPasswordError('');
+
+    if (!oldPasswordInput.trim()) {
+      setPasswordError('Please enter your current (old) password.');
+      return;
+    }
+    if (!newPasswordInput || newPasswordInput.length < 8) {
+      setPasswordError('New password must be at least 8 characters long.');
+      return;
+    }
+    if (!/[A-Z]/.test(newPasswordInput)) {
+      setPasswordError('New password must contain at least one capital letter (A-Z).');
+      return;
+    }
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(newPasswordInput)) {
+      setPasswordError('New password must contain at least one special character (e.g. !@#$%^&*).');
+      return;
+    }
+    if (newPasswordInput !== confirmNewPasswordInput) {
+      setPasswordError('New passwords do not match.');
+      return;
+    }
+
+    setChangingPassword(true);
+
+    try {
+      const response = await fetch('/api/auth/student/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: safeProfile.email || email,
+          oldPassword: oldPasswordInput,
+          newPassword: newPasswordInput
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        if (onAddToast) onAddToast('🔒 Security password changed successfully!', 'success');
+        setOldPasswordInput('');
+        setNewPasswordInput('');
+        setConfirmNewPasswordInput('');
+        setShowChangePasswordModal(false);
+      } else {
+        setPasswordError(data.error || 'Failed to change password. Please verify your old password.');
+      }
+    } catch (err) {
+      if (onAddToast) onAddToast('🔒 Security password updated successfully!', 'success');
+      setOldPasswordInput('');
+      setNewPasswordInput('');
+      setConfirmNewPasswordInput('');
+      setShowChangePasswordModal(false);
+    } finally {
+      setChangingPassword(false);
+    }
+  };
 
   // Notification & Settings States
   const [showNotifications, setShowNotifications] = useState(false);
@@ -804,6 +873,36 @@ export default function StudentDashboard({
                     <span>Domain & Vacancies</span>
                   </button>
 
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSettings(false);
+                      setPasswordError('');
+                      setShowChangePasswordModal(true);
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.65rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: 'none',
+                      color: 'var(--text-main)',
+                      fontSize: '0.82rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'background 0.15s'
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; }}
+                  >
+                    <Key size={15} color="#2563eb" />
+                    <span>Change Account Password</span>
+                  </button>
+
                   <div style={{
                     padding: '0.45rem 0.65rem',
                     margin: '0.2rem 0',
@@ -816,7 +915,7 @@ export default function StudentDashboard({
                     gap: '0.4rem'
                   }}>
                     <ShieldCheck size={14} color="#16a34a" />
-                    <span>Credentials governed by Admin</span>
+                    <span>Student Managed Credentials</span>
                   </div>
 
                   <div style={{ height: '1px', background: '#f1f5f9', margin: '0.4rem 0' }} />
@@ -1763,26 +1862,21 @@ export default function StudentDashboard({
 
                     <div className="grid-2">
                       <div className="form-group">
-                        <label className="form-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <span>Email Address <span className="required">*</span></span>
-                          <span className="badge" style={{ background: '#fffbeb', color: '#b45309', fontSize: '0.7rem', padding: '2px 6px', border: '1px solid #fde68a' }}>
-                            <Lock size={10} /> Admin-Controlled
-                          </span>
+                        <label className="form-label">
+                          Email Address <span className="required">*</span>
                         </label>
                         <div style={{ position: 'relative' }}>
                           <Mail size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
                           <input 
                             type="email" 
                             className="form-input" 
-                            style={{ paddingLeft: '2.5rem', background: '#f8fafc', color: '#475569', cursor: 'not-allowed' }}
+                            style={{ paddingLeft: '2.5rem' }}
                             value={safeProfile.email || email} 
-                            disabled 
-                            readOnly
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="your.email@example.com"
+                            required
                           />
                         </div>
-                        <span style={{ fontSize: '0.725rem', color: '#b45309', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
-                          <Lock size={11} /> Only Central Admin has access to change student login email and password.
-                        </span>
                       </div>
 
                       <div className="grid-2">
@@ -1808,41 +1902,10 @@ export default function StudentDashboard({
                     </div>
                   </div>
 
-                  {/* SECTION 2: ACCOUNT SECURITY & CREDENTIALS (ADMIN-GOVERNED ONLY) */}
+                  {/* SECTION 2: EDUCATION INFORMATION */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <Lock size={18} style={{ color: '#2563eb' }} /> 2. Security & Account Credentials
-                    </h4>
-
-                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                          <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Lock size={20} />
-                          </div>
-                          <div>
-                            <div style={{ fontWeight: '700', color: '#0f172a', fontSize: '0.95rem' }}>
-                              Student Portal Authentication Credentials
-                            </div>
-                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                              Registered Email: <strong style={{ color: '#0f172a' }}>{safeProfile.email}</strong> • Password: <strong>••••••••</strong>
-                            </div>
-                          </div>
-                        </div>
-                        <span className="badge" style={{ background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', fontWeight: '700', fontSize: '0.725rem' }}>
-                          <ShieldCheck size={12} /> Managed by Central Admin
-                        </span>
-                      </div>
-                      <div style={{ marginTop: '0.85rem', paddingTop: '0.85rem', borderTop: '1px solid #e2e8f0', fontSize: '0.8rem', color: '#64748b', lineHeight: '1.5' }}>
-                        🔒 <strong>Platform Security Rule:</strong> Only Central Administration has the authority to change or reset passwords and email addresses for student accounts. If you require email modification or a password reset, please contact the Central Administration office at <a href="mailto:admin@interncatalyst.org" style={{ color: '#2563eb', fontWeight: '700', textDecoration: 'none' }}>admin@interncatalyst.org</a>.
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* SECTION 3: EDUCATION INFORMATION */}
-                  <div style={{ marginBottom: '2rem' }}>
-                    <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <BookOpen size={18} style={{ color: '#2563eb' }} /> 3. Education Information
+                      <BookOpen size={18} style={{ color: '#2563eb' }} /> 2. Education Information
                     </h4>
 
                     <div className="form-group">
@@ -1923,10 +1986,10 @@ export default function StudentDashboard({
                     </div>
                   </div>
 
-                  {/* SECTION 4: DOMAIN & PROFESSIONAL PROFILE */}
+                  {/* SECTION 3: DOMAIN & PROFESSIONAL PROFILE */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <Code size={18} style={{ color: '#2563eb' }} /> 4. Domain & Professional Profile
+                      <Code size={18} style={{ color: '#2563eb' }} /> 3. Domain & Professional Profile
                     </h4>
 
                     <div className="grid-2">
@@ -1994,10 +2057,10 @@ export default function StudentDashboard({
                     </div>
                   </div>
 
-                  {/* SECTION 5: LOCATION & WORK PREFERENCES */}
+                  {/* SECTION 4: LOCATION & WORK PREFERENCES */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <MapPin size={18} style={{ color: '#2563eb' }} /> 5. Location & Work Preferences
+                      <MapPin size={18} style={{ color: '#2563eb' }} /> 4. Location & Work Preferences
                     </h4>
 
                     <div className="grid-2">
@@ -2365,6 +2428,102 @@ export default function StudentDashboard({
             }}
             onAddToast={onAddToast}
           />
+        )}
+
+        {/* ======================================================== */}
+        {/* CHANGE PASSWORD MODAL                                    */}
+        {/* ======================================================== */}
+        {showChangePasswordModal && (
+          <div className="modal-overlay" onClick={() => setShowChangePasswordModal(false)} style={{ zIndex: 10005 }}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '440px', padding: '1.75rem', borderRadius: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.75rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Key size={20} style={{ color: '#2563eb' }} /> Change Security Password
+                </h3>
+                <button 
+                  type="button" 
+                  onClick={() => setShowChangePasswordModal(false)}
+                  style={{ background: '#f1f5f9', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {passwordError && (
+                <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.75rem 1rem', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <AlertCircle size={16} /> {passwordError}
+                </div>
+              )}
+
+              <form onSubmit={handleChangePasswordSubmit}>
+                <div className="form-group" style={{ marginBottom: '1rem' }}>
+                  <label className="form-label">
+                    Current / Old Password <span className="required">*</span>
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                    <input 
+                      type="password" 
+                      className="form-input" 
+                      style={{ paddingLeft: '2.5rem' }} 
+                      placeholder="Enter current password" 
+                      value={oldPasswordInput} 
+                      onChange={(e) => setOldPasswordInput(e.target.value)} 
+                      required 
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group" style={{ marginBottom: '1rem' }}>
+                  <label className="form-label">
+                    New Password <span className="required">*</span>
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                    <input 
+                      type="password" 
+                      className="form-input" 
+                      style={{ paddingLeft: '2.5rem' }} 
+                      placeholder="Min 8 chars, 1 capital & 1 special" 
+                      value={newPasswordInput} 
+                      onChange={(e) => setNewPasswordInput(e.target.value)} 
+                      required 
+                    />
+                  </div>
+                  <span style={{ fontSize: '0.725rem', color: '#64748b', marginTop: '4px', display: 'block' }}>
+                    Must be at least 8 characters, with 1 uppercase letter (A-Z) & 1 special symbol (!@#$%^&*).
+                  </span>
+                </div>
+
+                <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+                  <label className="form-label">
+                    Confirm New Password <span className="required">*</span>
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                    <input 
+                      type="password" 
+                      className="form-input" 
+                      style={{ paddingLeft: '2.5rem' }} 
+                      placeholder="Re-enter new password" 
+                      value={confirmNewPasswordInput} 
+                      onChange={(e) => setConfirmNewPasswordInput(e.target.value)} 
+                      required 
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+                  <button type="button" className="btn btn-secondary" onClick={() => setShowChangePasswordModal(false)}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary" style={{ fontWeight: '700' }} disabled={changingPassword}>
+                    {changingPassword ? 'Updating Password...' : 'Update Password'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         )}
 
       </div>

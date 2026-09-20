@@ -1,60 +1,89 @@
 import React from 'react';
-import { ShieldCheck, MapPin, Clock, DollarSign, Users, Calendar, ArrowRight, Building2 } from 'lucide-react';
+import { ShieldCheck, MapPin, Clock, Users, Calendar, ArrowRight, Building2 } from 'lucide-react';
 
 export default function InternshipCard({ internship, onSelect, onApply }) {
+  const isFullTime = (internship.internshipType || 'Full-time') === 'Full-time';
+
   return (
-    <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
-      {/* Header with Company Logo & Badges */}
+    <div className="glass-card" style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      height: '100%', 
+      position: 'relative',
+      background: '#ffffff',
+      border: '1px solid #e2e8f0',
+      borderRadius: '12px',
+      padding: '1.25rem',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+      transition: 'all 0.2s ease'
+    }}>
+      {/* Top Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '1rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', overflow: 'hidden' }}>
           <img 
             src={internship.logo} 
             alt={internship.companyName}
             style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '12px',
+              width: '42px',
+              height: '42px',
+              borderRadius: '8px',
               objectFit: 'cover',
-              border: '1px solid var(--border-color)',
-              background: '#fff'
+              border: '1px solid #e2e8f0',
+              background: '#f8fafc',
+              flexShrink: 0
             }}
           />
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <span style={{ fontWeight: '700', fontSize: '0.925rem', color: '#0f172a' }}>
+          <div style={{ overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
+              <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {internship.companyName}
               </span>
-              {internship.verified ? (
-                <span className="badge badge-verified" title="Verified Employer Identity & Genuine Stipend">
-                  <ShieldCheck size={12} /> Verified
-                </span>
-              ) : (
-                <span className="badge badge-pending" title="Pending Verification Audit">
-                  Pending Audit
+              {internship.verified && (
+                <span style={{ 
+                  background: '#f0fdf4', 
+                  color: '#15803d', 
+                  border: '1px solid #bbf7d0', 
+                  borderRadius: '4px', 
+                  fontSize: '0.7rem', 
+                  padding: '1px 5px', 
+                  fontWeight: '700',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '3px'
+                }}>
+                  <ShieldCheck size={11} /> Verified
                 </span>
               )}
             </div>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '2px' }}>
-              <Building2 size={13} /> {internship.industry}
+            <span style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '2px' }}>
+              <Building2 size={12} /> {internship.industry || 'Tech & Services'}
             </span>
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.35rem' }}>
-          <span className="badge badge-pill" style={{
-            background: internship.workMode === 'Online' ? '#e0f2fe' : '#f3e8ff',
-            color: internship.workMode === 'Online' ? '#0369a1' : '#6b21a8',
-            borderColor: 'transparent'
+        {/* Work Mode & Type Badge */}
+        <div style={{ display: 'flex', gap: '0.3rem', flexShrink: 0 }}>
+          <span style={{
+            background: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            color: '#334155',
+            borderRadius: '6px',
+            fontSize: '0.725rem',
+            padding: '2px 7px',
+            fontWeight: '600'
           }}>
             {internship.workMode}
           </span>
-          <span className="badge badge-pill" style={{
-            background: (internship.internshipType || 'Full-time') === 'Full-time' ? 'rgba(37, 99, 235, 0.1)' : 'rgba(147, 51, 234, 0.1)',
-            color: (internship.internshipType || 'Full-time') === 'Full-time' ? '#2563eb' : '#9333ea',
-            borderColor: (internship.internshipType || 'Full-time') === 'Full-time' ? '#bfdbfe' : '#e9d5ff',
-            fontSize: '0.725rem'
+          <span style={{
+            background: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            color: '#334155',
+            borderRadius: '6px',
+            fontSize: '0.725rem',
+            padding: '2px 7px',
+            fontWeight: '600'
           }}>
-            {(internship.internshipType || 'Full-time') === 'Full-time' ? '🌕 Full-Time' : '🌓 Part-Time'}
+            {isFullTime ? 'Full-Time' : 'Part-Time'}
           </span>
         </div>
       </div>
@@ -63,41 +92,41 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
       <h3 
         onClick={() => onSelect(internship)}
         style={{
-          fontSize: '1.15rem',
+          fontSize: '1.05rem',
           fontWeight: '700',
           color: '#0f172a',
           marginBottom: '0.65rem',
           cursor: 'pointer',
-          lineHeight: '1.3'
+          lineHeight: '1.35'
         }}
       >
         {internship.title}
       </h3>
 
-      {/* Key Specifications Grid */}
+      {/* Meta Specs Grid */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: '0.65rem',
-        margin: '0.5rem 0 1rem',
-        fontSize: '0.825rem',
-        color: 'var(--text-muted)'
+        gap: '0.5rem 0.75rem',
+        margin: '0.25rem 0 1rem',
+        fontSize: '0.8rem',
+        color: '#64748b'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <Calendar size={14} style={{ color: '#7c3aed' }} />
+          <Calendar size={13} style={{ color: '#64748b' }} />
           <span>Apply by {internship.deadline || 'Sept 30'}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <Clock size={14} style={{ color: '#2563eb' }} />
-          <span>{internship.duration} ({internship.workingHours ? internship.workingHours.split('(')[1]?.replace(')', '') || 'Std' : 'Std'})</span>
+          <Clock size={13} style={{ color: '#64748b' }} />
+          <span>{internship.duration || '3 Months'}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <MapPin size={14} style={{ color: '#dc2626' }} />
+          <MapPin size={13} style={{ color: '#64748b' }} />
           <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{internship.location}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <Users size={14} style={{ color: '#0284c7' }} />
-          <span>{internship.openings} Openings</span>
+          <Users size={13} style={{ color: '#64748b' }} />
+          <span>{internship.openings || 5} Openings</span>
         </div>
       </div>
 
@@ -105,38 +134,63 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '1.25rem' }}>
         {internship.skills.slice(0, 4).map((skill, idx) => (
           <span key={idx} style={{
-            background: '#f1f5f9',
+            background: '#f8fafc',
             border: '1px solid #e2e8f0',
             color: '#475569',
-            padding: '0.2rem 0.5rem',
-            borderRadius: '6px',
-            fontSize: '0.75rem',
+            padding: '2px 7px',
+            borderRadius: '5px',
+            fontSize: '0.74rem',
             fontWeight: '600'
           }}>
             {skill}
           </span>
         ))}
         {internship.skills.length > 4 && (
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', alignSelf: 'center' }}>
+          <span style={{ fontSize: '0.74rem', color: '#64748b', alignSelf: 'center' }}>
             +{internship.skills.length - 4} more
           </span>
         )}
       </div>
 
       {/* Footer Actions */}
-      <div style={{ marginTop: 'auto', paddingTop: '0.85rem', borderTop: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+      <div style={{ 
+        marginTop: 'auto', 
+        paddingTop: '0.75rem', 
+        borderTop: '1px solid #e2e8f0', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justify: 'space-between' 
+      }}>
+        <div style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
           <Calendar size={13} /> Deadline: {internship.deadline}
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', gap: '0.4rem' }}>
           <button 
+            type="button"
             className="btn btn-secondary btn-sm"
+            style={{ 
+              background: '#f8fafc', 
+              border: '1px solid #cbd5e1', 
+              color: '#334155',
+              fontSize: '0.8rem',
+              padding: '0.35rem 0.75rem',
+              fontWeight: '600'
+            }}
             onClick={() => onSelect(internship)}
           >
             Details
           </button>
           <button 
+            type="button"
             className="btn btn-primary btn-sm"
+            style={{ 
+              background: '#1e3a8a', 
+              color: '#ffffff', 
+              border: 'none',
+              fontSize: '0.8rem',
+              padding: '0.35rem 0.85rem',
+              fontWeight: '700'
+            }}
             onClick={() => onApply(internship)}
           >
             Apply <ArrowRight size={13} />

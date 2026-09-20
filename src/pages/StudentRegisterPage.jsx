@@ -124,7 +124,7 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
       onUpdateProfile(createdProfile);
     }
     if (onAddToast) {
-      onAddToast('🎉 Student account registered successfully!', 'success');
+      onAddToast(`🎉 Student account registered! ✉️ Welcome email dispatched to ${createdProfile.email}`, 'success');
     }
     if (onLoginSuccess) {
       onLoginSuccess('student', formData.email, createdProfile);

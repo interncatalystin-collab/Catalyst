@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Logo from '../components/Logo';
 import { 
   Search, 
   ShieldCheck, 
@@ -42,26 +41,24 @@ export default function HomePage({
       <section className="hero-section">
         <div className="hero-glow"></div>
         <div className="container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          {/* Brand Logo Banner */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
-            <Logo height={68} mode="light" showTagline={true} />
-          </div>
-
           {/* Trust Pill */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            background: '#f8fafc',
-            border: '1px solid #cbd5e1',
-            color: '#1e3a8a',
-            padding: '0.4rem 1rem',
-            borderRadius: '30px',
-            fontSize: '0.85rem',
-            fontWeight: '600',
-            marginBottom: '1.5rem'
-          }}>
-            <ShieldCheck size={16} /> 100% Verified Internships & Scam-Free Guarantee
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: '#f8fafc',
+              border: '1px solid #cbd5e1',
+              color: '#1e3a8a',
+              padding: '0.45rem 1.25rem',
+              borderRadius: '30px',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.03)'
+            }}>
+              <ShieldCheck size={16} style={{ color: '#2563eb' }} />
+              <span>100% Verified Internships & Scam-Free Guarantee</span>
+            </div>
           </div>
 
           {/* Main Headline */}
