@@ -47,16 +47,16 @@ export default function HomePage({
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',
-              background: '#f8fafc',
-              border: '1px solid #cbd5e1',
-              color: '#1e3a8a',
+              background: '#f0f9ff',
+              border: '1px solid #bae6fd',
+              color: '#0284c7',
               padding: '0.45rem 1.25rem',
               borderRadius: '30px',
               fontSize: '0.875rem',
               fontWeight: '600',
-              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.03)'
+              boxShadow: '0 2px 5px rgba(2, 132, 199, 0.05)'
             }}>
-              <ShieldCheck size={16} style={{ color: '#2563eb' }} />
+              <ShieldCheck size={16} style={{ color: '#0284c7' }} />
               <span>100% Verified Internships & Scam-Free Guarantee</span>
             </div>
           </div>
@@ -149,8 +149,8 @@ export default function HomePage({
             {/* Box 1: Students */}
             <div className="glass-card">
               <div style={{
-                width: '48px', height: '48px', borderRadius: '12px', background: '#f1f5f9',
-                color: '#1e3a8a', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem'
+                width: '48px', height: '48px', borderRadius: '12px', background: '#f0f9ff',
+                color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem'
               }}>
                 <GraduationCap size={24} />
               </div>
@@ -160,7 +160,7 @@ export default function HomePage({
               </p>
               <button 
                 onClick={() => { setCurrentRole('student'); setActiveTab('student-dash'); }}
-                style={{ background: 'none', border: 'none', color: '#1e3a8a', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}
+                style={{ background: 'none', border: 'none', color: '#0284c7', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}
               >
                 Go to Student Dashboard <ArrowRight size={14} />
               </button>

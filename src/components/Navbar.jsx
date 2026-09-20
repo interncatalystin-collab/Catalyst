@@ -31,7 +31,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
       {/* Main Navbar */}
       <nav style={{
         background: '#ffffff',
-        borderBottom: '2px solid #1e3a8a',
+        borderBottom: '2px solid #0284c7',
         padding: '0.75rem 0',
         boxShadow: '0 1px 4px rgba(15, 23, 42, 0.05)'
       }}>
@@ -87,14 +87,14 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                   className="btn btn-primary btn-sm nav-login-btn"
                   onClick={() => handleNavClick('login')}
                   style={{ 
-                    background: '#1e3a8a',
+                    background: '#0284c7',
                     color: '#ffffff',
                     border: 'none',
                     fontWeight: '700', 
                     padding: '0.45rem 1.15rem',
                     fontSize: '0.85rem',
                     borderRadius: '6px',
-                    boxShadow: '0 1px 3px rgba(30, 58, 138, 0.2)',
+                    boxShadow: '0 1px 3px rgba(2, 132, 199, 0.25)',
                     whiteSpace: 'nowrap',
                     flexShrink: 0
                   }}
@@ -108,7 +108,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                   <button 
                     className="btn btn-primary btn-sm"
                     onClick={() => handleNavClick('student-dash')}
-                    style={{ background: '#1e3a8a', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '6px' }}
+                    style={{ background: '#0284c7', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '6px' }}
                   >
                     <GraduationCap size={14} /> Student Dashboard
                   </button>
@@ -157,23 +157,25 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div style={{
-          background: '#0f172a',
-          borderBottom: '2px solid rgba(6, 182, 212, 0.4)',
-          padding: '1.25rem 1rem',
+          background: '#ffffff',
+          borderBottom: '2px solid #0284c7',
+          padding: '1rem',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.75rem',
-          boxShadow: '0 10px 25px rgba(0,0,0,0.5)'
+          gap: '0.65rem',
+          boxShadow: '0 8px 20px rgba(0,0,0,0.1)'
         }}>
           {currentRole === 'visitor' ? (
             <button 
               className="btn btn-primary" 
               style={{ 
-                background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)', 
+                background: '#0284c7', 
                 color: '#ffffff', 
-                fontWeight: '800',
+                fontWeight: '700',
                 padding: '0.75rem 1rem',
-                fontSize: '0.925rem'
+                fontSize: '0.9rem',
+                border: 'none',
+                borderRadius: '8px'
               }} 
               onClick={() => handleNavClick('login')}
             >
@@ -184,7 +186,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               {currentRole === 'student' && (
                 <button 
                   className="btn btn-primary" 
-                  style={{ background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 100%)', color: '#ffffff', fontWeight: '800', padding: '0.75rem 1rem', fontSize: '0.925rem' }} 
+                  style={{ background: '#0284c7', color: '#ffffff', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
                   onClick={() => handleNavClick('student-dash')}
                 >
                   <GraduationCap size={16} /> Student Dashboard
@@ -193,7 +195,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               {currentRole === 'company' && (
                 <button 
                   className="btn btn-emerald" 
-                  style={{ background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)', color: '#ffffff', fontWeight: '800', padding: '0.75rem 1rem', fontSize: '0.925rem' }} 
+                  style={{ background: '#15803d', color: '#ffffff', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
                   onClick={() => handleNavClick('company-dash')}
                 >
                   <Building2 size={16} /> Company Dashboard
@@ -202,7 +204,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               {currentRole === 'admin' && (
                 <button 
                   className="btn btn-secondary" 
-                  style={{ borderColor: '#38bdf8', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', fontWeight: '800', padding: '0.75rem 1rem', fontSize: '0.925rem' }} 
+                  style={{ borderColor: '#0f172a', color: '#ffffff', background: '#0f172a', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
                   onClick={() => handleNavClick('admin-dash')}
                 >
                   <Shield size={16} /> Admin Dashboard
@@ -210,38 +212,38 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               )}
             </>
           )}
-          <hr style={{ borderColor: 'rgba(255,255,255,0.15)', margin: '0.25rem 0' }} />
+          <hr style={{ borderColor: '#e2e8f0', margin: '0.25rem 0' }} />
           <button 
             className="btn btn-secondary" 
-            style={{ background: '#ffffff', color: '#0f172a', fontWeight: '800', border: '1.5px solid #cbd5e1', padding: '0.7rem 1rem', fontSize: '0.9rem' }} 
+            style={{ background: '#f8fafc', color: '#0f172a', fontWeight: '600', border: '1px solid #e2e8f0', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
             onClick={() => handleNavClick('home')}
           >
             Home
           </button>
           <button 
             className="btn btn-secondary" 
-            style={{ background: '#ffffff', color: '#0f172a', fontWeight: '800', border: '1.5px solid #cbd5e1', padding: '0.7rem 1rem', fontSize: '0.9rem' }} 
+            style={{ background: '#f8fafc', color: '#0f172a', fontWeight: '600', border: '1px solid #e2e8f0', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
             onClick={() => handleNavClick('browse')}
           >
             Find Internships
           </button>
           <button 
             className="btn btn-secondary" 
-            style={{ background: '#ffffff', color: '#0f172a', fontWeight: '800', border: '1.5px solid #cbd5e1', padding: '0.7rem 1rem', fontSize: '0.9rem' }} 
+            style={{ background: '#f8fafc', color: '#0f172a', fontWeight: '600', border: '1px solid #e2e8f0', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
             onClick={() => handleNavClick('how-it-works')}
           >
             How It Works
           </button>
           <button 
             className="btn btn-secondary" 
-            style={{ background: '#ffffff', color: '#0f172a', fontWeight: '800', border: '1.5px solid #cbd5e1', padding: '0.7rem 1rem', fontSize: '0.9rem' }} 
+            style={{ background: '#f8fafc', color: '#0f172a', fontWeight: '600', border: '1px solid #e2e8f0', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
             onClick={() => handleNavClick('resume-templates')}
           >
             Resume Templates
           </button>
           <button 
             className="btn btn-secondary" 
-            style={{ background: '#ffffff', color: '#0f172a', fontWeight: '800', border: '1.5px solid #cbd5e1', padding: '0.7rem 1rem', fontSize: '0.9rem' }} 
+            style={{ background: '#f8fafc', color: '#0f172a', fontWeight: '600', border: '1px solid #e2e8f0', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
             onClick={() => handleNavClick('about')}
           >
             About Us

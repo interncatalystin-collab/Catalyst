@@ -623,11 +623,11 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                       Gmail / Student Email Address <span className="required">*</span>
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <Mail size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <Mail size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)', pointerEvents: 'none', zIndex: 5 }} />
                       <input 
                         type="email" 
-                        className="form-input" 
-                        style={{ paddingLeft: '2.5rem' }}
+                        className="form-input has-icon-left" 
+                        style={{ paddingLeft: '2.85rem' }}
                         placeholder="student@university.edu or gmail.com"
                         value={emailOrPhone}
                         onChange={(e) => setEmailOrPhone(e.target.value)}
@@ -643,18 +643,18 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                         Student Account Password <span className="required">*</span>
                       </label>
                       <span 
-                        style={{ fontSize: '0.75rem', color: '#2563eb', cursor: 'pointer', fontWeight: '600' }}
+                        style={{ fontSize: '0.75rem', color: '#0284c7', cursor: 'pointer', fontWeight: '700' }}
                         onClick={() => setShowAdminAssistNotice(true)}
                       >
                         Forgot Password?
                       </span>
                     </div>
                     <div style={{ position: 'relative' }}>
-                      <Key size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <Key size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)', pointerEvents: 'none', zIndex: 5 }} />
                       <input 
                         type={showPassword ? 'text' : 'password'}
-                        className="form-input" 
-                        style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
+                        className="form-input has-icon-left has-icon-right" 
+                        style={{ paddingLeft: '2.85rem', paddingRight: '2.85rem' }}
                         placeholder="Enter account password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -663,7 +663,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                       <button 
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
+                        style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', zIndex: 5 }}
                       >
                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
@@ -748,11 +748,11 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                       Full Name <span className="required">*</span>
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <User size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <User size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)', pointerEvents: 'none', zIndex: 5 }} />
                       <input 
                         type="text" 
-                        className="form-input" 
-                        style={{ paddingLeft: '2.5rem' }}
+                        className="form-input has-icon-left" 
+                        style={{ paddingLeft: '2.85rem' }}
                         placeholder="Enter your full legal/academic name"
                         value={signUpName}
                         onChange={(e) => setSignUpName(e.target.value)}
@@ -767,11 +767,11 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                       Gmail / Student Email Address <span className="required">*</span>
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <Mail size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <Mail size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)', pointerEvents: 'none', zIndex: 5 }} />
                       <input 
                         type="email" 
-                        className="form-input" 
-                        style={{ paddingLeft: '2.5rem' }}
+                        className="form-input has-icon-left" 
+                        style={{ paddingLeft: '2.85rem' }}
                         placeholder="student@gmail.com or university.edu"
                         value={signUpEmail}
                         onChange={(e) => setSignUpEmail(e.target.value)}
@@ -786,11 +786,11 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                       Create Account Password <span className="required">*</span>
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <Key size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <Key size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)', pointerEvents: 'none', zIndex: 5 }} />
                       <input 
                         type={showSignUpPassword ? 'text' : 'password'}
-                        className="form-input" 
-                        style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
+                        className="form-input has-icon-left has-icon-right" 
+                        style={{ paddingLeft: '2.85rem', paddingRight: '2.85rem' }}
                         placeholder="Create account password (min 6 chars)"
                         value={signUpPassword}
                         onChange={(e) => setSignUpPassword(e.target.value)}
@@ -799,7 +799,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                       <button 
                         type="button"
                         onClick={() => setShowSignUpPassword(!showSignUpPassword)}
-                        style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
+                        style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', zIndex: 5 }}
                       >
                         {showSignUpPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
@@ -812,11 +812,11 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                       Confirm Account Password <span className="required">*</span>
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <Lock size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                      <Lock size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)', pointerEvents: 'none', zIndex: 5 }} />
                       <input 
                         type={showSignUpPassword ? 'text' : 'password'}
-                        className="form-input" 
-                        style={{ paddingLeft: '2.5rem' }}
+                        className="form-input has-icon-left" 
+                        style={{ paddingLeft: '2.85rem' }}
                         placeholder="Re-enter password to confirm"
                         value={signUpConfirmPassword}
                         onChange={(e) => setSignUpConfirmPassword(e.target.value)}

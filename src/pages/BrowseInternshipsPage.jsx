@@ -115,8 +115,8 @@ export default function BrowseInternshipsPage({
               style={{
                 padding: '0.75rem 0.95rem',
                 borderRadius: '8px',
-                border: selectedDomain === 'All' ? '1px solid #1e3a8a' : '1px solid #e2e8f0',
-                background: selectedDomain === 'All' ? '#1e3a8a' : '#ffffff',
+                border: selectedDomain === 'All' ? '1px solid #0284c7' : '1px solid #e2e8f0',
+                background: selectedDomain === 'All' ? '#0284c7' : '#ffffff',
                 color: selectedDomain === 'All' ? '#ffffff' : '#334155',
                 fontWeight: '700',
                 fontSize: '0.85rem',
@@ -145,8 +145,8 @@ export default function BrowseInternshipsPage({
                   style={{
                     padding: '0.75rem 0.95rem',
                     borderRadius: '8px',
-                    border: isSelected ? '1px solid #1e3a8a' : '1px solid #e2e8f0',
-                    background: isSelected ? '#1e3a8a' : '#ffffff',
+                    border: isSelected ? '1px solid #0284c7' : '1px solid #e2e8f0',
+                    background: isSelected ? '#0284c7' : '#ffffff',
                     color: isSelected ? '#ffffff' : '#334155',
                     fontWeight: '700',
                     fontSize: '0.825rem',

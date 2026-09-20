@@ -184,7 +184,7 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
             type="button"
             className="btn btn-primary btn-sm"
             style={{ 
-              background: '#1e3a8a', 
+              background: '#0284c7', 
               color: '#ffffff', 
               border: 'none',
               fontSize: '0.8rem',
