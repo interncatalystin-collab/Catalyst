@@ -7,7 +7,7 @@ export default function AboutUsPage() {
       <div className="container">
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <div className="badge badge-pill" style={{ marginBottom: '0.75rem', color: '#2563eb' }}>
+          <div className="badge badge-pill" style={{ marginBottom: '0.75rem', color: '#1e3a8a' }}>
             <Sparkles size={14} /> Our Mission & Business Model
           </div>
           <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.75rem' }}>
@@ -21,7 +21,7 @@ export default function AboutUsPage() {
         {/* Mission & Vision Grid */}
         <div className="grid-2" style={{ marginBottom: '4rem' }}>
           <div className="glass-card" style={{ padding: '2.5rem' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
               <Target size={26} />
             </div>
             <h2 style={{ fontSize: '1.5rem', color: '#0f172a', fontWeight: '800', marginBottom: '0.75rem' }}>
@@ -48,7 +48,7 @@ export default function AboutUsPage() {
         {/* 7-Step Business Model Architecture */}
         <div style={{ marginBottom: '4rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div className="badge badge-pill" style={{ marginBottom: '0.5rem', color: '#2563eb' }}>
+            <div className="badge badge-pill" style={{ marginBottom: '0.5rem', color: '#1e3a8a' }}>
               <Briefcase size={14} /> Ecosystem Framework
             </div>
             <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#0f172a' }}>
@@ -63,7 +63,7 @@ export default function AboutUsPage() {
             {/* Step 1 */}
             <div className="glass-card">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#2563eb', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pillar 01</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#1e3a8a', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pillar 01</span>
                 <span className="badge badge-verified">Verified</span>
               </div>
               <h3 style={{ color: '#0f172a', fontSize: '1.15rem', fontWeight: '700', marginBottom: '0.5rem' }}>1. Student Registration & Resume Verification</h3>
@@ -75,7 +75,7 @@ export default function AboutUsPage() {
             {/* Step 2 */}
             <div className="glass-card">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#0284c7', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pillar 02</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#1e3a8a', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pillar 02</span>
                 <span className="badge badge-verified">AI Engine</span>
               </div>
               <h3 style={{ color: '#0f172a', fontSize: '1.15rem', fontWeight: '700', marginBottom: '0.5rem' }}>2. Matching Students with Relevant Internship Openings</h3>

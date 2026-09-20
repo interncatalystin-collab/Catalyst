@@ -469,7 +469,7 @@ export default function StudentDashboard({
                   position: 'absolute',
                   bottom: '0',
                   right: '0',
-                  background: '#2563eb',
+                  background: '#1e3a8a',
                   color: '#ffffff',
                   border: '2px solid #ffffff',
                   borderRadius: '50%',
@@ -500,8 +500,8 @@ export default function StudentDashboard({
               
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginTop: '6px', flexWrap: 'wrap' }}>
                 <span style={{
-                  background: 'rgba(37, 99, 235, 0.08)',
-                  color: '#2563eb',
+                  background: 'rgba(30, 58, 138, 0.08)',
+                  color: '#1e3a8a',
                   fontSize: '0.8rem',
                   fontWeight: '700',
                   padding: '0.2rem 0.6rem',
@@ -899,7 +899,7 @@ export default function StudentDashboard({
                     onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; }}
                   >
-                    <Key size={15} color="#2563eb" />
+                    <Key size={15} color="#1e3a8a" />
                     <span>Change Account Password</span>
                   </button>
 
@@ -992,8 +992,8 @@ export default function StudentDashboard({
           >
             <User size={16} /> Student Profile
             <span style={{
-              background: activeTab === 'profile' ? '#ffffff' : '#e0e7ff',
-              color: activeTab === 'profile' ? '#1d4ed8' : '#3730a3',
+              background: '#1e3a8a',
+              color: '#ffffff',
               fontSize: '0.7rem',
               fontWeight: '800',
               padding: '0.15rem 0.45rem',
@@ -1023,8 +1023,8 @@ export default function StudentDashboard({
           >
             <Briefcase size={16} /> Domain Role & Vacancies
             <span style={{
-              background: activeTab === 'domain-role' ? '#ffffff' : '#e0e7ff',
-              color: activeTab === 'domain-role' ? '#1d4ed8' : '#3730a3',
+              background: '#1e3a8a',
+              color: '#ffffff',
               fontSize: '0.7rem',
               fontWeight: '800',
               padding: '0.15rem 0.45rem',
@@ -1088,7 +1088,7 @@ export default function StudentDashboard({
                 <img 
                   src={avatar} 
                   alt="Candidate Photo" 
-                  style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #2563eb' }} 
+                  style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #1e3a8a' }} 
                 />
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -1130,7 +1130,7 @@ export default function StudentDashboard({
             }}>
               <div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <Sparkles size={18} style={{ color: '#2563eb' }} /> Domain-Based Central Placement
+                  <Sparkles size={18} style={{ color: '#1e3a8a' }} /> Domain-Based Central Placement
                 </h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '2px' }}>
                   Students apply directly for their <strong>Domain Role</strong>. You cannot apply to individual companies. Your single domain application pools you across all connected partner companies below.
@@ -1165,7 +1165,7 @@ export default function StudentDashboard({
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <span className="badge badge-verified" style={{ background: '#2563eb', color: '#fff' }}>
+                    <span className="badge badge-verified" style={{ background: '#1e3a8a', color: '#fff' }}>
                       Verified Domain Track
                     </span>
                     <span className="badge badge-pill" style={{ background: '#f1f5f9', color: '#475569' }}>
@@ -1277,7 +1277,7 @@ export default function StudentDashboard({
               }}>
                 <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                    <Users size={14} style={{ color: '#2563eb' }} /> ROLE VACANCIES
+                    <Users size={14} style={{ color: '#1e3a8a' }} /> ROLE VACANCIES
                   </span>
                   <strong style={{ fontSize: '1.4rem', color: '#0f172a', display: 'block', marginTop: '4px' }}>
                     {currentDomainRole.totalVacancies} Open Seats
@@ -1358,7 +1358,7 @@ export default function StudentDashboard({
               <div style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '0.5rem' }}>
                 <div>
                   <h3 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                    <Building2 size={20} style={{ color: '#2563eb' }} />
+                    <Building2 size={20} style={{ color: '#1e3a8a' }} />
                     Connected Companies Hiring for this Role ({currentDomainRole.connectedCompanies.length})
                   </h3>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '2px' }}>
@@ -1465,7 +1465,7 @@ export default function StudentDashboard({
                       justifyContent: 'space-between',
                       fontSize: '0.75rem'
                     }}>
-                      <span style={{ color: '#2563eb', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span style={{ color: '#1e3a8a', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                         <ShieldCheck size={12} /> Pooled Hiring Partner
                       </span>
                       <span style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
@@ -1512,7 +1512,7 @@ export default function StudentDashboard({
                         <tr>
                           <td>
                             <strong style={{ color: '#0f172a', display: 'block' }}>{app.internshipTitle}</strong>
-                            <span style={{ fontSize: '0.78rem', color: '#2563eb', fontWeight: '600' }}>
+                            <span style={{ fontSize: '0.78rem', color: '#1e3a8a', fontWeight: '600' }}>
                               {app.domain || 'Domain Track'}
                             </span>
                             <span style={{ display: 'block', fontSize: '0.72rem', color: '#16a34a', marginTop: '2px' }}>
@@ -1539,7 +1539,7 @@ export default function StudentDashboard({
                           <td>
                             {app.assessmentStatus === 'Completed' ? (
                               <div>
-                                <span className="badge badge-verified" style={{ background: (app.assessmentScore || 0) >= 60 ? '#16a34a' : '#2563eb', color: '#fff', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem' }}>
+                                <span className="badge badge-verified" style={{ background: (app.assessmentScore || 0) >= 60 ? '#16a34a' : '#1e3a8a', color: '#fff', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem' }}>
                                   <Award size={12} /> Score: {app.assessmentScore}%
                                 </span>
                                 <div style={{ fontSize: '0.72rem', color: '#16a34a', marginTop: '3px', fontWeight: '600' }}>
@@ -1725,7 +1725,7 @@ export default function StudentDashboard({
                   gap: '0.75rem'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <GraduationCap size={22} style={{ color: '#2563eb' }} />
+                    <GraduationCap size={22} style={{ color: '#1e3a8a' }} />
                     <div>
                       <strong style={{ fontSize: '0.95rem', color: '#1e40af', display: 'block' }}>
                         Official Candidate Registration Form
@@ -1735,7 +1735,7 @@ export default function StudentDashboard({
                       </span>
                     </div>
                   </div>
-                  <span className="badge badge-verified" style={{ background: '#2563eb', color: '#ffffff' }}>
+                  <span className="badge badge-verified" style={{ background: '#1e3a8a', color: '#ffffff' }}>
                     Live Registration Mode
                   </span>
                 </div>
@@ -1764,7 +1764,7 @@ export default function StudentDashboard({
                         height: '105px',
                         borderRadius: '50%',
                         objectFit: 'cover',
-                        border: '3px solid #2563eb',
+                        border: '3px solid #1e3a8a',
                         boxShadow: '0 6px 16px rgba(37, 99, 235, 0.25)',
                         background: '#fff'
                       }}
@@ -1777,7 +1777,7 @@ export default function StudentDashboard({
                         position: 'absolute',
                         bottom: '4px',
                         right: '4px',
-                        background: '#2563eb',
+                        background: '#1e3a8a',
                         color: '#fff',
                         border: '2px solid #fff',
                         borderRadius: '50%',
@@ -1797,9 +1797,9 @@ export default function StudentDashboard({
                   <div style={{ flex: 1, minWidth: '260px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '4px' }}>
                       <h4 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        <Image size={18} style={{ color: '#2563eb' }} /> Candidate Profile Photograph <span className="required">*</span>
+                        <Image size={18} style={{ color: '#1e3a8a' }} /> Candidate Profile Photograph <span className="required">*</span>
                       </h4>
-                      <span className="badge badge-verified" style={{ background: '#eff6ff', color: '#2563eb', fontSize: '0.7rem', padding: '2px 8px' }}>
+                      <span className="badge badge-verified" style={{ background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', fontSize: '0.7rem', padding: '2px 8px' }}>
                         Mandatory Upload
                       </span>
                     </div>
@@ -1826,7 +1826,7 @@ export default function StudentDashboard({
                   {/* SECTION 1: PERSONAL INFORMATION */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <User size={18} style={{ color: '#2563eb' }} /> 1. Personal Information
+                      <User size={18} style={{ color: '#1e3a8a' }} /> 1. Personal Information
                     </h4>
 
                     <div className="grid-2">
@@ -1905,7 +1905,7 @@ export default function StudentDashboard({
                   {/* SECTION 2: EDUCATION INFORMATION */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <BookOpen size={18} style={{ color: '#2563eb' }} /> 2. Education Information
+                      <BookOpen size={18} style={{ color: '#1e3a8a' }} /> 2. Education Information
                     </h4>
 
                     <div className="form-group">
@@ -1989,7 +1989,7 @@ export default function StudentDashboard({
                   {/* SECTION 3: DOMAIN & PROFESSIONAL PROFILE */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <Code size={18} style={{ color: '#2563eb' }} /> 3. Domain & Professional Profile
+                      <Code size={18} style={{ color: '#1e3a8a' }} /> 3. Domain & Professional Profile
                     </h4>
 
                     <div className="grid-2">
@@ -2006,7 +2006,7 @@ export default function StudentDashboard({
                         <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <span>ATS Resume Drive Link <span className="required">*</span></span>
                           {resumeUrl && (
-                            <a href={resumeUrl} target="_blank" rel="noreferrer" style={{ fontSize: '0.75rem', color: '#2563eb', fontWeight: '700' }}>
+                            <a href={resumeUrl} target="_blank" rel="noreferrer" style={{ fontSize: '0.75rem', color: '#1e3a8a', fontWeight: '700' }}>
                               Test Link ↗
                             </a>
                           )}
@@ -2060,7 +2060,7 @@ export default function StudentDashboard({
                   {/* SECTION 4: LOCATION & WORK PREFERENCES */}
                   <div style={{ marginBottom: '2rem' }}>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-                      <MapPin size={18} style={{ color: '#2563eb' }} /> 4. Location & Work Preferences
+                      <MapPin size={18} style={{ color: '#1e3a8a' }} /> 4. Location & Work Preferences
                     </h4>
 
                     <div className="grid-2">
@@ -2150,7 +2150,7 @@ export default function StudentDashboard({
             <div className="modal-content" style={{ maxWidth: '560px' }} onClick={(e) => e.stopPropagation()}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Briefcase size={20} />
                   </div>
                   <div>
@@ -2227,10 +2227,10 @@ export default function StudentDashboard({
                     fontSize: '0.85rem'
                   }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#0f172a', fontWeight: '600' }}>
-                      <FileText size={15} style={{ color: '#2563eb' }} />
+                      <FileText size={15} style={{ color: '#1e3a8a' }} />
                       Verified ATS Resume PDF Attached
                     </span>
-                    <a href={safeProfile.resumeUrl || '#'} target="_blank" rel="noreferrer" style={{ color: '#2563eb', fontWeight: '700' }}>
+                    <a href={safeProfile.resumeUrl || '#'} target="_blank" rel="noreferrer" style={{ color: '#1e3a8a', fontWeight: '700' }}>
                       View
                     </a>
                   </div>
@@ -2438,7 +2438,7 @@ export default function StudentDashboard({
             <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '440px', padding: '1.75rem', borderRadius: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.75rem' }}>
                 <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Key size={20} style={{ color: '#2563eb' }} /> Change Security Password
+                  <Key size={20} style={{ color: '#1e3a8a' }} /> Change Security Password
                 </h3>
                 <button 
                   type="button" 

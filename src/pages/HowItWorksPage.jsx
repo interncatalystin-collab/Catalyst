@@ -83,7 +83,7 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
         {activeWorkflow === 'students' && (
           <div className="grid-4">
             <div className="glass-card">
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: '800', fontSize: '1.1rem' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', border: '1px solid #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: '800', fontSize: '1.1rem' }}>
                 01
               </div>
               <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>Sign Up & Complete Profile</h3>
@@ -93,7 +93,7 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
             </div>
 
             <div className="glass-card">
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#e0f2fe', color: '#0284c7', border: '1px solid #bae6fd', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: '800', fontSize: '1.1rem' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', border: '1px solid #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: '800', fontSize: '1.1rem' }}>
                 02
               </div>
               <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>Search Verified Roles</h3>
@@ -138,7 +138,7 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
             </div>
 
             <div className="glass-card">
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#e0f2fe', color: '#0284c7', border: '1px solid #bae6fd', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: '800', fontSize: '1.1rem' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', border: '1px solid #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: '800', fontSize: '1.1rem' }}>
                 02
               </div>
               <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>Earn Verification Badge</h3>
@@ -172,7 +172,7 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
         {/* 7 Pillars: Defining Our Business Model */}
         <div style={{ marginTop: '4rem', paddingTop: '3rem', borderTop: '1px solid var(--border-color)' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div className="badge badge-pill" style={{ marginBottom: '0.5rem', color: '#2563eb' }}>
+            <div className="badge badge-pill" style={{ marginBottom: '0.5rem', color: '#1e3a8a' }}>
               <Briefcase size={14} /> Core Platform Architecture
             </div>
             <h2 style={{ fontSize: '2.1rem', fontWeight: '800', color: '#0f172a' }}>
@@ -185,8 +185,8 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
             {/* Step 1 */}
-            <div className="glass-card" style={{ borderLeft: '4px solid #2563eb', display: 'flex', flexDirection: 'column', height: '100%' }}>
-              <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '0.95rem', marginBottom: '0.85rem' }}>
+            <div className="glass-card" style={{ borderLeft: '4px solid #1e3a8a', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', border: '1px solid #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '0.95rem', marginBottom: '0.85rem' }}>
                 01
               </div>
               <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>Student Registration & Manual Resume Screening</h3>
@@ -196,8 +196,8 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
             </div>
 
             {/* Step 2 */}
-            <div className="glass-card" style={{ borderLeft: '4px solid #0284c7', display: 'flex', flexDirection: 'column', height: '100%' }}>
-              <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#f0f9ff', color: '#0284c7', border: '1px solid #bae6fd', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '0.95rem', marginBottom: '0.85rem' }}>
+            <div className="glass-card" style={{ borderLeft: '4px solid #1e3a8a', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', border: '1px solid #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '0.95rem', marginBottom: '0.85rem' }}>
                 02
               </div>
               <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.6rem', lineHeight: '1.4' }}>Domain Matching & Proctored Online Assessment</h3>
@@ -279,38 +279,38 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
 
           <div className="grid-2">
             {/* 1) Student Registration Features */}
-            <div className="glass-card" style={{ border: '1px solid #bfdbfe', background: '#eff6ff' }}>
+            <div className="glass-card" style={{ border: '1px solid #cbd5e1', background: 'rgba(30, 58, 138, 0.04)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#dbeafe', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(30, 58, 138, 0.1)', color: '#1e3a8a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <GraduationCap size={22} />
                 </div>
                 <div>
                   <h3 style={{ color: '#0f172a', fontSize: '1.2rem', fontWeight: '800' }}>1) Student Registration Features</h3>
-                  <span style={{ fontSize: '0.8rem', color: '#2563eb' }}>Free Candidate Account Setup</span>
+                  <span style={{ fontSize: '0.8rem', color: '#1e3a8a' }}>Free Candidate Account Setup</span>
                 </div>
               </div>
 
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                 <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                  <CheckCircle size={18} style={{ color: '#2563eb', shrink: 0, marginTop: '2px' }} />
+                  <CheckCircle size={18} style={{ color: '#1e3a8a', shrink: 0, marginTop: '2px' }} />
                   <div>
                     <strong style={{ color: '#0f172a' }}>Authenticated Profile & Resume:</strong> Upload PDF resume, specify degree, college, branch, and graduation year.
                   </div>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                  <CheckCircle size={18} style={{ color: '#2563eb', shrink: 0, marginTop: '2px' }} />
+                  <CheckCircle size={18} style={{ color: '#1e3a8a', shrink: 0, marginTop: '2px' }} />
                   <div>
                     <strong style={{ color: '#0f172a' }}>Work Mode & Stipend Preferences:</strong> Choose Online (Remote), Offline (On-Site), or Hybrid filters.
                   </div>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                  <CheckCircle size={18} style={{ color: '#2563eb', shrink: 0, marginTop: '2px' }} />
+                  <CheckCircle size={18} style={{ color: '#1e3a8a', shrink: 0, marginTop: '2px' }} />
                   <div>
                     <strong style={{ color: '#0f172a' }}>Mandatory Contact Verification:</strong> Secure phone number input ensuring direct recruiter communication and SMS updates.
                   </div>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                  <CheckCircle size={18} style={{ color: '#2563eb', shrink: 0, marginTop: '2px' }} />
+                  <CheckCircle size={18} style={{ color: '#1e3a8a', shrink: 0, marginTop: '2px' }} />
                   <div>
                     <strong style={{ color: '#0f172a' }}>Real-time Application Tracker:</strong> Monitor status changes (Under Review, Shortlisted, Selected, Withdrawn).
                   </div>

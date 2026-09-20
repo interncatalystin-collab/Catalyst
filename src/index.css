@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --primary: #0284c7;
-  --primary-hover: #0369a1;
-  --primary-light: rgba(2, 132, 199, 0.08);
+  --primary: #1e3a8a;
+  --primary-hover: #1e293b;
+  --primary-light: rgba(30, 58, 138, 0.08);
   --secondary: #334155;
-  --accent: #0284c7;
+  --accent: #1e3a8a;
   
   --verified-color: #15803d;
   --verified-bg: #f0fdf4;
@@ -33,7 +33,7 @@
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  --shadow-glow: 0 4px 12px rgba(30, 58, 138, 0.2);
   
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
@@ -88,10 +88,9 @@ button, input, select, textarea {
 
 /* Typography */
 .text-gradient {
-  color: #0284c7;
-  background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #1e3a8a;
+  background: none;
+  -webkit-text-fill-color: initial;
 }
 
 .text-gradient-emerald {
@@ -111,7 +110,7 @@ button, input, select, textarea {
   background: #ffffff;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 2px solid #0284c7;
+  border-bottom: 2px solid #1e3a8a;
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
 }
 
@@ -196,15 +195,15 @@ button, input, select, textarea {
 }
 
 .btn-primary {
-  background: #0284c7;
+  background: #1e3a8a;
   color: #fff;
-  box-shadow: 0 1px 3px rgba(2, 132, 199, 0.25);
+  box-shadow: 0 1px 3px rgba(30, 58, 138, 0.2);
 }
 
 .btn-primary:hover {
-  background: #0369a1;
+  background: #1e293b;
   transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(3, 105, 161, 0.35);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
 }
 
 .btn-secondary {
@@ -514,15 +513,15 @@ button, input, select, textarea {
 }
 
 .nav-link-btn:hover {
-  color: #0284c7;
-  background: #f0f9ff;
+  color: #1e3a8a;
+  background: #f1f5f9;
 }
 
 .nav-link-btn.active {
-  color: #0284c7;
+  color: #1e3a8a;
   font-weight: 700;
-  background: #e0f2fe;
-  border-bottom: 2px solid #0284c7;
+  background: #eff6ff;
+  border-bottom: 2px solid #1e3a8a;
 }
 
 @media (max-width: 1200px) {
@@ -782,6 +781,25 @@ button, input, select, textarea {
   h3 {
     font-size: 1.1rem !important;
   }
+
+  .nav-container {
+    padding: 0 0.65rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .logo-tagline {
+    display: none !important;
+  }
+
+  .nav-action-ctas {
+    gap: 0.35rem !important;
+  }
+
+  .nav-login-btn {
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.78rem !important;
+  }
 }
+
 
 

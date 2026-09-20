@@ -538,8 +538,8 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                     flex: 1,
                     padding: '0.45rem',
                     border: 'none',
-                    background: authMode === 'signin' ? '#eff6ff' : 'transparent',
-                    color: authMode === 'signin' ? '#2563eb' : '#64748b',
+                    background: authMode === 'signin' ? 'rgba(30, 58, 138, 0.08)' : 'transparent',
+                    color: authMode === 'signin' ? '#1e3a8a' : '#64748b',
                     fontWeight: authMode === 'signin' ? '800' : '600',
                     borderRadius: '8px',
                     fontSize: '0.825rem',
@@ -559,8 +559,8 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                     flex: 1,
                     padding: '0.45rem',
                     border: 'none',
-                    background: authMode === 'signup' ? '#eff6ff' : 'transparent',
-                    color: authMode === 'signup' ? '#2563eb' : '#64748b',
+                    background: authMode === 'signup' ? 'rgba(30, 58, 138, 0.08)' : 'transparent',
+                    color: authMode === 'signup' ? '#1e3a8a' : '#64748b',
                     fontWeight: authMode === 'signup' ? '800' : '600',
                     borderRadius: '8px',
                     fontSize: '0.825rem',
@@ -643,7 +643,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                         Student Account Password <span className="required">*</span>
                       </label>
                       <span 
-                        style={{ fontSize: '0.75rem', color: '#0284c7', cursor: 'pointer', fontWeight: '700' }}
+                        style={{ fontSize: '0.75rem', color: '#1e3a8a', cursor: 'pointer', fontWeight: '700' }}
                         onClick={() => setShowAdminAssistNotice(true)}
                       >
                         Forgot Password?
@@ -673,7 +673,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                   {/* Remember Me */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.825rem', color: 'var(--text-muted)', cursor: 'pointer' }}>
-                      <input type="checkbox" defaultChecked style={{ accentColor: '#2563eb' }} />
+                      <input type="checkbox" defaultChecked style={{ accentColor: '#1e3a8a' }} />
                       Remember login session
                     </label>
                   </div>
@@ -692,7 +692,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                   <div style={{ textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                     Don't have an account yet?{' '}
                     <span 
-                      style={{ color: '#2563eb', fontWeight: '700', cursor: 'pointer', textDecoration: 'underline' }}
+                      style={{ color: '#1e3a8a', fontWeight: '700', cursor: 'pointer', textDecoration: 'underline' }}
                       onClick={() => setAuthMode('signup')}
                     >
                       Create Student Profile (Sign Up)
@@ -839,7 +839,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
                   <div style={{ textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                     Already have an account?{' '}
                     <span 
-                      style={{ color: '#2563eb', fontWeight: '700', cursor: 'pointer', textDecoration: 'underline' }}
+                      style={{ color: '#1e3a8a', fontWeight: '700', cursor: 'pointer', textDecoration: 'underline' }}
                       onClick={() => setAuthMode('signin')}
                     >
                       Sign In to Student Portal

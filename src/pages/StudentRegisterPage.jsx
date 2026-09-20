@@ -216,7 +216,7 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
       {!isEmbeddedInDashboard ? (
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <Logo height={48} mode="light" showTagline={true} style={{ marginBottom: '1rem', margin: '0 auto 1rem' }} />
-          <div className="badge badge-verified" style={{ marginBottom: '0.75rem', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', display: 'inline-flex' }}>
+          <div className="badge badge-verified" style={{ marginBottom: '0.75rem', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', border: '1px solid #cbd5e1', display: 'inline-flex' }}>
             <GraduationCap size={15} /> Student Enrollment & Placement Portal
           </div>
           <h1 style={{ fontSize: '2.25rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
@@ -228,8 +228,8 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
         </div>
       ) : (
         <div style={{
-          background: 'rgba(37, 99, 235, 0.1)',
-          border: '1px solid rgba(37, 99, 235, 0.3)',
+          background: 'rgba(30, 58, 138, 0.08)',
+          border: '1px solid rgba(30, 58, 138, 0.25)',
           borderRadius: '12px',
           padding: '1.25rem 1.5rem',
           marginBottom: '1.75rem',
@@ -240,17 +240,17 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
           gap: '0.75rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-            <GraduationCap size={28} style={{ color: '#38bdf8' }} />
+            <GraduationCap size={28} style={{ color: '#1e3a8a' }} />
             <div>
-              <strong style={{ fontSize: '1.1rem', color: '#93c5fd', display: 'block' }}>
+              <strong style={{ fontSize: '1.1rem', color: '#1e3a8a', display: 'block' }}>
                 📝 Official Student Candidate Registration Form
               </strong>
-              <span style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                 Complete your full candidate profile, academic details, and ATS resume link inside your Student Dashboard.
               </span>
             </div>
           </div>
-          <span className="badge badge-verified" style={{ background: '#2563eb', color: '#ffffff', padding: '0.45rem 0.85rem' }}>
+          <span className="badge badge-verified" style={{ background: '#1e3a8a', color: '#ffffff', padding: '0.45rem 0.85rem' }}>
             Dashboard Registration ✓
           </span>
         </div>
@@ -274,7 +274,7 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
           {/* SECTION 1: PERSONAL INFORMATION */}
           <div style={{ marginBottom: '2rem' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-              <User size={18} style={{ color: '#2563eb' }} /> 1. Personal Information & Photo
+              <User size={18} style={{ color: '#1e3a8a' }} /> 1. Personal Information & Photo
             </h3>
 
             {/* Candidate Photo Upload Station */}
@@ -307,7 +307,7 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
                       height: '80px',
                       borderRadius: '50%',
                       objectFit: 'cover',
-                      border: '3px solid #2563eb',
+                      border: '3px solid #1e3a8a',
                       boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)'
                     }}
                   />
@@ -319,7 +319,7 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
                       position: 'absolute',
                       bottom: '0',
                       right: '0',
-                      background: '#2563eb',
+                      background: '#1e3a8a',
                       color: '#ffffff',
                       border: '2px solid #ffffff',
                       borderRadius: '50%',
@@ -475,7 +475,7 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
           {/* SECTION 2: EDUCATION INFORMATION */}
           <div style={{ marginBottom: '2rem' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-              <BookOpen size={18} style={{ color: '#2563eb' }} /> 2. Education Information
+              <BookOpen size={18} style={{ color: '#1e3a8a' }} /> 2. Education Information
             </h3>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
@@ -531,7 +531,7 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
           {/* SECTION 3: PROFESSIONAL INFORMATION */}
           <div style={{ marginBottom: '2rem' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-              <Code size={18} style={{ color: '#2563eb' }} /> 3. Professional Profile & Links
+              <Code size={18} style={{ color: '#1e3a8a' }} /> 3. Professional Profile & Links
             </h3>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
@@ -585,7 +585,7 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
           {/* SECTION 4: LOCATION & PREFERENCES */}
           <div style={{ marginBottom: '2rem' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '2px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-              <MapPin size={18} style={{ color: '#2563eb' }} /> 4. Location & Work Preferences
+              <MapPin size={18} style={{ color: '#1e3a8a' }} /> 4. Location & Work Preferences
             </h3>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>

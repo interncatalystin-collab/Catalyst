@@ -31,7 +31,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
       {/* Main Navbar */}
       <nav style={{
         background: '#ffffff',
-        borderBottom: '2px solid #0284c7',
+        borderBottom: '2px solid #1e3a8a',
         padding: '0.75rem 0',
         boxShadow: '0 1px 4px rgba(15, 23, 42, 0.05)'
       }}>
@@ -87,14 +87,14 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                   className="btn btn-primary btn-sm nav-login-btn"
                   onClick={() => handleNavClick('login')}
                   style={{ 
-                    background: '#0284c7',
+                    background: '#1e3a8a',
                     color: '#ffffff',
                     border: 'none',
                     fontWeight: '700', 
                     padding: '0.45rem 1.15rem',
                     fontSize: '0.85rem',
                     borderRadius: '6px',
-                    boxShadow: '0 1px 3px rgba(2, 132, 199, 0.25)',
+                    boxShadow: '0 1px 3px rgba(30, 58, 138, 0.2)',
                     whiteSpace: 'nowrap',
                     flexShrink: 0
                   }}
@@ -108,7 +108,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                   <button 
                     className="btn btn-primary btn-sm"
                     onClick={() => handleNavClick('student-dash')}
-                    style={{ background: '#0284c7', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '6px' }}
+                    style={{ background: '#1e3a8a', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '6px' }}
                   >
                     <GraduationCap size={14} /> Student Dashboard
                   </button>
@@ -158,7 +158,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
       {mobileMenuOpen && (
         <div style={{
           background: '#ffffff',
-          borderBottom: '2px solid #0284c7',
+          borderBottom: '2px solid #1e3a8a',
           padding: '1rem',
           display: 'flex',
           flexDirection: 'column',
@@ -169,7 +169,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
             <button 
               className="btn btn-primary" 
               style={{ 
-                background: '#0284c7', 
+                background: '#1e3a8a', 
                 color: '#ffffff', 
                 fontWeight: '700',
                 padding: '0.75rem 1rem',
@@ -186,7 +186,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               {currentRole === 'student' && (
                 <button 
                   className="btn btn-primary" 
-                  style={{ background: '#0284c7', color: '#ffffff', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
+                  style={{ background: '#1e3a8a', color: '#ffffff', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
                   onClick={() => handleNavClick('student-dash')}
                 >
                   <GraduationCap size={16} /> Student Dashboard

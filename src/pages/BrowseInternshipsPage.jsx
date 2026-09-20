@@ -98,7 +98,7 @@ export default function BrowseInternshipsPage({
         <div style={{ marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Layers size={18} color="#2563eb" />
+              <Layers size={18} color="#1e3a8a" />
               <h2 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
                 Specialized Placement Domain Tracks
               </h2>
@@ -115,8 +115,8 @@ export default function BrowseInternshipsPage({
               style={{
                 padding: '0.75rem 0.95rem',
                 borderRadius: '8px',
-                border: selectedDomain === 'All' ? '1px solid #0284c7' : '1px solid #e2e8f0',
-                background: selectedDomain === 'All' ? '#0284c7' : '#ffffff',
+                border: selectedDomain === 'All' ? '1px solid #1e3a8a' : '1px solid #e2e8f0',
+                background: selectedDomain === 'All' ? '#1e3a8a' : '#ffffff',
                 color: selectedDomain === 'All' ? '#ffffff' : '#334155',
                 fontWeight: '700',
                 fontSize: '0.85rem',
@@ -145,8 +145,8 @@ export default function BrowseInternshipsPage({
                   style={{
                     padding: '0.75rem 0.95rem',
                     borderRadius: '8px',
-                    border: isSelected ? '1px solid #0284c7' : '1px solid #e2e8f0',
-                    background: isSelected ? '#0284c7' : '#ffffff',
+                    border: isSelected ? '1px solid #1e3a8a' : '1px solid #e2e8f0',
+                    background: isSelected ? '#1e3a8a' : '#ffffff',
                     color: isSelected ? '#ffffff' : '#334155',
                     fontWeight: '700',
                     fontSize: '0.825rem',
@@ -193,7 +193,7 @@ export default function BrowseInternshipsPage({
               className="form-select"
               value={selectedDomain}
               onChange={(e) => setSelectedDomain(e.target.value)}
-              style={{ width: 'auto', padding: '0.4rem 0.85rem', fontSize: '0.85rem', fontWeight: '700', color: '#1d4ed8', background: '#eff6ff', border: '1px solid #bfdbfe' }}
+              style={{ width: 'auto', padding: '0.4rem 0.85rem', fontSize: '0.85rem', fontWeight: '700', color: '#1e3a8a', background: 'rgba(30, 58, 138, 0.08)', border: '1px solid #cbd5e1' }}
             >
               <option value="All" style={{ background: '#ffffff', color: '#0f172a' }}>Domain Track: All (6 Domains)</option>
               {DOMAIN_ROLES_DATA.map(d => (
@@ -221,10 +221,12 @@ export default function BrowseInternshipsPage({
               className="form-select"
               value={selectedIndustry}
               onChange={(e) => setSelectedIndustry(e.target.value)}
-              style={{ width: 'auto', padding: '0.4rem 0.85rem', fontSize: '0.85rem' }}
+              style={{ width: 'auto', padding: '0.4rem 0.85rem', fontSize: '0.85rem', fontWeight: '600' }}
             >
-              {industries.map(ind => (
-                <option key={ind} value={ind} style={{ background: '#ffffff' }}>Industry: {ind}</option>
+              {industries.map((ind, idx) => (
+                <option key={idx} value={ind} style={{ background: '#ffffff' }}>
+                  Industry: {ind}
+                </option>
               ))}
             </select>
 
@@ -233,10 +235,10 @@ export default function BrowseInternshipsPage({
               className="form-select"
               value={selectedWorkMode}
               onChange={(e) => setSelectedWorkMode(e.target.value)}
-              style={{ width: 'auto', padding: '0.4rem 0.85rem', fontSize: '0.85rem' }}
+              style={{ width: 'auto', padding: '0.4rem 0.85rem', fontSize: '0.85rem', fontWeight: '600' }}
             >
               <option value="All" style={{ background: '#ffffff' }}>Work Mode: All</option>
-              <option value="Online" style={{ background: '#ffffff' }}>Online (Remote)</option>
+              <option value="Online / Remote" style={{ background: '#ffffff' }}>Online (Remote)</option>
               <option value="Offline" style={{ background: '#ffffff' }}>Offline (On-Site)</option>
               <option value="Hybrid" style={{ background: '#ffffff' }}>Hybrid</option>
             </select>
@@ -247,7 +249,7 @@ export default function BrowseInternshipsPage({
                 type="checkbox"
                 checked={verifiedOnly}
                 onChange={(e) => setVerifiedOnly(e.target.checked)}
-                style={{ width: '16px', height: '16px', accentColor: '#2563eb' }}
+                style={{ width: '16px', height: '16px', accentColor: '#1e3a8a' }}
               />
               <span className="badge badge-verified"><ShieldCheck size={13} /> Verified Employers</span>
             </label>

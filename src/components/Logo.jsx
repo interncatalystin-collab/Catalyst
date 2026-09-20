@@ -132,15 +132,18 @@ export default function Logo({
           Intern<span style={{ color: accentColor }}>Catalyst</span>
         </div>
         {showTagline && (
-          <div style={{ 
-            fontSize: `${fontSizeTagline}px`, 
-            fontWeight: '600',
-            color: tagColor, 
-            letterSpacing: '0.01em',
-            marginTop: '1px',
-            fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-            whiteSpace: 'nowrap'
-          }}>
+          <div 
+            className="logo-tagline"
+            style={{ 
+              fontSize: `${fontSizeTagline}px`, 
+              fontWeight: '600',
+              color: tagColor, 
+              letterSpacing: '0.01em',
+              marginTop: '1px',
+              fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
+              whiteSpace: 'nowrap'
+            }}
+          >
             Accelerate Your Career
           </div>
         )}

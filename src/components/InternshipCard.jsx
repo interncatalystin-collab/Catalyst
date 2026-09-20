@@ -18,14 +18,21 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
       transition: 'all 0.2s ease'
     }}>
       {/* Top Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '1rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', overflow: 'hidden' }}>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'flex-start', 
+        justifyContent: 'space-between', 
+        gap: '0.5rem', 
+        marginBottom: '0.85rem',
+        flexWrap: 'wrap'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minWidth: 0, flex: '1 1 180px' }}>
           <img 
             src={internship.logo} 
             alt={internship.companyName}
             style={{
-              width: '42px',
-              height: '42px',
+              width: '40px',
+              height: '40px',
               borderRadius: '8px',
               objectFit: 'cover',
               border: '1px solid #e2e8f0',
@@ -33,9 +40,9 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
               flexShrink: 0
             }}
           />
-          <div style={{ overflow: 'hidden' }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
-              <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
                 {internship.companyName}
               </span>
               {internship.verified && (
@@ -44,12 +51,13 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
                   color: '#15803d', 
                   border: '1px solid #bbf7d0', 
                   borderRadius: '4px', 
-                  fontSize: '0.7rem', 
+                  fontSize: '0.68rem', 
                   padding: '1px 5px', 
                   fontWeight: '700',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '3px'
+                  gap: '3px',
+                  flexShrink: 0
                 }}>
                   <ShieldCheck size={11} /> Verified
                 </span>
@@ -62,7 +70,7 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
         </div>
 
         {/* Work Mode & Type Badge */}
-        <div style={{ display: 'flex', gap: '0.3rem', flexShrink: 0 }}>
+        <div style={{ display: 'flex', gap: '0.3rem', flexShrink: 0, flexWrap: 'wrap', alignItems: 'center' }}>
           <span style={{
             background: '#f8fafc',
             border: '1px solid #e2e8f0',
@@ -70,7 +78,8 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
             borderRadius: '6px',
             fontSize: '0.725rem',
             padding: '2px 7px',
-            fontWeight: '600'
+            fontWeight: '600',
+            whiteSpace: 'nowrap'
           }}>
             {internship.workMode}
           </span>
@@ -81,7 +90,8 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
             borderRadius: '6px',
             fontSize: '0.725rem',
             padding: '2px 7px',
-            fontWeight: '600'
+            fontWeight: '600',
+            whiteSpace: 'nowrap'
           }}>
             {isFullTime ? 'Full-Time' : 'Part-Time'}
           </span>
@@ -92,7 +102,7 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
       <h3 
         onClick={() => onSelect(internship)}
         style={{
-          fontSize: '1.05rem',
+          fontSize: '1.025rem',
           fontWeight: '700',
           color: '#0f172a',
           marginBottom: '0.65rem',
@@ -112,21 +122,21 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
         fontSize: '0.8rem',
         color: '#64748b'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <Calendar size={13} style={{ color: '#64748b' }} />
-          <span>Apply by {internship.deadline || 'Sept 30'}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', minWidth: 0 }}>
+          <Calendar size={13} style={{ color: '#64748b', flexShrink: 0 }} />
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Apply by {internship.deadline || 'Sept 30'}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <Clock size={13} style={{ color: '#64748b' }} />
-          <span>{internship.duration || '3 Months'}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', minWidth: 0 }}>
+          <Clock size={13} style={{ color: '#64748b', flexShrink: 0 }} />
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{internship.duration || '3 Months'}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <MapPin size={13} style={{ color: '#64748b' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', minWidth: 0 }}>
+          <MapPin size={13} style={{ color: '#64748b', flexShrink: 0 }} />
           <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{internship.location}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <Users size={13} style={{ color: '#64748b' }} />
-          <span>{internship.openings || 5} Openings</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', minWidth: 0 }}>
+          <Users size={13} style={{ color: '#64748b', flexShrink: 0 }} />
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{internship.openings || 5} Openings</span>
         </div>
       </div>
 
@@ -159,12 +169,14 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
         borderTop: '1px solid #e2e8f0', 
         display: 'flex', 
         alignItems: 'center', 
-        justify: 'space-between' 
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '0.5rem' 
       }}>
-        <div style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-          <Calendar size={13} /> Deadline: {internship.deadline}
+        <div style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.3rem', whiteSpace: 'nowrap' }}>
+          <Calendar size={13} /> Deadline: {internship.deadline || 'Sept 30'}
         </div>
-        <div style={{ display: 'flex', gap: '0.4rem' }}>
+        <div style={{ display: 'flex', gap: '0.4rem', marginLeft: 'auto' }}>
           <button 
             type="button"
             className="btn btn-secondary btn-sm"
@@ -184,7 +196,7 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
             type="button"
             className="btn btn-primary btn-sm"
             style={{ 
-              background: '#0284c7', 
+              background: '#1e3a8a', 
               color: '#ffffff', 
               border: 'none',
               fontSize: '0.8rem',
