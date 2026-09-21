@@ -84,6 +84,10 @@ export default function StudentDashboard({
   const [domainCoverNote, setDomainCoverNote] = useState('');
   const [isSubmittingDomain, setIsSubmittingDomain] = useState(false);
 
+  // Mentor Guidance State
+  const [showMentorModal, setShowMentorModal] = useState(false);
+  const [mentorTopic, setMentorTopic] = useState('1-on-1 Mock Technical Interview');
+
   // Delete Account Modal State
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -851,6 +855,35 @@ export default function StudentDashboard({
                     type="button"
                     onClick={() => {
                       setShowSettings(false);
+                      setActiveTab('mentor');
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.65rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: 'none',
+                      color: 'var(--text-main)',
+                      fontSize: '0.82rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'background 0.15s'
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; }}
+                  >
+                    <GraduationCap size={15} color="#7c3aed" />
+                    <span>Mentor Guidance & Coaching</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSettings(false);
                       setPasswordError('');
                       setShowChangePasswordModal(true);
                     }}
@@ -1035,6 +1068,37 @@ export default function StudentDashboard({
               borderRadius: '10px'
             }}>
               {applications.length}
+            </span>
+          </button>
+
+          {/* Tab 4: Mentor Guidance */}
+          <button 
+            onClick={() => setActiveTab('mentor')}
+            style={{
+              background: activeTab === 'mentor' ? 'var(--primary)' : '#ffffff',
+              border: activeTab === 'mentor' ? 'none' : '1px solid var(--border-color)',
+              color: activeTab === 'mentor' ? '#ffffff' : 'var(--text-main)',
+              padding: '0.65rem 1.25rem',
+              borderRadius: 'var(--radius-md)',
+              fontWeight: '700',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              boxShadow: activeTab === 'mentor' ? 'var(--shadow-glow)' : 'none'
+            }}
+          >
+            <GraduationCap size={16} /> Mentor Guidance
+            <span style={{
+              background: activeTab === 'mentor' ? '#ffffff' : '#ecfdf5',
+              color: activeTab === 'mentor' ? '#16a34a' : '#047857',
+              fontSize: '0.7rem',
+              fontWeight: '800',
+              padding: '0.15rem 0.45rem',
+              borderRadius: '10px'
+            }}>
+              Assigned
             </span>
           </button>
         </div>
@@ -1630,6 +1694,306 @@ export default function StudentDashboard({
                 </button>
               </div>
             )}
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* TAB 4: MENTOR GUIDANCE & 1-ON-1 COACHING                 */}
+        {/* ======================================================== */}
+        {activeTab === 'mentor' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+            
+            {/* Top Header Card: Assigned Industry Mentor */}
+            <div className="glass-card" style={{
+              padding: '1.75rem',
+              background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '16px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.25rem' }}>
+                
+                {/* Mentor Info Left */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
+                  <div style={{ position: 'relative' }}>
+                    <img 
+                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" 
+                      alt="Assigned Industry Mentor"
+                      style={{
+                        width: '84px',
+                        height: '84px',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        border: '3px solid var(--primary)',
+                        boxShadow: '0 4px 14px rgba(37, 99, 235, 0.2)'
+                      }}
+                    />
+                    <span style={{
+                      position: 'absolute',
+                      bottom: '2px',
+                      right: '2px',
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '50%',
+                      background: '#16a34a',
+                      border: '2.5px solid #ffffff',
+                      boxShadow: '0 0 6px rgba(22, 163, 74, 0.6)'
+                    }} title="Mentor Online & Available" />
+                  </div>
+
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '4px' }}>
+                      <h2 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+                        Dr. Rajesh V. Sharma
+                      </h2>
+                      <span className="badge badge-verified" style={{ background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0' }}>
+                        <ShieldCheck size={13} /> Assigned Official Mentor
+                      </span>
+                    </div>
+
+                    <p style={{ margin: '0 0 6px 0', fontSize: '0.92rem', color: '#334155', fontWeight: '600' }}>
+                      Senior Industry Placement Mentor & Technical Director (Ex-Microsoft / AIET)
+                    </p>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flexWrap: 'wrap', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', color: '#1e3a8a', fontWeight: '700' }}>
+                        <Briefcase size={13} /> Specialized: {currentDomainRole.domainName}
+                      </span>
+                      <span>•</span>
+                      <span style={{ color: '#059669', fontWeight: '700' }}>
+                        ⭐ 4.95/5 Rating (420+ Sessions)
+                      </span>
+                      <span>•</span>
+                      <span>14+ Yrs Corporate Exp</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick CTA Actions Right */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <button 
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setMentorTopic('1-on-1 Mock Interview');
+                      setShowMentorModal(true);
+                    }}
+                    style={{ padding: '0.65rem 1.25rem', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                  >
+                    <Calendar size={15} /> Book 1-on-1 Slot
+                  </button>
+
+                  <button 
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setMentorTopic('ATS Resume Review');
+                      setShowMentorModal(true);
+                    }}
+                    style={{ padding: '0.65rem 1.25rem', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                  >
+                    <FileText size={15} /> Request Resume Review
+                  </button>
+                </div>
+
+              </div>
+
+              {/* Mentorship Highlights & Status Bar */}
+              <div style={{
+                marginTop: '1.5rem',
+                paddingTop: '1.25rem',
+                borderTop: '1px solid #e2e8f0',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '1rem'
+              }}>
+                <div style={{ background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600', display: 'block' }}>Upcoming Scheduled Session</span>
+                  <strong style={{ fontSize: '0.9rem', color: '#1e3a8a', display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '3px' }}>
+                    <Clock size={14} /> Today, 5:30 PM IST (Confirmed)
+                  </strong>
+                </div>
+
+                <div style={{ background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600', display: 'block' }}>Resume ATS Score Audit</span>
+                  <strong style={{ fontSize: '0.9rem', color: '#16a34a', display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '3px' }}>
+                    <Award size={14} /> 94/100 (ATS Optimized)
+                  </strong>
+                </div>
+
+                <div style={{ background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600', display: 'block' }}>Domain Readiness Level</span>
+                  <strong style={{ fontSize: '0.9rem', color: '#d97706', display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '3px' }}>
+                    <Sparkles size={14} /> Level 4 (Placement Ready)
+                  </strong>
+                </div>
+              </div>
+
+            </div>
+
+            {/* 4 Core Guidance Modules Grid */}
+            <div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', marginBottom: '1rem' }}>
+                Personalized Guidance Modules & Services
+              </h3>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
+                
+                {/* Module 1: 1-on-1 Mock Interview */}
+                <div className="glass-card" style={{ padding: '1.5rem', background: '#ffffff', borderRadius: '14px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(37, 99, 235, 0.1)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+                      <Calendar size={22} />
+                    </div>
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
+                      1-on-1 Mock Technical Interview
+                    </h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '1.25rem' }}>
+                      Simulate real corporate interviews with live coding, domain Q&A, and detailed score breakdown to build confidence.
+                    </p>
+                  </div>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      setMentorTopic('1-on-1 Mock Technical Interview');
+                      setShowMentorModal(true);
+                    }}
+                    style={{ width: '100%', justifyContent: 'center', gap: '0.4rem', fontWeight: '700' }}
+                  >
+                    Schedule Mock Session <ArrowRight size={14} />
+                  </button>
+                </div>
+
+                {/* Module 2: ATS Resume & Portfolio Audit */}
+                <div className="glass-card" style={{ padding: '1.5rem', background: '#ffffff', borderRadius: '14px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(22, 163, 74, 0.1)', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+                      <FileText size={22} />
+                    </div>
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
+                      ATS Resume & Portfolio Review
+                    </h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '1.25rem' }}>
+                      Have your resume line-by-line audited by senior HR leads to guarantee high parser scores & recruiter callbacks.
+                    </p>
+                  </div>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      setMentorTopic('ATS Resume & Portfolio Review');
+                      setShowMentorModal(true);
+                    }}
+                    style={{ width: '100%', justifyContent: 'center', gap: '0.4rem', fontWeight: '700' }}
+                  >
+                    Request Resume Review <ArrowRight size={14} />
+                  </button>
+                </div>
+
+                {/* Module 3: Domain Placement Roadmap */}
+                <div className="glass-card" style={{ padding: '1.5rem', background: '#ffffff', borderRadius: '14px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(124, 58, 237, 0.1)', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+                      <BookOpen size={22} />
+                    </div>
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
+                      Domain Placement Roadmap
+                    </h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '1.25rem' }}>
+                      Customized 30-day skill enhancement checklist tailored specifically to your chosen domain role ({currentDomainRole.roleTitle}).
+                    </p>
+                  </div>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      setMentorTopic('Domain Placement Roadmap Guidance');
+                      setShowMentorModal(true);
+                    }}
+                    style={{ width: '100%', justifyContent: 'center', gap: '0.4rem', fontWeight: '700' }}
+                  >
+                    View Domain Checklist <ArrowRight size={14} />
+                  </button>
+                </div>
+
+                {/* Module 4: Direct Q&A Ask Mentor */}
+                <div className="glass-card" style={{ padding: '1.5rem', background: '#ffffff', borderRadius: '14px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(217, 119, 6, 0.1)', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+                      <Send size={22} />
+                    </div>
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
+                      Direct Mentor Q&A Messaging
+                    </h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '1.25rem' }}>
+                      Stuck on a technical doubt or interview question? Ask your assigned mentor directly for guidance within 24 hours.
+                    </p>
+                  </div>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      setMentorTopic('General Career & Technical Q&A');
+                      setShowMentorModal(true);
+                    }}
+                    style={{ width: '100%', justifyContent: 'center', gap: '0.4rem', fontWeight: '700' }}
+                  >
+                    Ask a Question <Send size={13} />
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Additional Mentors Directory Section */}
+            <div className="glass-card" style={{ padding: '1.5rem', background: '#ffffff', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#0f172a' }}>
+                    Specialized Domain Mentor Pool
+                  </h3>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                    Connect with additional corporate tech leaders available for mock assessments and specialized guidance.
+                  </p>
+                </div>
+                <span className="badge badge-verified" style={{ background: '#eff6ff', color: '#1d4ed8' }}>
+                  <Users size={13} /> 12 Domain Experts Active
+                </span>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+                
+                {/* Mentor Pool Item 1 */}
+                <div style={{ padding: '1rem', border: '1px solid #f1f5f9', borderRadius: '12px', background: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80" alt="Mentor" style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} />
+                  <div style={{ flex: 1 }}>
+                    <strong style={{ fontSize: '0.9rem', color: '#0f172a', display: 'block' }}>Priya Mukherjee</strong>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Lead AI Engineer @ Ex-TCS</span>
+                    <div style={{ fontSize: '0.72rem', color: '#16a34a', marginTop: '2px', fontWeight: '600' }}>✓ ML & Data Science Track</div>
+                  </div>
+                  <button className="btn btn-secondary btn-sm" onClick={() => { setMentorTopic('AI & Data Science Session'); setShowMentorModal(true); }} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem' }}>Book</button>
+                </div>
+
+                {/* Mentor Pool Item 2 */}
+                <div style={{ padding: '1rem', border: '1px solid #f1f5f9', borderRadius: '12px', background: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80" alt="Mentor" style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} />
+                  <div style={{ flex: 1 }}>
+                    <strong style={{ fontSize: '0.9rem', color: '#0f172a', display: 'block' }}>Anand K. Verma</strong>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Senior Full-Stack Architect</span>
+                    <div style={{ fontSize: '0.72rem', color: '#1e3a8a', marginTop: '2px', fontWeight: '600' }}>✓ MERN & Cloud Systems</div>
+                  </div>
+                  <button className="btn btn-secondary btn-sm" onClick={() => { setMentorTopic('Full-Stack Web Dev Session'); setShowMentorModal(true); }} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem' }}>Book</button>
+                </div>
+
+                {/* Mentor Pool Item 3 */}
+                <div style={{ padding: '1rem', border: '1px solid #f1f5f9', borderRadius: '12px', background: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=120&q=80" alt="Mentor" style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} />
+                  <div style={{ flex: 1 }}>
+                    <strong style={{ fontSize: '0.9rem', color: '#0f172a', display: 'block' }}>Sneha Deshmukh</strong>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Corporate HR Director</span>
+                    <div style={{ fontSize: '0.72rem', color: '#d97706', marginTop: '2px', fontWeight: '600' }}>✓ Behavioral & Salary Prep</div>
+                  </div>
+                  <button className="btn btn-secondary btn-sm" onClick={() => { setMentorTopic('HR & Behavioral Interview Session'); setShowMentorModal(true); }} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem' }}>Book</button>
+                </div>
+
+              </div>
+            </div>
+
           </div>
         )}
 
@@ -2496,6 +2860,144 @@ export default function StudentDashboard({
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* MENTORSHIP SESSION BOOKING MODAL                         */}
+        {/* ======================================================== */}
+        {showMentorModal && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(15, 23, 42, 0.6)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 10005,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem'
+          }}>
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '16px',
+              maxWidth: '520px',
+              width: '100%',
+              padding: '1.75rem',
+              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
+              position: 'relative',
+              animation: 'fadeIn 0.2s ease-out'
+            }}>
+              <button 
+                onClick={() => setShowMentorModal(false)}
+                style={{
+                  position: 'absolute',
+                  top: '1.25rem',
+                  right: '1.25rem',
+                  background: '#f1f5f9',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: '#64748b'
+                }}
+              >
+                <X size={16} />
+              </button>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.5rem' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(37, 99, 235, 0.1)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <GraduationCap size={20} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+                    Book Mentorship Guidance
+                  </h3>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Assigned Mentor: Dr. Rajesh V. Sharma</span>
+                </div>
+              </div>
+
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                setShowMentorModal(false);
+                if (onAddToast) onAddToast(`🎉 Mentorship request for "${mentorTopic}" submitted successfully! Your mentor will confirm your slot.`, 'success');
+              }}>
+                <div style={{ marginTop: '1.25rem' }}>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label className="form-label" style={{ fontWeight: '700', fontSize: '0.85rem' }}>Guidance / Session Topic</label>
+                    <select 
+                      value={mentorTopic} 
+                      onChange={(e) => setMentorTopic(e.target.value)}
+                      className="form-control"
+                      style={{ padding: '0.65rem 0.85rem', width: '100%', borderRadius: '8px', border: '1px solid var(--border-color)' }}
+                    >
+                      <option value="1-on-1 Mock Technical Interview">1-on-1 Mock Technical Interview</option>
+                      <option value="ATS Resume & Portfolio Review">ATS Resume & Portfolio Review</option>
+                      <option value="Domain Placement Roadmap Guidance">Domain Placement Roadmap Guidance</option>
+                      <option value="General Career & Technical Q&A">General Career & Technical Q&A</option>
+                      <option value="Salary Negotiation & Offer Review">Salary Negotiation & Offer Review</option>
+                    </select>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                    <div>
+                      <label className="form-label" style={{ fontWeight: '700', fontSize: '0.85rem' }}>Preferred Date</label>
+                      <input 
+                        type="date" 
+                        defaultValue={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
+                        className="form-control"
+                        style={{ padding: '0.6rem 0.75rem', width: '100%', borderRadius: '8px', border: '1px solid var(--border-color)' }}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="form-label" style={{ fontWeight: '700', fontSize: '0.85rem' }}>Preferred Time Slot</label>
+                      <select className="form-control" style={{ padding: '0.6rem 0.75rem', width: '100%', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                        <option value="10:00 AM IST">10:00 AM IST</option>
+                        <option value="02:00 PM IST">02:00 PM IST</option>
+                        <option value="05:30 PM IST">05:30 PM IST (Recommended)</option>
+                        <option value="07:00 PM IST">07:00 PM IST</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: '1.25rem' }}>
+                    <label className="form-label" style={{ fontWeight: '700', fontSize: '0.85rem' }}>Specific Questions or Notes for Mentor</label>
+                    <textarea 
+                      rows={3}
+                      placeholder="Mention any specific technical topics, resume areas, or interview doubts you want to focus on..."
+                      className="form-control"
+                      style={{ padding: '0.65rem 0.85rem', width: '100%', borderRadius: '8px', border: '1px solid var(--border-color)', resize: 'vertical' }}
+                    />
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                    <button 
+                      type="button" 
+                      className="btn btn-secondary" 
+                      onClick={() => setShowMentorModal(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="btn btn-primary"
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: '700' }}
+                    >
+                      <Calendar size={15} /> Confirm Mentorship Slot
+                    </button>
+                  </div>
+                </div>
+              </form>
+
             </div>
           </div>
         )}
