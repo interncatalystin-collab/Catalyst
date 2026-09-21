@@ -801,5 +801,57 @@ button, input, select, textarea {
   }
 }
 
+/* Dashboard Notification & Settings Dropdown Popovers */
+.notification-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: -75px;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  z-index: 90;
+  overflow: hidden;
+  animation: fadeIn 0.15s ease-out;
+}
 
+.settings-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 270px;
+  max-width: calc(100vw - 32px);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  z-index: 90;
+  padding: 0.65rem;
+  overflow: hidden;
+  animation: fadeIn 0.15s ease-out;
+}
 
+@media (max-width: 640px) {
+  .notification-popover {
+    right: auto !important;
+    left: -70px !important;
+    width: 300px !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+
+  .settings-popover {
+    right: 0 !important;
+    width: 270px !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-popover {
+    left: -60px !important;
+    width: 290px !important;
+    max-width: calc(100vw - 16px) !important;
+  }
+}

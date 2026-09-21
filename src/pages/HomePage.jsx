@@ -83,7 +83,7 @@ export default function HomePage({
             margin: '0 auto 2.5rem',
             lineHeight: '1.6'
           }}>
-            Accelerate your career with 100% verified IT & Non-IT internships, ATS resume tools, and direct corporate hiring.
+            Accelerate your career with 100% verified internships, ATS resume tools, and direct corporate hiring.
           </p>
 
           {/* Main Action Button */}

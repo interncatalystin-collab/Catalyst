@@ -619,21 +619,7 @@ export default function StudentDashboard({
 
               {/* Notification Dropdown Panel */}
               {showNotifications && (
-                <div style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 8px)',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '320px',
-                  maxWidth: 'calc(100vw - 32px)',
-                  background: '#ffffff',
-                  borderRadius: '12px',
-                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
-                  border: '1px solid var(--border-color)',
-                  zIndex: 90,
-                  overflow: 'hidden',
-                  animation: 'fadeIn 0.15s ease-out'
-                }}>
+                <div className="notification-popover">
                   {/* Header */}
                   <div style={{
                     display: 'flex',
@@ -770,21 +756,7 @@ export default function StudentDashboard({
 
               {/* Settings Dropdown Menu */}
               {showSettings && (
-                <div style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 8px)',
-                  right: 0,
-                  width: '270px',
-                  maxWidth: 'calc(100vw - 32px)',
-                  background: '#ffffff',
-                  borderRadius: '12px',
-                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
-                  border: '1px solid var(--border-color)',
-                  zIndex: 90,
-                  padding: '0.65rem',
-                  overflow: 'hidden',
-                  animation: 'fadeIn 0.15s ease-out'
-                }}>
+                <div className="settings-popover">
                   {/* Student Quick Bio Header */}
                   <div style={{
                     padding: '0.5rem 0.65rem 0.75rem',
