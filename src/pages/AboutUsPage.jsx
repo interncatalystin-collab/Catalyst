@@ -28,7 +28,7 @@ export default function AboutUsPage() {
               Our Mission
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.7' }}>
-              To eradicate fraudulent internship listings and unconfirmed job claims. We aim to ensure that every ambitious student gets direct access to verified corporate stipends, structured supervisor mentorship, and a clear pathway from education into full-time employment.
+              We aim to ensure that every ambitious student gets direct access to verified corporate stipends, structured supervisor mentorship, and a clear pathway from education into full-time employment. To eradicate fraudulent internship listings and unconfirmed job claims.
             </p>
           </div>
 

@@ -1829,6 +1829,306 @@ Senior Systems Administrator | Corporate IT Services (2019 - Present)
 \\end{itemize}
 
 \\end{document}`
+  },
+  {
+    id: 'tpl-biz-analyst',
+    title: 'Business Analyst & Corporate Strategy',
+    category: 'Business & Strategy',
+    atsScore: '99%',
+    format: 'PDF / DOCX / LaTeX',
+    downloads: '18,400+',
+    idealFor: 'Business Analysts, Strategy Consultants, MBA Freshers & Operations Leads',
+    description: 'Tailored for business analysts, corporate strategy specialists, financial modeling, SQL reporting, market research, and executive stakeholder presentations.',
+    tags: ['#1 Business Template', 'Business Analyst', 'Strategy & Consulting', 'MBA / BBA'],
+    color: '#0d9488',
+    layoutStyle: 'single-column-ats',
+    name: 'PRIYA SHARMA',
+    subtitle: 'Senior Business Analyst | Corporate Strategy & Market Intelligence',
+    sections: [
+      { title: 'BUSINESS & ANALYTICAL SKILLS', content: 'Market Research, Financial Modeling, Requirement Gathering, Process Mapping (BPMN), SQL, Tableau, PowerBI, Advanced Excel (VBA)' },
+      { title: 'CORPORATE STRATEGY EXPERIENCE', content: 'Senior Business Analyst - Global Consulting Group (2021-present) • Business Operations Intern (2020-2021)' },
+      { title: 'PROJECTS & CASE STUDIES', content: 'APAC Market Expansion Analysis • Supply Chain Process Optimization' },
+      { title: 'EDUCATION & CERTIFICATIONS', content: 'MBA in General Management (GPA 3.9/4.0) • Certified Business Analysis Professional (CBAP)' }
+    ],
+    previewText: `PRIYA SHARMA
+Senior Business Analyst | Corporate Strategy & Market Intelligence | priya.sharma@email.com
+
+BUSINESS & ANALYTICAL SKILLS
+Tools & Tech: SQL, Tableau, PowerBI, Advanced Excel (VBA), Jira, Confluence, BPMN 2.0
+Core Competencies: Requirement Gathering, Financial Modeling, Process Optimization, Stakeholder Management
+
+EXPERIENCE & IMPACT
+Senior Business Analyst | Global Consulting Group (2021 - Present)
+• Led market expansion strategy analysis driving 24% YoY revenue growth in APAC region.
+• Modeled financial projections and ROI metrics for $12M client acquisition strategy.`,
+    customLaTeXCode: `\\documentclass[letterpaper,11pt]{article}
+\\usepackage[empty]{fullpage}
+\\usepackage{titlesec}
+\\usepackage{enumitem}
+
+\\titleformat{\\section}{\\vspace{-4pt}\\scshape\\raggedright\\large\\bfseries}{}{0em}{}[\\color{Teal}\\hrule height 1.2pt \\vspace{-5pt}]
+
+\\begin{document}
+\\begin{center}
+    {\\Huge \\scshape \\textbf{PRIYA SHARMA}} \\\\ \\vspace{2pt}
+    \\small Senior Business Analyst $|$ Corporate Strategy \\& Market Intelligence \\\\
+    \\small priya.sharma@email.com $|$ linkedin.com/in/priyasharmabiz
+\\end{center}
+
+\\section{Core Competencies \\& Analytics Tools}
+\\begin{itemize}[leftmargin=0.15in, label={}]
+  \\small{\\item{
+   \\textbf{Analytics Tools}{: SQL, Tableau, PowerBI, Advanced Excel (VBA), Jira, BPMN 2.0} \\\\
+   \\textbf{Methodologies}{: Requirement Gathering, Financial Modeling, Process Mapping, Market Analysis}
+  }}
+\\end{itemize}
+
+\\section{Professional Business Experience}
+\\textbf{Senior Business Analyst} \\hfill Global Consulting Group (2021 -- Present) \\\\
+\\begin{itemize}
+    \\item Led market expansion strategy analysis driving 24\\% YoY revenue growth in APAC region.
+    \\item Modeled financial projections and ROI metrics for \\$12M client acquisition strategy.
+\\end{itemize}
+
+\\end{document}`
+  },
+  {
+    id: 'tpl-digital-mktg',
+    title: 'Digital Marketing & Growth Manager',
+    category: 'Marketing & Sales',
+    atsScore: '98%',
+    format: 'PDF / DOCX / LaTeX',
+    downloads: '15,200+',
+    idealFor: 'Growth Marketers, SEO/SEM Specialists, Social Media Managers & Brand Leads',
+    description: 'Optimized for performance marketing, Google Ads/Meta Ads campaign management, conversion rate optimization (CRO), funnel analytics, and content strategy.',
+    tags: ['Growth Marketing', 'SEO / PPC Specialist', 'Brand & Media Manager'],
+    color: '#e11d48',
+    layoutStyle: 'single-column-ats',
+    name: 'ANANYA ROY',
+    subtitle: 'Digital Marketing Lead | Performance Marketing & SEO Specialist',
+    sections: [
+      { title: 'MARKETING COMPETENCIES', content: 'Google Ads (Search/Display), Meta Ads Manager, SEO/SEM, GA4, HubSpot, Copywriting, A/B Testing, Email Funnels' },
+      { title: 'CAMPAIGN EXPERIENCE', content: 'Managed $250k annual performance marketing budget delivering 4.2x ROAS across paid search and paid social channels' },
+      { title: 'MARKETING CERTIFICATIONS', content: 'Google Search Ads Certified, HubSpot Inbound Marketing, Meta Certified Digital Marketing Associate' }
+    ],
+    previewText: `ANANYA ROY
+Digital Marketing Lead | Performance Marketing & SEO Specialist | ananya.mktg@email.com
+
+CORE COMPETENCIES & MARKETING TOOLS
+Marketing Channels: Google Ads (Search/Display), Meta Ads, SEO/SEM, Email Automation, Content Marketing
+Analytics & Platforms: GA4, Google Tag Manager, HubSpot, SEMrush, Ahrefs, Mailchimp
+
+PERFORMANCE EXPERIENCE
+Digital Marketing Lead | E-Commerce Retail Brands (2021 - Present)
+• Scaled annual e-commerce revenue by 140% through targeted PPC campaigns and landing page CRO.
+• Managed $250k performance ad spend achieving 4.2x return on ad spend (ROAS).`,
+    customLaTeXCode: `\\documentclass[letterpaper,11pt]{article}
+\\usepackage[empty]{fullpage}
+\\usepackage{titlesec}
+
+\\titleformat{\\section}{\\vspace{-4pt}\\scshape\\raggedright\\large\\bfseries}{}{0em}{}[\\color{Rose}\\hrule height 1.2pt \\vspace{-5pt}]
+
+\\begin{document}
+\\begin{center}
+    {\\Huge \\scshape \\textbf{ANANYA ROY}} \\\\ \\vspace{2pt}
+    \\small Digital Marketing Lead $|$ Performance Marketing \\& SEO Specialist \\\\
+    \\small ananya.mktg@email.com $|$ linkedin.com/in/ananyaroymktg
+\\end{center}
+
+\\section{Marketing Stack \\& Competencies}
+\\begin{itemize}[leftmargin=0.15in, label={}]
+  \\small{\\item{
+   \\textbf{Platforms}{: Google Ads, Meta Ads Manager, GA4, HubSpot, SEMrush, Ahrefs, Mailchimp} \\\\
+   \\textbf{Specialties}{: Performance Marketing, PPC, Technical SEO, CRO, Funnel Optimization, A/B Testing}
+  }}
+\\end{itemize}
+
+\\section{Marketing Experience}
+\\textbf{Digital Marketing Manager} \\hfill E-Commerce Brands (2021 -- Present) \\\\
+\\begin{itemize}
+    \\item Managed \\$250k annual ad budget generating 4.2x ROAS across Google Search and Meta Ads.
+    \\item Increased organic website search traffic by 180\\% within 9 months through technical SEO audits.
+\\end{itemize}
+
+\\end{document}`
+  },
+  {
+    id: 'tpl-finance-bank',
+    title: 'Finance, Accounting & Investment Banking',
+    category: 'Finance & Accounting',
+    atsScore: '99%',
+    format: 'PDF / DOCX / LaTeX',
+    downloads: '21,600+',
+    idealFor: 'Financial Analysts, Chartered Accountants (CA), Investment Banking Associates & Tax Consultants',
+    description: 'Built for financial analysts, CA aspirants, corporate accounting, valuation modeling (DCF/LBO), GAAP/IFRS compliance, and audit reporting.',
+    tags: ['Financial Analyst', 'CA / CFA Track', 'Investment Banking'],
+    color: '#15803d',
+    layoutStyle: 'single-column-ats',
+    name: 'VIKRAM CHOUDHARY',
+    subtitle: 'Financial Analyst | Equity Research & Corporate Finance',
+    sections: [
+      { title: 'FINANCIAL COMPETENCIES', content: 'DCF & LBO Valuation, Financial Modeling, GAAP/IFRS Compliance, Variance Analysis, SAP FICO, Bloomberg Terminal' },
+      { title: 'FINANCIAL ANALYSIS EXPERIENCE', content: 'Performed DCF valuation and M&A due diligence for $15M cross-border corporate acquisition' },
+      { title: 'EDUCATION & CERTIFICATIONS', content: 'B.Com (Honours in Finance) • CFA Level II Candidate • NISM Series VIII Equity Derivatives' }
+    ],
+    previewText: `VIKRAM CHOUDHARY
+Financial Analyst | Equity Research & Corporate Finance | vikram.fin@email.com
+
+FINANCIAL MODELING & ANALYTICAL STACK
+Financial Modeling: Discounted Cash Flow (DCF), LBO, Comparable Company Analysis (Comps), Budgeting
+Software & Tools: Bloomberg Terminal, Capital IQ, SAP FICO, Advanced Excel (VBA), QuickBooks
+
+CORPORATE FINANCE EXPERIENCE
+Financial Analyst | Investment Management Partners (2020 - Present)
+• Performed comprehensive financial valuation modeling for 12 public tech equities.
+• Assisted in deal execution and due diligence for a $15M cross-border M&A acquisition.`,
+    customLaTeXCode: `\\documentclass[letterpaper,11pt]{article}
+\\usepackage[empty]{fullpage}
+\\usepackage{titlesec}
+
+\\titleformat{\\section}{\\vspace{-4pt}\\scshape\\raggedright\\large\\bfseries}{}{0em}{}[\\color{DarkGreen}\\hrule height 1.2pt \\vspace{-5pt}]
+
+\\begin{document}
+\\begin{center}
+    {\\Huge \\scshape \\textbf{VIKRAM CHOUDHARY}} \\\\ \\vspace{2pt}
+    \\small Financial Analyst $|$ Equity Research \\& Corporate Finance \\\\
+    \\small vikram.fin@email.com $|$ linkedin.com/in/vikramchoudharyfin
+\\end{center}
+
+\\section{Financial Modeling \\& Tooling}
+\\begin{itemize}[leftmargin=0.15in, label={}]
+  \\small{\\item{
+   \\textbf{Modeling}{: DCF Valuation, LBO Models, Three-Statement Financial Modeling, Comps Analysis} \\\\
+   \\textbf{Tools}{: Bloomberg Terminal, Capital IQ, SAP FICO, Advanced Excel, QuickBooks, SAP}
+  }}
+\\end{itemize}
+
+\\section{Corporate Finance Experience}
+\\textbf{Corporate Finance Analyst} \\hfill Investment Management Partners (2020 -- Present) \\\\
+\\begin{itemize}
+    \\item Performed financial valuation modeling and equity research for 12 technology sector stocks.
+    \\item Conducted M\\&A due diligence for \\$15M acquisition transaction with zero post-closing discrepancies.
+\\end{itemize}
+
+\\end{document}`
+  },
+  {
+    id: 'tpl-uiux-product-design',
+    title: 'UI/UX Designer & Product Specialist',
+    category: 'Design & Product',
+    atsScore: '96%',
+    format: 'PDF / DOCX / LaTeX',
+    downloads: '16,900+',
+    idealFor: 'UI/UX Designers, Product Designers, Design Systems Leads & Interaction Designers',
+    description: 'Structured for product designers focusing on user research, wireframing, Figma design systems, usability testing, and mobile app design.',
+    tags: ['Figma / Design Systems', 'UI/UX Specialist', 'Product Design Portfolio'],
+    color: '#7c3aed',
+    layoutStyle: 'single-column-ats',
+    name: 'SNEHA KULKARNI',
+    subtitle: 'Product & UI/UX Designer | Design Systems Lead',
+    sections: [
+      { title: 'DESIGN SKILLS & TOOLKIT', content: 'Figma, Adobe XD, Illustrator, User Research, Wireframing, Rapid Prototyping, Design Systems, Usability Testing' },
+      { title: 'PRODUCT DESIGN EXPERIENCE', content: 'Redesigned mobile banking app checkout flow increasing user conversion rates by 18%' }
+    ],
+    previewText: `SNEHA KULKARNI
+Product & UI/UX Designer | Design Systems Lead | sneha.design@email.com | snehadesign.portfolio
+
+DESIGN COMPETENCIES & TOOLKIT
+Tools: Figma, Adobe Creative Cloud, Framer, ProtoPie, Miro, Zeplin, HTML/CSS
+Design Practice: User Research, Persona Creation, Wireframing, Prototyping, Design Systems, Usability Audits
+
+PRODUCT DESIGN EXPERIENCE
+Senior UI/UX Designer | Digital Product Studio (2021 - Present)
+• Created end-to-end design system adopted across 4 web & mobile product lines.
+• Redesigned mobile checkout flow increasing user payment conversion by 18%.`,
+    customLaTeXCode: `\\documentclass[letterpaper,11pt]{article}
+\\usepackage[empty]{fullpage}
+\\usepackage{titlesec}
+
+\\titleformat{\\section}{\\vspace{-4pt}\\scshape\\raggedright\\large\\bfseries}{}{0em}{}[\\color{Purple}\\hrule height 1.2pt \\vspace{-5pt}]
+
+\\begin{document}
+\\begin{center}
+    {\\Huge \\scshape \\textbf{SNEHA KULKARNI}} \\\\ \\vspace{2pt}
+    \\small Product \\& UI/UX Designer $|$ Design Systems Lead \\\\
+    \\small sneha.design@email.com $|$ portfolio: snehadesign.com
+\\end{center}
+
+\\section{Design Toolkit \\& Process}
+\\begin{itemize}[leftmargin=0.15in, label={}]
+  \\small{\\item{
+   \\textbf{Design Tools}{: Figma, Adobe XD, Framer, ProtoPie, Miro, Zeplin, HTML/CSS} \\\\
+   \\textbf{Methods}{: User Journey Mapping, Wireframing, High-Fidelity Prototyping, Usability Testing}
+  }}
+\\end{itemize}
+
+\\section{Product Design Experience}
+\\textbf{Senior UI/UX Designer} \\hfill Digital Product Studio (2021 -- Present) \\\\
+\\begin{itemize}
+    \\item Built comprehensive enterprise Figma design system reducing feature design turnaround by 35\\%.
+    \\item Redesigned mobile app onboarding flow, driving an 18\\% increase in completed user signups.
+\\end{itemize}
+
+\\end{document}`
+  },
+  {
+    id: 'tpl-hr-operations',
+    title: 'HR Manager & Talent Acquisition Lead',
+    category: 'Human Resources & Operations',
+    atsScore: '97%',
+    format: 'PDF / DOCX / LaTeX',
+    downloads: '13,800+',
+    idealFor: 'HR Business Partners, Talent Acquisition Specialists, Recruitment Leads & People Ops',
+    description: 'Designed for HR professionals managing end-to-end recruitment, employee engagement, HRIS tools (Workday/BambooHR), payroll, and onboarding.',
+    tags: ['Talent Acquisition', 'HR Business Partner', 'People & Operations'],
+    color: '#b45309',
+    layoutStyle: 'single-column-ats',
+    name: 'ROHIT VERMA',
+    subtitle: 'HR Generalist & Talent Acquisition Specialist',
+    sections: [
+      { title: 'HR COMPETENCIES', content: 'Talent Acquisition, Campus Drives, Employee Engagement, HRIS (Workday, Darwinbox), Payroll, Labor Law Compliance' },
+      { title: 'HR LEADERSHIP EXPERIENCE', content: 'Recruited 120+ software & business candidates in 1 year maintaining 92% 90-day retention rate' }
+    ],
+    previewText: `ROHIT VERMA
+HR Generalist & Talent Acquisition Specialist | rohit.hr@email.com
+
+HRIS & TALENT MANAGEMENT STACK
+Platforms: Workday, BambooHR, Darwinbox, LinkedIn Recruiter, Greenhouse ATS
+Core Competencies: End-to-End Recruitment, Campus Hiring, Onboarding, Employee Retention, Labor Compliance
+
+HUMAN RESOURCES EXPERIENCE
+HR & Talent Acquisition Lead | Tech Corporate Enterprise (2021 - Present)
+• Managed full lifecycle recruitment hiring 120+ engineering and business professionals.
+• Achieved a 92% 90-day employee retention rate through structured onboarding programs.`,
+    customLaTeXCode: `\\documentclass[letterpaper,11pt]{article}
+\\usepackage[empty]{fullpage}
+\\usepackage{titlesec}
+
+\\titleformat{\\section}{\\vspace{-4pt}\\scshape\\raggedright\\large\\bfseries}{}{0em}{}[\\color{Brown}\\hrule height 1.2pt \\vspace{-5pt}]
+
+\\begin{document}
+\\begin{center}
+    {\\Huge \\scshape \\textbf{ROHIT VERMA}} \\\\ \\vspace{2pt}
+    \\small HR Generalist \\& Talent Acquisition Specialist \\\\
+    \\small rohit.hr@email.com $|$ linkedin.com/in/rohithr
+\\end{center}
+
+\\section{HRIS \\& Talent Management Stack}
+\\begin{itemize}[leftmargin=0.15in, label={}]
+  \\small{\\item{
+   \\textbf{Platforms}{: Workday, BambooHR, Darwinbox, LinkedIn Recruiter, Greenhouse ATS} \\\\
+   \\textbf{HR Competencies}{: End-to-End Recruitment, Campus Drives, Onboarding, Policy Compliance}
+  }}
+\\end{itemize}
+
+\\section{Human Resources Experience}
+\\textbf{Talent Acquisition Lead} \\hfill Tech Corporate Enterprise (2021 -- Present) \\\\
+\\begin{itemize}
+    \\item Spearheaded hiring initiatives recruiting 120+ technical and business candidates in 12 months.
+    \\item Reduced average time-to-hire from 45 days to 28 days while maintaining top candidate quality.
+\\end{itemize}
+
+\\end{document}`
   }
 ];
 
@@ -2297,11 +2597,20 @@ export default function ResumeTemplatesPage() {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [latexEditorTemplate, setLatexEditorTemplate] = useState(null);
   const [downloadSuccessToast, setDownloadSuccessToast] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const filteredTemplates = RESUME_TEMPLATES_DATA.filter(tpl => {
+    if (selectedCategory === 'All') return true;
+    if (selectedCategory === 'IT & Software') {
+      return ['Software Engineering', 'Data Science & AI', 'Web & Mobile Dev', 'Cloud & DevOps', 'Cybersecurity', 'Campus & Freshers', 'Artificial Intelligence', 'Backend Development', 'Cloud Engineering', 'IT Management', 'Database Administration', 'Embedded Systems', 'Quality Assurance', 'Networking', 'Web3 & Blockchain', 'IT Support'].includes(tpl.category);
+    }
+    return tpl.category === selectedCategory;
+  });
 
   const handleDownload = (template, formatName = 'PDF') => {
     const fileName = `${(template.name || 'candidate').toLowerCase().replace(/[^a-z0-9]/g, '_')}_resume.pdf`;
     const pdfBlobContent = `% PDF Format Resume Document for ${template.name || 'Candidate'}
-% InternCatalyst Verified IT Resume Template
+% InternCatalyst Verified Resume Template
 Title: ${template.title}
 Category: ${template.category}
 ATS Parsing Score: ${template.atsScore}
@@ -2342,22 +2651,46 @@ ${template.previewText}
       `}</style>
       <div className="container">
         {/* Page Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div className="badge badge-verified" style={{ marginBottom: '0.75rem', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe' }}>
-            <Code size={14} /> Official IT & Software Engineering Resume Collection
+            <FileText size={14} /> Official IT & Non-IT Multi-Domain Resume Collection
           </div>
           <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.75rem' }}>
-            IT & Tech <span className="text-gradient">LaTeX Resume Templates</span>
+            Verified <span className="text-gradient">LaTeX & ATS Resume Templates</span>
           </h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', maxWidth: '750px', margin: '0 auto', lineHeight: '1.6' }}>
-            ATS-optimized 100% IT resume formats for Software Engineers, AI Engineers, Full-Stack Developers, Cloud Architects, and CS Campus Freshers.
+          <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', maxWidth: '780px', margin: '0 auto', lineHeight: '1.6' }}>
+            ATS-optimized 100% verified resume formats for Software Engineers, Business Analysts, Digital Marketers, Financial Analysts, UI/UX Designers, and HR Professionals.
           </p>
+        </div>
+
+        {/* Category Domain Filter Bar */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
+          {['All', 'IT & Software', 'Business & Strategy', 'Marketing & Sales', 'Finance & Accounting', 'Design & Product', 'Human Resources & Operations'].map(cat => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className="btn btn-sm"
+              style={{
+                borderRadius: '20px',
+                padding: '0.45rem 1rem',
+                fontSize: '0.85rem',
+                fontWeight: '600',
+                background: selectedCategory === cat ? '#1e3a8a' : '#f1f5f9',
+                color: selectedCategory === cat ? '#ffffff' : '#334155',
+                border: selectedCategory === cat ? '1px solid #1e3a8a' : '1px solid #cbd5e1',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
 
         {/* Verified Badge Row */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
-            Showing <strong>{RESUME_TEMPLATES_DATA.length}</strong> Professional IT Resume Templates
+            Showing <strong>{filteredTemplates.length}</strong> Professional {selectedCategory === 'All' ? 'IT & Non-IT' : selectedCategory} Resume Templates
           </span>
           <span style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
             <ShieldCheck size={16} /> 100% Free, ATS-Optimized & Compilable in LaTeX
@@ -2366,7 +2699,7 @@ ${template.previewText}
 
         {/* Template Grid */}
         <div className="grid-3" style={{ gap: '1.75rem' }}>
-          {RESUME_TEMPLATES_DATA.map(tpl => (
+          {filteredTemplates.map(tpl => (
             <div key={tpl.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
               {/* Header Badges */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>

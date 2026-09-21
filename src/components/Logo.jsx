@@ -86,8 +86,8 @@ export default function Logo({
 
   // Default: Hybrid Horizontal (Swoosh Icon PNG + Ultra-crisp typography)
   const textColor = isDark ? '#ffffff' : '#0f172a';
-  const accentColor = isDark ? '#38bdf8' : '#0284c7';
-  const tagColor = isDark ? '#06b6d4' : '#0284c7';
+  const accentColor = isDark ? '#60a5fa' : '#1e3a8a';
+  const tagColor = isDark ? '#3b82f6' : '#1e3a8a';
 
   const iconHeight = height;
   const fontSizeTitle = Math.max(14, height * 0.52);
@@ -116,7 +116,7 @@ export default function Logo({
           width: 'auto', 
           objectFit: 'contain',
           flexShrink: 0,
-          filter: 'drop-shadow(0 2px 10px rgba(6, 182, 212, 0.4))'
+          filter: isDark ? 'drop-shadow(0 2px 10px rgba(96, 165, 250, 0.4))' : 'drop-shadow(0 2px 10px rgba(30, 58, 138, 0.25))'
         }} 
       />
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flexShrink: 0, whiteSpace: 'nowrap' }}>

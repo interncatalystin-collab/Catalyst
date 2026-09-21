@@ -29,7 +29,7 @@ export default function Footer({ setActiveTab }) {
               InternCatalyst connects students, colleges, and verified employers for internship opportunities.
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#4ade80', fontSize: '0.85rem', fontWeight: '600' }}>
-              <ShieldCheck size={16} /> 100% Verified Employer Opportunities
+              <ShieldCheck size={16} /> 100% Internship Opportunities
             </div>
           </div>
 
