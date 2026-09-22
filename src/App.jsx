@@ -11,6 +11,7 @@ import CompanyDashboard from './pages/CompanyDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import InternshipModal from './components/InternshipModal';
 import LoginPage from './components/LoginPage';
+import WhatsAppButton from './components/WhatsAppButton';
 
 import { 
   INITIAL_INTERNSHIPS, 
@@ -643,6 +644,9 @@ export default function App() {
           onUpdateStudentProfile={setStudentProfile}
         />
       )}
+
+      {/* Floating WhatsApp Support Button for Queries */}
+      <WhatsAppButton />
 
       {/* Toast Notification Popups */}
       <div className="toast-container">

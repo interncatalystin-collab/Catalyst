@@ -24,6 +24,7 @@ import {
   Upload,
   Image
 } from 'lucide-react';
+import { ALL_CITIES } from '../data/citiesData';
 
 export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUpdateProfile, onAddToast, isEmbeddedInDashboard = false }) {
   const photoInputRef = useRef(null);
@@ -82,10 +83,22 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [isCustomCity, setIsCustomCity] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleCityChange = (e) => {
+    const val = e.target.value;
+    if (val === 'Other') {
+      setIsCustomCity(true);
+      setFormData(prev => ({ ...prev, city: '' }));
+    } else {
+      setIsCustomCity(false);
+      setFormData(prev => ({ ...prev, city: val }));
+    }
   };
 
   const handleRegisterDone = (studentData) => {
@@ -591,7 +604,35 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
               <div>
                 <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>City</label>
-                <input type="text" name="city" className="form-input" placeholder="e.g. Bangalore" value={formData.city} onChange={handleChange} />
+                <select 
+                  name="city" 
+                  className="form-input" 
+                  value={isCustomCity ? 'Other' : formData.city} 
+                  onChange={handleCityChange}
+                >
+                  <option value="">Select City</option>
+                  {formData.city && !isCustomCity && !ALL_CITIES.includes(formData.city) && (
+                    <option value={formData.city}>{formData.city}</option>
+                  )}
+                  {ALL_CITIES.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                  <option value="Other">Other</option>
+                </select>
+
+                {isCustomCity && (
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <input 
+                      type="text" 
+                      name="city" 
+                      className="form-input" 
+                      placeholder="Enter city manually" 
+                      value={formData.city} 
+                      onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
+                      autoFocus
+                    />
+                  </div>
+                )}
               </div>
 
               <div>

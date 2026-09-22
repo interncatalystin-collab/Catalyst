@@ -86,8 +86,8 @@ export default function Logo({
 
   // Default: Hybrid Horizontal (Swoosh Icon PNG + Ultra-crisp typography)
   const textColor = isDark ? '#ffffff' : '#0f172a';
-  const accentColor = isDark ? '#60a5fa' : '#1e3a8a';
-  const tagColor = isDark ? '#3b82f6' : '#1e3a8a';
+  const accentColor = isDark ? '#38bdf8' : '#2563eb';
+  const tagColor = isDark ? '#38bdf8' : '#64748b';
 
   const iconHeight = height;
   const fontSizeTitle = Math.max(14, height * 0.52);

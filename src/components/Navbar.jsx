@@ -30,16 +30,16 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
     <header className="nav-header">
       {/* Main Navbar */}
       <nav style={{
-        background: '#ffffff',
-        borderBottom: '2px solid #1e3a8a',
+        background: '#0b1528',
+        borderBottom: '1px solid rgba(56, 189, 248, 0.2)',
         padding: '0.75rem 0',
-        boxShadow: '0 1px 4px rgba(15, 23, 42, 0.05)'
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.35)'
       }}>
         <div className="nav-container">
           {/* Logo */}
           <Logo 
             height={38} 
-            mode="light" 
+            mode="dark" 
             showTagline={true}
             onClick={() => handleNavClick('home')} 
             style={{ flexShrink: 0, marginRight: '0.5rem' }}
@@ -84,19 +84,23 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
             {currentRole === 'visitor' ? (
               <div style={{ display: 'flex', gap: '0.4rem' }}>
                 <button 
-                  className="btn btn-primary btn-sm nav-login-btn"
+                  className="btn btn-sm nav-login-btn"
                   onClick={() => handleNavClick('login')}
                   style={{ 
-                    background: '#1e3a8a',
+                    background: '#0284c7',
                     color: '#ffffff',
                     border: 'none',
                     fontWeight: '700', 
                     padding: '0.45rem 1.15rem',
                     fontSize: '0.85rem',
                     borderRadius: '6px',
-                    boxShadow: '0 1px 3px rgba(30, 58, 138, 0.2)',
+                    boxShadow: '0 2px 10px rgba(2, 132, 199, 0.35)',
                     whiteSpace: 'nowrap',
-                    flexShrink: 0
+                    flexShrink: 0,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem'
                   }}
                 >
                   <Lock size={14} /> Login
@@ -106,9 +110,9 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 {currentRole === 'student' && (
                   <button 
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-sm"
                     onClick={() => handleNavClick('student-dash')}
-                    style={{ background: '#1e3a8a', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '6px' }}
+                    style={{ background: '#0284c7', color: '#ffffff', fontWeight: '700', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '6px' }}
                   >
                     <GraduationCap size={14} /> Student Dashboard
                   </button>
@@ -117,7 +121,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                   <button 
                     className="btn btn-emerald btn-sm"
                     onClick={() => handleNavClick('company-dash')}
-                    style={{ background: '#15803d', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '6px' }}
+                    style={{ background: '#15803d', color: '#ffffff', border: 'none', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '6px' }}
                   >
                     <Building2 size={14} /> Company Dashboard
                   </button>
@@ -126,7 +130,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                   <button 
                     className="btn btn-secondary btn-sm"
                     onClick={() => handleNavClick('admin-dash')}
-                    style={{ borderColor: '#0f172a', color: '#ffffff', background: '#0f172a', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '6px' }}
+                    style={{ borderColor: 'rgba(255,255,255,0.3)', color: '#ffffff', background: '#0f172a', fontSize: '0.8rem', padding: '0.45rem 0.85rem', borderRadius: '6px' }}
                   >
                     <Shield size={14} /> Admin Dashboard
                   </button>
@@ -140,9 +144,9 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               style={{
                 display: 'none',
-                background: '#f1f5f9',
-                border: '1px solid #cbd5e1',
-                color: '#0f172a',
+                background: 'rgba(255, 255, 255, 0.15)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                color: '#ffffff',
                 padding: '0.4rem',
                 borderRadius: '6px',
                 cursor: 'pointer'
@@ -157,19 +161,19 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div style={{
-          background: '#ffffff',
-          borderBottom: '2px solid #1e3a8a',
+          background: '#0b1528',
+          borderBottom: '2px solid #0284c7',
           padding: '1rem',
           display: 'flex',
           flexDirection: 'column',
           gap: '0.65rem',
-          boxShadow: '0 8px 20px rgba(0,0,0,0.1)'
+          boxShadow: '0 8px 25px rgba(0,0,0,0.4)'
         }}>
           {currentRole === 'visitor' ? (
             <button 
-              className="btn btn-primary" 
+              className="btn" 
               style={{ 
-                background: '#1e3a8a', 
+                background: '#0284c7', 
                 color: '#ffffff', 
                 fontWeight: '700',
                 padding: '0.75rem 1rem',
@@ -185,8 +189,8 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
             <>
               {currentRole === 'student' && (
                 <button 
-                  className="btn btn-primary" 
-                  style={{ background: '#1e3a8a', color: '#ffffff', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
+                  className="btn" 
+                  style={{ background: '#0284c7', color: '#ffffff', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
                   onClick={() => handleNavClick('student-dash')}
                 >
                   <GraduationCap size={16} /> Student Dashboard
@@ -203,8 +207,8 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               )}
               {currentRole === 'admin' && (
                 <button 
-                  className="btn btn-secondary" 
-                  style={{ borderColor: '#0f172a', color: '#ffffff', background: '#0f172a', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
+                  className="btn" 
+                  style={{ borderColor: 'rgba(255,255,255,0.2)', color: '#ffffff', background: '#0f172a', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
                   onClick={() => handleNavClick('admin-dash')}
                 >
                   <Shield size={16} /> Admin Dashboard
@@ -212,38 +216,38 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               )}
             </>
           )}
-          <hr style={{ borderColor: '#e2e8f0', margin: '0.25rem 0' }} />
+          <hr style={{ borderColor: 'rgba(255,255,255,0.15)', margin: '0.25rem 0' }} />
           <button 
-            className="btn btn-secondary" 
-            style={{ background: '#f8fafc', color: '#0f172a', fontWeight: '600', border: '1px solid #e2e8f0', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
+            className="btn" 
+            style={{ background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: '600', border: '1px solid rgba(255,255,255,0.15)', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
             onClick={() => handleNavClick('home')}
           >
             Home
           </button>
           <button 
-            className="btn btn-secondary" 
-            style={{ background: '#f8fafc', color: '#0f172a', fontWeight: '600', border: '1px solid #e2e8f0', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
+            className="btn" 
+            style={{ background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: '600', border: '1px solid rgba(255,255,255,0.15)', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
             onClick={() => handleNavClick('browse')}
           >
             Find Internships
           </button>
           <button 
-            className="btn btn-secondary" 
-            style={{ background: '#f8fafc', color: '#0f172a', fontWeight: '600', border: '1px solid #e2e8f0', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
+            className="btn" 
+            style={{ background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: '600', border: '1px solid rgba(255,255,255,0.15)', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
             onClick={() => handleNavClick('how-it-works')}
           >
             How It Works
           </button>
           <button 
-            className="btn btn-secondary" 
-            style={{ background: '#f8fafc', color: '#0f172a', fontWeight: '600', border: '1px solid #e2e8f0', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
+            className="btn" 
+            style={{ background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: '600', border: '1px solid rgba(255,255,255,0.15)', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
             onClick={() => handleNavClick('resume-templates')}
           >
             Resume Templates
           </button>
           <button 
-            className="btn btn-secondary" 
-            style={{ background: '#f8fafc', color: '#0f172a', fontWeight: '600', border: '1px solid #e2e8f0', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
+            className="btn" 
+            style={{ background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: '600', border: '1px solid rgba(255,255,255,0.15)', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
             onClick={() => handleNavClick('about')}
           >
             About Us

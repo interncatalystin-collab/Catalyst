@@ -47,6 +47,7 @@ import {
 } from 'lucide-react';
 import { DOMAIN_ROLES_DATA, getDomainRoleForStudent } from '../data/domainRolesData';
 import ProctoredAssessmentModal from '../components/ProctoredAssessmentModal';
+import { ALL_CITIES } from '../data/citiesData';
 
 export default function StudentDashboard({ 
   profile, 
@@ -242,6 +243,7 @@ export default function StudentDashboard({
   const [gender, setGender] = useState(safeProfile.gender || 'Male');
   const [city, setCity] = useState(safeProfile.city || '');
   const [state, setState] = useState(safeProfile.state || '');
+  const [isCustomCity, setIsCustomCity] = useState(false);
   const [internshipPreference, setInternshipPreference] = useState(safeProfile.internshipPreference || 'Remote / Online');
   const [resumeUrl, setResumeUrl] = useState(safeProfile.resumeUrl || safeProfile.resumeLink || '');
   const [linkedinUrl, setLinkedinUrl] = useState(safeProfile.linkedinUrl || safeProfile.linkedin || '');
@@ -2405,13 +2407,42 @@ export default function StudentDashboard({
                       <div className="grid-2">
                         <div className="form-group">
                           <label className="form-label">City</label>
-                          <input 
-                            type="text" 
-                            className="form-input" 
-                            value={city} 
-                            onChange={(e) => setCity(e.target.value)} 
-                            placeholder="e.g. Bangalore" 
-                          />
+                          <select 
+                            className="form-select" 
+                            value={isCustomCity ? 'Other' : city} 
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === 'Other') {
+                                setIsCustomCity(true);
+                                setCity('');
+                              } else {
+                                setIsCustomCity(false);
+                                setCity(val);
+                              }
+                            }}
+                          >
+                            <option value="">Select City</option>
+                            {city && !isCustomCity && !ALL_CITIES.includes(city) && (
+                              <option value={city}>{city}</option>
+                            )}
+                            {ALL_CITIES.map((c) => (
+                              <option key={c} value={c}>{c}</option>
+                            ))}
+                            <option value="Other">Other</option>
+                          </select>
+
+                          {isCustomCity && (
+                            <div style={{ marginTop: '0.5rem' }}>
+                              <input 
+                                type="text" 
+                                className="form-input" 
+                                placeholder="Enter city manually" 
+                                value={city} 
+                                onChange={(e) => setCity(e.target.value)} 
+                                autoFocus
+                              />
+                            </div>
+                          )}
                         </div>
                         <div className="form-group">
                           <label className="form-label">State</label>
