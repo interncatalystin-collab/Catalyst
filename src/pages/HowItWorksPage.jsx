@@ -29,7 +29,9 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
           </p>
 
           {/* Workflow Toggle */}
-          <div style={{
+          <div 
+            className="workflow-toggle-container"
+            style={{
             display: 'inline-flex',
             background: '#ffffff',
             border: '1px solid var(--border-color)',
@@ -38,6 +40,7 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
             boxShadow: 'var(--shadow-sm)'
           }}>
             <button 
+              className="workflow-toggle-btn"
               onClick={() => setActiveWorkflow('students')}
               style={{
                 background: activeWorkflow === 'students' ? 'var(--primary)' : 'transparent',
@@ -58,6 +61,7 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
             </button>
 
             <button 
+              className="workflow-toggle-btn"
               onClick={() => setActiveWorkflow('companies')}
               style={{
                 background: activeWorkflow === 'companies' ? 'var(--verified-color)' : 'transparent',

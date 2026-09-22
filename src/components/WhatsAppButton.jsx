@@ -10,6 +10,7 @@ export default function WhatsAppButton({
 
   return (
     <div
+      className="whatsapp-floating-wrapper"
       style={{
         position: 'fixed',
         bottom: '24px',
@@ -26,6 +27,7 @@ export default function WhatsAppButton({
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
+        className="whatsapp-floating-btn"
         aria-label="Chat with us on WhatsApp for any queries"
         title="Chat on WhatsApp"
         onMouseEnter={() => setIsHovered(true)}

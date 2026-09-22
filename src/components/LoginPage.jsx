@@ -388,7 +388,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
   };
 
   return (
-    <div style={{ padding: '4rem 0 6rem', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ padding: '4rem 1rem 6rem', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ width: '100%', maxWidth: '520px' }}>
         {/* Header Badge & Brand Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -407,7 +407,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
         </div>
 
         {/* Login Card */}
-        <div className="glass-card" style={{ padding: '2.25rem', background: '#ffffff', borderRadius: '16px', boxShadow: '0 20px 40px rgba(15, 23, 42, 0.08)', border: '1px solid var(--border-color)' }}>
+        <div className="glass-card login-card" style={{ padding: '2.25rem', background: '#ffffff', borderRadius: '16px', boxShadow: '0 20px 40px rgba(15, 23, 42, 0.08)', border: '1px solid var(--border-color)' }}>
           {/* Role Selector Tabs */}
           <div style={{
             display: 'grid',

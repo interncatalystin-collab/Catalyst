@@ -228,7 +228,7 @@ export default function HomePage({
       {/* Featured Internships Grid */}
       <section style={{ padding: '3rem 0' }}>
         <div className="container">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
               <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#0f172a' }}>
                 Featured <span className="text-gradient">Internship Opportunities</span>
@@ -321,7 +321,9 @@ export default function HomePage({
             </button>
           </div>
 
-          <div style={{
+          <div 
+            className="responsive-banner-card"
+            style={{
             background: '#ffffff',
             border: '1px solid #cbd5e1',
             borderRadius: 'var(--radius-xl)',

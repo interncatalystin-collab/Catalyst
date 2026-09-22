@@ -447,7 +447,7 @@ export default function StudentDashboard({
       <div className="container">
         
         {/* Top Summary Banner */}
-        <div className="glass-card" style={{
+        <div className="glass-card profile-header-card" style={{
           marginBottom: '2rem',
           display: 'flex',
           alignItems: 'center',
@@ -456,7 +456,7 @@ export default function StudentDashboard({
           gap: '1.5rem',
           padding: '1.5rem'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          <div className="profile-header-info" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
             <div style={{ position: 'relative' }}>
               <img 
                 src={avatar || safeProfile.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'} 

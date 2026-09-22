@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Logo from './Logo';
 import { 
+  Home,
   Briefcase, 
   Search, 
   User, 
@@ -142,14 +143,20 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
             <button 
               className="mobile-menu-btn"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle navigation menu"
               style={{
                 display: 'none',
-                background: 'rgba(255, 255, 255, 0.15)',
+                background: 'rgba(255, 255, 255, 0.12)',
                 border: '1px solid rgba(255, 255, 255, 0.25)',
                 color: '#ffffff',
-                padding: '0.4rem',
-                borderRadius: '6px',
-                cursor: 'pointer'
+                padding: '0.45rem',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                minWidth: '40px',
+                minHeight: '40px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s ease'
               }}
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -160,14 +167,14 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div style={{
+        <div className="mobile-nav-drawer" style={{
           background: '#0b1528',
           borderBottom: '2px solid #0284c7',
           padding: '1rem',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.65rem',
-          boxShadow: '0 8px 25px rgba(0,0,0,0.4)'
+          gap: '0.5rem',
+          boxShadow: '0 12px 30px rgba(0,0,0,0.5)'
         }}>
           {currentRole === 'visitor' ? (
             <button 
@@ -179,7 +186,12 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
                 padding: '0.75rem 1rem',
                 fontSize: '0.9rem',
                 border: 'none',
-                borderRadius: '8px'
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                minHeight: '44px'
               }} 
               onClick={() => handleNavClick('login')}
             >
@@ -190,7 +202,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               {currentRole === 'student' && (
                 <button 
                   className="btn" 
-                  style={{ background: '#0284c7', color: '#ffffff', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
+                  style={{ background: '#0284c7', color: '#ffffff', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', minHeight: '44px' }} 
                   onClick={() => handleNavClick('student-dash')}
                 >
                   <GraduationCap size={16} /> Student Dashboard
@@ -199,7 +211,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               {currentRole === 'company' && (
                 <button 
                   className="btn btn-emerald" 
-                  style={{ background: '#15803d', color: '#ffffff', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
+                  style={{ background: '#15803d', color: '#ffffff', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', minHeight: '44px' }} 
                   onClick={() => handleNavClick('company-dash')}
                 >
                   <Building2 size={16} /> Company Dashboard
@@ -208,7 +220,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               {currentRole === 'admin' && (
                 <button 
                   className="btn" 
-                  style={{ borderColor: 'rgba(255,255,255,0.2)', color: '#ffffff', background: '#0f172a', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px' }} 
+                  style={{ borderColor: 'rgba(255,255,255,0.2)', color: '#ffffff', background: '#0f172a', fontWeight: '700', padding: '0.75rem 1rem', fontSize: '0.9rem', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', minHeight: '44px' }} 
                   onClick={() => handleNavClick('admin-dash')}
                 >
                   <Shield size={16} /> Admin Dashboard
@@ -216,42 +228,41 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
               )}
             </>
           )}
-          <hr style={{ borderColor: 'rgba(255,255,255,0.15)', margin: '0.25rem 0' }} />
-          <button 
-            className="btn" 
-            style={{ background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: '600', border: '1px solid rgba(255,255,255,0.15)', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
-            onClick={() => handleNavClick('home')}
-          >
-            Home
-          </button>
-          <button 
-            className="btn" 
-            style={{ background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: '600', border: '1px solid rgba(255,255,255,0.15)', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
-            onClick={() => handleNavClick('browse')}
-          >
-            Find Internships
-          </button>
-          <button 
-            className="btn" 
-            style={{ background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: '600', border: '1px solid rgba(255,255,255,0.15)', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
-            onClick={() => handleNavClick('how-it-works')}
-          >
-            How It Works
-          </button>
-          <button 
-            className="btn" 
-            style={{ background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: '600', border: '1px solid rgba(255,255,255,0.15)', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
-            onClick={() => handleNavClick('resume-templates')}
-          >
-            Resume Templates
-          </button>
-          <button 
-            className="btn" 
-            style={{ background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: '600', border: '1px solid rgba(255,255,255,0.15)', padding: '0.65rem 1rem', fontSize: '0.875rem', justifyContent: 'flex-start' }} 
-            onClick={() => handleNavClick('about')}
-          >
-            About Us
-          </button>
+          <hr style={{ borderColor: 'rgba(255,255,255,0.12)', margin: '0.35rem 0' }} />
+          {[
+            { id: 'home', label: 'Home', icon: <Home size={16} /> },
+            { id: 'browse', label: 'Find Internships', icon: <Search size={16} /> },
+            { id: 'how-it-works', label: 'How It Works', icon: <HelpCircle size={16} /> },
+            { id: 'resume-templates', label: 'Resume Templates', icon: <FileText size={16} /> },
+            { id: 'about', label: 'About Us', icon: <Info size={16} /> },
+          ].map((navItem) => {
+            const isActive = activeTab === navItem.id || (navItem.id === 'resume-templates' && activeTab === 'resources');
+            return (
+              <button 
+                key={navItem.id}
+                className="btn" 
+                style={{ 
+                  background: isActive ? 'rgba(56, 189, 248, 0.18)' : 'rgba(255,255,255,0.06)', 
+                  color: isActive ? '#38bdf8' : '#e2e8f0', 
+                  fontWeight: isActive ? '700' : '600', 
+                  border: isActive ? '1px solid #38bdf8' : '1px solid rgba(255,255,255,0.1)', 
+                  padding: '0.75rem 1rem', 
+                  fontSize: '0.9rem', 
+                  justifyContent: 'flex-start',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.65rem',
+                  minHeight: '44px',
+                  transition: 'all 0.15s ease'
+                }} 
+                onClick={() => handleNavClick(navItem.id)}
+              >
+                {navItem.icon}
+                <span>{navItem.label}</span>
+              </button>
+            );
+          })}
         </div>
       )}
     </header>

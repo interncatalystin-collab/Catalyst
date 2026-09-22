@@ -120,15 +120,18 @@ export default function Logo({
         }} 
       />
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flexShrink: 0, whiteSpace: 'nowrap' }}>
-        <div style={{ 
-          fontSize: `${fontSizeTitle}px`, 
-          fontWeight: '800', 
-          letterSpacing: '-0.03em', 
-          color: textColor,
-          lineHeight: '1.05',
-          fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-          whiteSpace: 'nowrap'
-        }}>
+        <div 
+          className="logo-title"
+          style={{ 
+            fontSize: `${fontSizeTitle}px`, 
+            fontWeight: '800', 
+            letterSpacing: '-0.03em', 
+            color: textColor,
+            lineHeight: '1.05',
+            fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
+            whiteSpace: 'nowrap'
+          }}
+        >
           Intern<span style={{ color: accentColor }}>Catalyst</span>
         </div>
         {showTagline && (

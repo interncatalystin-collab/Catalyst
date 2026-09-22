@@ -63,7 +63,7 @@ export default function Footer({ setActiveTab }) {
                 <li key={idx}>
                   <button 
                     onClick={() => handleTabClick(link.tab)} 
-                    style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                    style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '0.25rem 0', display: 'inline-block', textAlign: 'left', transition: 'color 0.2s' }}
                     onMouseEnter={(e) => e.target.style.color = '#38bdf8'}
                     onMouseLeave={(e) => e.target.style.color = '#94a3b8'}
                   >
@@ -90,7 +90,7 @@ export default function Footer({ setActiveTab }) {
                 <li key={idx}>
                   <button 
                     onClick={() => handleTabClick(link.tab)} 
-                    style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                    style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '0.25rem 0', display: 'inline-block', textAlign: 'left', transition: 'color 0.2s' }}
                     onMouseEnter={(e) => e.target.style.color = '#38bdf8'}
                     onMouseLeave={(e) => e.target.style.color = '#94a3b8'}
                   >
@@ -111,7 +111,7 @@ export default function Footer({ setActiveTab }) {
                 <Mail size={16} style={{ color: '#38bdf8', flexShrink: 0 }} />
                 <a 
                   href="mailto:interncatalyst.in@gmail.com" 
-                  style={{ color: '#cbd5e1', fontWeight: '500', textDecoration: 'none', transition: 'color 0.2s' }}
+                  style={{ color: '#cbd5e1', fontWeight: '500', textDecoration: 'none', transition: 'color 0.2s', padding: '0.2rem 0' }}
                   onMouseEnter={(e) => e.target.style.color = '#ffffff'}
                   onMouseLeave={(e) => e.target.style.color = '#cbd5e1'}
                 >
@@ -122,7 +122,7 @@ export default function Footer({ setActiveTab }) {
                 <Phone size={16} style={{ color: '#38bdf8', flexShrink: 0 }} />
                 <a 
                   href="tel:+919148762124" 
-                  style={{ color: '#cbd5e1', fontWeight: '500', textDecoration: 'none', transition: 'color 0.2s' }}
+                  style={{ color: '#cbd5e1', fontWeight: '500', textDecoration: 'none', transition: 'color 0.2s', padding: '0.2rem 0' }}
                   onMouseEnter={(e) => e.target.style.color = '#ffffff'}
                   onMouseLeave={(e) => e.target.style.color = '#cbd5e1'}
                 >
@@ -137,7 +137,7 @@ export default function Footer({ setActiveTab }) {
         </div>
 
         {/* Bottom Sub-bar */}
-        <div style={{
+        <div className="footer-bottom-bar" style={{
           borderTop: '1px solid rgba(255, 255, 255, 0.08)',
           paddingTop: '1.5rem',
           display: 'flex',
@@ -151,7 +151,7 @@ export default function Footer({ setActiveTab }) {
           <div>
             © {new Date().getFullYear()} InternCatalyst Platform. All rights reserved.
           </div>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
+          <div className="footer-legal-links" style={{ display: 'flex', gap: '0.75rem 1.25rem', flexWrap: 'wrap' }}>
             {[
               { label: 'Privacy Policy', tab: 'about' },
               { label: 'Terms of Service', tab: 'about' },
@@ -160,7 +160,7 @@ export default function Footer({ setActiveTab }) {
             ].map((legal, idx) => (
               <span 
                 key={idx} 
-                style={{ cursor: 'pointer', transition: 'color 0.2s' }} 
+                style={{ cursor: 'pointer', transition: 'color 0.2s', padding: '0.2rem 0' }} 
                 onClick={() => handleTabClick(legal.tab)}
                 onMouseEnter={(e) => e.target.style.color = '#38bdf8'}
                 onMouseLeave={(e) => e.target.style.color = '#64748b'}

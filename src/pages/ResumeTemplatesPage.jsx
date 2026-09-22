@@ -2409,13 +2409,17 @@ ${template.previewText}
         style={{ maxWidth: '1100px', width: '95%', height: '90vh', display: 'flex', flexDirection: 'column', padding: '0', overflow: 'hidden' }}
       >
         {/* Top Action Bar */}
-        <div style={{
+        <div 
+          className="overleaf-action-bar"
+          style={{
           background: '#0f172a',
           color: '#ffffff',
           padding: '1rem 1.5rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '0.75rem',
           borderBottom: '1px solid #1e293b'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -2465,7 +2469,10 @@ ${template.previewText}
         </div>
 
         {/* Split Pane Editor */}
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', overflow: 'hidden' }}>
+        <div 
+          className="overleaf-split-pane"
+          style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', overflow: 'hidden' }}
+        >
           {/* Left: Code Editor */}
           <div style={{ background: '#0f172a', display: 'flex', flexDirection: 'column', borderRight: '1px solid #1e293b' }}>
             <div style={{
@@ -2688,7 +2695,7 @@ ${template.previewText}
         </div>
 
         {/* Verified Badge Row */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', flexWrap: 'wrap', gap: '0.75rem' }}>
           <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
             Showing <strong>{filteredTemplates.length}</strong> Professional {selectedCategory === 'All' ? 'IT & Non-IT' : selectedCategory} Resume Templates
           </span>
