@@ -532,6 +532,15 @@ button, input, select, textarea {
   }
 }
 
+/* Mobile Back to Home Navigation Elements (Default: hidden on desktop) */
+.mobile-header-back-btn {
+  display: none !important;
+}
+
+.mobile-back-to-home-bar {
+  display: none !important;
+}
+
 @media (max-width: 1024px) {
   .desktop-links {
     display: none !important;
@@ -558,6 +567,86 @@ button, input, select, textarea {
 
 /* Comprehensive Mobile Alignment & Spacing Rules (< 768px Smartphones & Tablets) */
 @media (max-width: 768px) {
+  /* Mobile Back to Home Navigation Elements */
+  .mobile-header-back-btn {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #38bdf8;
+    padding: 0.35rem 0.65rem;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+  }
+
+  .mobile-header-back-btn:active {
+    background: rgba(56, 189, 248, 0.3);
+    transform: scale(0.96);
+  }
+
+  .mobile-back-to-home-bar {
+    display: block !important;
+    background: #0b1528;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    padding: 0.55rem 0.85rem;
+    position: sticky;
+    top: 54px;
+    z-index: 990;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .mobile-back-bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    max-width: 1380px;
+    margin: 0 auto;
+  }
+
+  .mobile-back-home-btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #0284c7;
+    color: #ffffff;
+    border: none;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+  }
+
+  .mobile-back-home-btn-action:active {
+    transform: scale(0.96);
+    background: #0369a1;
+  }
+
+  .mobile-back-route-badge {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.3rem 0.65rem;
+    border-radius: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 55%;
+  }
+
   .container {
     padding: 0 0.85rem !important;
   }
@@ -846,6 +935,26 @@ button, input, select, textarea {
   .nav-login-btn {
     padding: 0.35rem 0.65rem !important;
     font-size: 0.78rem !important;
+  }
+
+  .mobile-back-route-badge {
+    max-width: 44% !important;
+    font-size: 0.72rem !important;
+    padding: 0.25rem 0.5rem !important;
+  }
+
+  .mobile-back-home-btn-action {
+    padding: 0.38rem 0.7rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  .nav-brand-group {
+    gap: 0.3rem !important;
+  }
+
+  .mobile-header-back-btn {
+    padding: 0.3rem 0.5rem !important;
+    font-size: 0.74rem !important;
   }
 }
 

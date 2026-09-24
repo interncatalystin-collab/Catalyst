@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Logo from './Logo';
 import { 
+  ArrowLeft,
   Home,
   Briefcase, 
   Search, 
@@ -37,14 +38,29 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.35)'
       }}>
         <div className="nav-container">
-          {/* Logo */}
-          <Logo 
-            height={38} 
-            mode="dark" 
-            showTagline={true}
-            onClick={() => handleNavClick('home')} 
-            style={{ flexShrink: 0, marginRight: '0.5rem' }}
-          />
+          {/* Logo & Mobile Back Button */}
+          <div className="nav-brand-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
+            {activeTab !== 'home' && (
+              <button 
+                type="button"
+                className="mobile-header-back-btn"
+                onClick={() => handleNavClick('home')}
+                aria-label="Back to Home"
+                title="Back to Home"
+              >
+                <ArrowLeft size={16} />
+                <span>Home</span>
+              </button>
+            )}
+
+            <Logo 
+              height={38} 
+              mode="dark" 
+              showTagline={true}
+              onClick={() => handleNavClick('home')} 
+              style={{ flexShrink: 0, marginRight: '0.5rem' }}
+            />
+          </div>
 
           {/* Desktop Navigation Links */}
           <div className="desktop-links">
@@ -176,6 +192,32 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
           gap: '0.5rem',
           boxShadow: '0 12px 30px rgba(0,0,0,0.5)'
         }}>
+          {/* Quick Return to Home Button when on another page */}
+          {activeTab !== 'home' && (
+            <button 
+              type="button"
+              className="btn" 
+              style={{ 
+                background: 'rgba(56, 189, 248, 0.15)', 
+                color: '#38bdf8', 
+                border: '1px solid #38bdf8', 
+                fontWeight: '700', 
+                padding: '0.75rem 1rem', 
+                fontSize: '0.9rem', 
+                borderRadius: '8px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.5rem', 
+                minHeight: '44px',
+                marginBottom: '0.25rem'
+              }} 
+              onClick={() => handleNavClick('home')}
+            >
+              <ArrowLeft size={18} />
+              <span>← Back to Home Page</span>
+            </button>
+          )}
+
           {currentRole === 'visitor' ? (
             <button 
               className="btn" 

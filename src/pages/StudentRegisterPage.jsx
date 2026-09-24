@@ -12,6 +12,7 @@ import {
   MapPin, 
   Briefcase, 
   Lock, 
+  ArrowLeft,
   ArrowRight, 
   CheckCircle2, 
   AlertCircle,
@@ -224,20 +225,50 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
   };
 
   return (
-    <div style={{ padding: isEmbeddedInDashboard ? '0' : '3rem 1rem 6rem', maxWidth: isEmbeddedInDashboard ? '100%' : '840px', margin: '0 auto' }}>
+    <div style={{ padding: isEmbeddedInDashboard ? '0' : '2.5rem 1rem 6rem', maxWidth: isEmbeddedInDashboard ? '100%' : '840px', margin: '0 auto' }}>
       {/* Header */}
       {!isEmbeddedInDashboard ? (
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <Logo height={48} mode="light" showTagline={true} style={{ marginBottom: '1rem', margin: '0 auto 1rem' }} />
-          <div className="badge badge-verified" style={{ marginBottom: '0.75rem', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', border: '1px solid #cbd5e1', display: 'inline-flex' }}>
-            <GraduationCap size={15} /> Student Enrollment & Placement Portal
+        <div style={{ marginBottom: '2.5rem' }}>
+          {/* Back to Home Button */}
+          <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '1.25rem' }}>
+            <button
+              type="button"
+              onClick={() => {
+                if (setActiveTab) setActiveTab('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              style={{
+                background: '#ffffff',
+                border: '1px solid #cbd5e1',
+                color: '#1e3a8a',
+                borderRadius: '8px',
+                padding: '0.45rem 0.95rem',
+                fontSize: '0.85rem',
+                fontWeight: '700',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                boxShadow: '0 2px 5px rgba(0,0,0,0.04)',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <ArrowLeft size={16} /> Back to Home
+            </button>
           </div>
-          <h1 style={{ fontSize: '2.25rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
-            Create Your <span className="text-gradient">Student Account</span>
-          </h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-            Register to access verified internship opportunities, ATS resume builders, and employer matching.
-          </p>
+
+          <div style={{ textAlign: 'center' }}>
+            <Logo height={48} mode="light" showTagline={true} style={{ marginBottom: '1rem', margin: '0 auto 1rem' }} />
+            <div className="badge badge-verified" style={{ marginBottom: '0.75rem', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', border: '1px solid #cbd5e1', display: 'inline-flex' }}>
+              <GraduationCap size={15} /> Student Enrollment & Placement Portal
+            </div>
+            <h1 style={{ fontSize: '2.25rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
+              Create Your <span className="text-gradient">Student Account</span>
+            </h1>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
+              Register to access verified internship opportunities, ATS resume builders, and employer matching.
+            </p>
+          </div>
         </div>
       ) : (
         <div style={{

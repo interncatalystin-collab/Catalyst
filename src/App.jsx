@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -513,6 +514,37 @@ export default function App() {
         setCurrentRole={setCurrentRole} 
         unreadNotificationsCount={3}
       />
+
+      {/* Dedicated Mobile Back-to-Home Bar (Visible on mobile/tablet screens when outside Home) */}
+      {activeTab !== 'home' && (
+        <aside className="mobile-back-to-home-bar" aria-label="Mobile Navigation Back Bar">
+          <div className="mobile-back-bar-inner">
+            <button 
+              type="button"
+              className="mobile-back-home-btn-action"
+              onClick={() => {
+                setActiveTab('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              aria-label="Back to Home"
+            >
+              <ArrowLeft size={16} />
+              <span>Back to Home</span>
+            </button>
+            <span className="mobile-back-route-badge">
+              {activeTab === 'browse' && 'Browse Internships'}
+              {activeTab === 'how-it-works' && 'How It Works'}
+              {(activeTab === 'resume-templates' || activeTab === 'resources') && 'Resume Templates'}
+              {activeTab === 'about' && 'About Us'}
+              {activeTab === 'login' && 'Portal Sign In'}
+              {activeTab === 'register' && 'Student Enrollment'}
+              {(activeTab === 'student-dash' || activeTab === 'student-profile') && 'Student Dashboard'}
+              {activeTab === 'company-dash' && 'Company Dashboard'}
+              {activeTab === 'admin-dash' && 'Admin Dashboard'}
+            </span>
+          </div>
+        </aside>
+      )}
 
       {/* Main Content Router View */}
       <main style={{ flex: 1 }}>

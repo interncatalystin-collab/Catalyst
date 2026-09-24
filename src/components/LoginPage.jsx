@@ -7,6 +7,7 @@ import {
   GraduationCap, 
   Building2, 
   Shield, 
+  ArrowLeft,
   ArrowRight, 
   CheckCircle2,
   AlertCircle,
@@ -388,8 +389,36 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
   };
 
   return (
-    <div style={{ padding: '4rem 1rem 6rem', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ padding: '2.5rem 1rem 5rem', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ width: '100%', maxWidth: '520px' }}>
+        {/* Back to Home Button */}
+        <div style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'flex-start' }}>
+          <button
+            type="button"
+            onClick={() => {
+              if (setActiveTab) setActiveTab('home');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            style={{
+              background: '#ffffff',
+              border: '1px solid #cbd5e1',
+              color: '#1e3a8a',
+              borderRadius: '8px',
+              padding: '0.45rem 0.95rem',
+              fontSize: '0.85rem',
+              fontWeight: '700',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              boxShadow: '0 2px 5px rgba(0,0,0,0.04)',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <ArrowLeft size={16} /> Back to Home
+          </button>
+        </div>
+
         {/* Header Badge & Brand Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Logo height={52} mode="light" showTagline={true} style={{ marginBottom: '1.25rem' }} />
