@@ -26,7 +26,6 @@ export default function BrowseInternshipsPage({
 
     const matchesSearch = 
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (item.domain && item.domain.toLowerCase().includes(searchQuery.toLowerCase())) ||
       item.skills.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -59,10 +58,10 @@ export default function BrowseInternshipsPage({
         {/* Page Title & Search Bar */}
         <div style={{ marginBottom: '2.5rem' }}>
           <h1 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
-            Browse <span className="text-gradient">Internship Opportunities</span>
+            Available Roles <span className="text-gradient">by Domain</span>
           </h1>
           <p style={{ color: 'var(--text-muted)' }}>
-            Explore verified full-time, part-time, paid stipend, and free mentorship internships with transparent supervisor contacts.
+            Explore verified internship roles across specialized domain tracks. Students apply directly for their chosen domain role, with applications centrally vetted by Administration and routed to partner enterprises.
           </p>
 
           <div style={{
@@ -79,7 +78,7 @@ export default function BrowseInternshipsPage({
             <Search size={20} style={{ color: 'var(--text-muted)' }} />
             <input 
               type="text"
-              placeholder="Search by job title, company name, or skills (e.g., React, Python, Figma)..."
+              placeholder="Search by available role, domain, or skills (e.g., Full Stack, React, Python, Data Analyst)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{

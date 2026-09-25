@@ -1560,15 +1560,12 @@ export default function StudentDashboard({
                             </span>
                           </td>
                           <td>
-                            <div style={{ fontSize: '0.85rem', color: '#0f172a', fontWeight: '600' }}>
-                              {app.companyName}
+                            <div style={{ fontSize: '0.85rem', color: '#1e3a8a', fontWeight: '700' }}>
+                              {app.domain || 'Domain Track'} Partner Pool
                             </div>
-                            {Array.isArray(app.connectedCompanies) && app.connectedCompanies.length > 0 && (
-                              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                                Covers: {app.connectedCompanies.slice(0, 3).join(', ')}
-                                {app.connectedCompanies.length > 3 && ` +${app.connectedCompanies.length - 3} more`}
-                              </div>
-                            )}
+                            <div style={{ fontSize: '0.74rem', color: '#64748b', marginTop: '2px' }}>
+                              Verified Enterprise Network (Centrally Matched)
+                            </div>
                           </td>
                           <td>
                             <div style={{ fontSize: '0.85rem' }}>{app.appliedDate}</div>
@@ -1662,7 +1659,7 @@ export default function StudentDashboard({
                                   </span>
                                   <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>Sent to Company</strong>
                                   <span style={{ fontSize: '0.68rem', color: app.forwardedToEmployer ? '#166534' : '#64748b' }}>
-                                    {app.forwardedToEmployer ? `Top Candidate Sent to ${app.companyName}` : 'Admin Selection Queue'}
+                                    {app.forwardedToEmployer ? 'Top Candidate Shortlisted & Forwarded to Hiring Partner' : 'Admin Selection Queue'}
                                   </span>
                                 </div>
                                 <div style={{ background: app.status === 'Selected' || app.status === 'Hired' ? '#f0fdf4' : '#f8fafc', padding: '0.5rem', borderRadius: '8px', border: app.status === 'Selected' || app.status === 'Hired' ? '1px solid #bbf7d0' : '1px solid #e2e8f0' }}>

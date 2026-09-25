@@ -49,6 +49,7 @@ export const getApplicationsHandler = async (req, res) => {
 
   // Employer Dashboard / Top selected candidate profile access:
   // Forwarded candidates retain full candidate profile (name, email, phone, college, degree, resume, links)
+  // Non-forwarded applications have student details strictly hidden until Central Admin forwards them
   const resultApps = allApps.map(app => {
     if (app.forwardedToEmployer) {
       return app;
@@ -57,14 +58,22 @@ export const getApplicationsHandler = async (req, res) => {
       id: app.id,
       internshipId: app.internshipId,
       internshipTitle: app.internshipTitle,
+      domain: app.domain,
       companyName: app.companyName,
       appliedDate: app.appliedDate,
       status: app.status,
-      adminSelectionStatus: app.adminSelectionStatus,
-      studentName: app.studentName ? `${app.studentName.charAt(0)}. (Pending Vetting)` : 'Candidate (Pending Vetting)',
-      studentEmail: '🔒 Pending Admin Selection',
-      studentPhone: '🔒 Pending Admin Selection',
-      resumeName: '🔒 Stored in Central Admin Queue'
+      adminSelectionStatus: app.adminSelectionStatus || 'Pending Admin Selection',
+      forwardedToEmployer: false,
+      studentName: 'Candidate (Identity Protected by Central Admin)',
+      studentEmail: '🔒 Hidden until Admin Forwarding',
+      studentPhone: '🔒 Hidden until Admin Forwarding',
+      studentCollege: '🔒 Under Central Admin Review',
+      studentDegree: '🔒 Profile Vetting in Progress',
+      studentYear: '🔒',
+      resumeName: '🔒 Stored in Central Admin Queue',
+      resumeUrl: null,
+      linkedinUrl: null,
+      githubUrl: null
     };
   });
 

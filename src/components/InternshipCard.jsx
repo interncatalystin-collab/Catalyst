@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, MapPin, Clock, Users, Calendar, ArrowRight, Building2 } from 'lucide-react';
+import { ShieldCheck, MapPin, Clock, Users, Calendar, ArrowRight, Building2, Layers, Briefcase } from 'lucide-react';
 
 export default function InternshipCard({ internship, onSelect, onApply }) {
   const isFullTime = (internship.internshipType || 'Full-time') === 'Full-time';
@@ -17,7 +17,7 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
       boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
       transition: 'all 0.2s ease'
     }}>
-      {/* Top Header */}
+      {/* Top Header - Domain Track & Verified Status (Company identity withheld for student view) */}
       <div style={{ 
         display: 'flex', 
         alignItems: 'flex-start', 
@@ -27,44 +27,43 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
         flexWrap: 'wrap'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minWidth: 0, flex: '1 1 180px' }}>
-          <img 
-            src={internship.logo} 
-            alt={internship.companyName}
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '8px',
-              objectFit: 'cover',
-              border: '1px solid #e2e8f0',
-              background: '#f8fafc',
-              flexShrink: 0
-            }}
-          />
+          <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '10px',
+            background: 'linear-gradient(135deg, #1e3a8a, #0284c7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#ffffff',
+            boxShadow: '0 2px 8px rgba(2, 132, 199, 0.25)',
+            flexShrink: 0
+          }}>
+            <Layers size={20} />
+          </div>
           <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
-              <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
-                {internship.companyName}
+              <span style={{ fontWeight: '800', fontSize: '0.875rem', color: '#1e3a8a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
+                {internship.domain || 'Domain Track'}
               </span>
-              {internship.verified && (
-                <span style={{ 
-                  background: '#f0fdf4', 
-                  color: '#15803d', 
-                  border: '1px solid #bbf7d0', 
-                  borderRadius: '4px', 
-                  fontSize: '0.68rem', 
-                  padding: '1px 5px', 
-                  fontWeight: '700',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '3px',
-                  flexShrink: 0
-                }}>
-                  <ShieldCheck size={11} /> Verified
-                </span>
-              )}
+              <span style={{ 
+                background: '#f0fdf4', 
+                color: '#15803d', 
+                border: '1px solid #bbf7d0', 
+                borderRadius: '4px', 
+                fontSize: '0.68rem', 
+                padding: '1px 5px', 
+                fontWeight: '700',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '3px',
+                flexShrink: 0
+              }}>
+                <ShieldCheck size={11} /> Verified Role
+              </span>
             </div>
             <span style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '2px' }}>
-              <Building2 size={12} /> {internship.industry || 'Tech & Services'}
+              <Briefcase size={12} /> Partner Enterprise Pool
             </span>
           </div>
         </div>

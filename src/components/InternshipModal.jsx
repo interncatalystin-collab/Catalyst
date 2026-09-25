@@ -18,7 +18,9 @@ import {
   Send,
   GraduationCap,
   Upload,
-  CreditCard
+  CreditCard,
+  Layers,
+  Briefcase
 } from 'lucide-react';
 
 export default function InternshipModal({ 
@@ -114,29 +116,37 @@ export default function InternshipModal({
           <X size={20} />
         </button>
 
-        {/* Modal Header */}
+        {/* Modal Header - Role Title & Domain Track (Company identity withheld from student view) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-          <img 
-            src={internship.logo} 
-            alt={internship.companyName}
-            style={{ width: '60px', height: '60px', borderRadius: '14px', objectFit: 'cover', background: '#fff', border: '1px solid #e2e8f0' }}
-          />
+          <div style={{
+            width: '60px',
+            height: '60px',
+            borderRadius: '14px',
+            background: 'linear-gradient(135deg, #1e3a8a, #0284c7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#ffffff',
+            boxShadow: '0 4px 14px rgba(2, 132, 199, 0.25)',
+            flexShrink: 0
+          }}>
+            <Layers size={30} />
+          </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '1rem', color: 'var(--text-muted)', fontWeight: '600' }}>
-                {internship.companyName}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '0.95rem', color: '#1e3a8a', fontWeight: '800' }}>
+                {internship.domain || 'Domain Track'}
               </span>
-              {internship.verified ? (
-                <span className="badge badge-verified">
-                  <ShieldCheck size={13} /> Verified Employer
-                </span>
-              ) : (
-                <span className="badge badge-pending">Pending Verification</span>
-              )}
+              <span className="badge badge-verified">
+                <ShieldCheck size={13} /> Verified Role
+              </span>
             </div>
             <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#0f172a', marginTop: '2px' }}>
               {internship.title}
             </h2>
+            <div style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '2px' }}>
+              <Briefcase size={12} /> Partner Corporate Hiring Pool (Centrally Vetted)
+            </div>
           </div>
         </div>
 
@@ -185,27 +195,22 @@ export default function InternshipModal({
           </div>
         </div>
 
-        {/* Supervisor Details Box */}
-        {internship.supervisorName && (
-          <div style={{
-            background: '#eff6ff',
-            border: '1px solid #bfdbfe',
-            borderRadius: 'var(--radius-md)',
-            padding: '1rem',
-            marginBottom: '1.5rem',
-            fontSize: '0.85rem'
-          }}>
-            <h4 style={{ color: '#2563eb', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-              <UserCheck size={16} /> Designated Internship Supervisor Details
-            </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem', color: '#334155' }}>
-              <div><strong>Supervisor:</strong> {internship.supervisorName} ({internship.supervisorDesignation})</div>
-              <div><Mail size={13} style={{ display: 'inline', marginRight: '4px' }} /> {internship.supervisorEmail}</div>
-              <div><Phone size={13} style={{ display: 'inline', marginRight: '4px' }} /> {internship.supervisorPhone}</div>
-              <div><Calendar size={13} style={{ display: 'inline', marginRight: '4px' }} /> Deadline: {internship.deadline}</div>
-            </div>
-          </div>
-        )}
+        {/* Central Placement & Domain Role Policy (Replaces company supervisor contact for student view) */}
+        <div style={{
+          background: '#eff6ff',
+          border: '1px solid #bfdbfe',
+          borderRadius: 'var(--radius-md)',
+          padding: '1rem 1.15rem',
+          marginBottom: '1.5rem',
+          fontSize: '0.85rem'
+        }}>
+          <h4 style={{ color: '#1e40af', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.4rem', fontSize: '0.9rem', fontWeight: '800' }}>
+            <ShieldCheck size={17} style={{ color: '#2563eb' }} /> Central Placement & Domain Role Policy
+          </h4>
+          <p style={{ color: '#334155', margin: 0, lineHeight: '1.5', fontSize: '0.825rem' }}>
+            Students apply directly for the <strong>{internship.title}</strong> role in the <strong>{internship.domain || 'Domain'}</strong> track. To ensure fair and merit-based hiring, partner company identities and supervisor contacts are centrally managed by InternCatalyst Administration and disclosed upon interview shortlisting.
+          </p>
+        </div>
 
           {/* Application Form */}
           {hasApplied ? (

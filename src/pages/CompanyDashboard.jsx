@@ -119,9 +119,14 @@ export default function CompanyDashboard({
   };
 
   const companyListings = internships.filter(i => i.companyName === company.name || i.companyId === company.id);
-  const companyApps = applications.filter(app => 
-    (app.companyName === company.name) && 
-    (app.forwardedToEmployer || app.adminSelectionStatus === 'Shortlisted & Forwarded to Employer')
+  const allCompanyApplications = applications.filter(app => 
+    app.companyName === company.name || companyListings.some(l => l.id === app.internshipId)
+  );
+  const companyApps = allCompanyApplications.filter(app => 
+    app.forwardedToEmployer || app.adminSelectionStatus === 'Shortlisted & Forwarded to Employer'
+  );
+  const pendingVettingApps = allCompanyApplications.filter(app => 
+    !(app.forwardedToEmployer || app.adminSelectionStatus === 'Shortlisted & Forwarded to Employer')
   );
 
   const handlePostSubmit = (e) => {
@@ -833,6 +838,28 @@ export default function CompanyDashboard({
         {/* Tab 3: Applicant Manager & Candidate Selection */}
         {activeTab === 'applicants' && (
           <div className="glass-card">
+            {/* Student Privacy & Admin Forwarding Protocol Banner */}
+            <div style={{
+              background: 'rgba(30, 58, 138, 0.25)',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
+              borderRadius: '10px',
+              padding: '1rem 1.25rem',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.85rem'
+            }}>
+              <ShieldCheck size={26} style={{ color: '#38bdf8', flexShrink: 0 }} />
+              <div>
+                <strong style={{ fontSize: '0.95rem', color: '#f8fafc', display: 'block', marginBottom: '2px' }}>
+                  🔒 Student Privacy & Central Admin Vetting Protocol
+                </strong>
+                <span style={{ fontSize: '0.825rem', color: '#cbd5e1', lineHeight: '1.45' }}>
+                  In accordance with platform rules, candidate personal information (name, email, phone, college, and resume) is strictly protected and hidden from company view until Central Admin verifies candidate qualifications, reviews proctored assessments, and forwards the candidate profile to your portal.
+                </span>
+              </div>
+            </div>
+
             <div style={{
               background: '#f0fdf4',
               border: '1px solid #bbf7d0',
@@ -979,11 +1006,87 @@ export default function CompanyDashboard({
               <div style={{ padding: '2rem 1rem', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px border-dashed rgba(255,255,255,0.1)' }}>
                 <Clock size={32} style={{ color: '#38bdf8', marginBottom: '0.75rem' }} />
                 <h4 style={{ color: '#f8fafc', fontSize: '1.05rem', fontWeight: '700', marginBottom: '0.35rem' }}>
-                  Awaiting Admin Candidate Selection
+                  Awaiting Admin Candidate Forwarding
                 </h4>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', maxWidth: '580px', margin: '0 auto' }}>
-                  Central Admin is currently vetting incoming student applications. As soon as Admin manually selects the best matching candidates for {company.name}, they will appear here automatically for recruiter screening.
+                  Central Admin is currently vetting incoming student applications. As soon as Admin manually selects the best matching candidates for {company.name}, they will appear here automatically with full profiles for recruiter screening.
                 </p>
+              </div>
+            )}
+
+            {/* Candidates in Central Admin Screening Queue (Student Details Protected until Admin Forwarding) */}
+            {pendingVettingApps.length > 0 && (
+              <div style={{ marginTop: '2.5rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <div>
+                    <h4 style={{ color: '#f8fafc', fontSize: '1.05rem', fontWeight: '700', margin: 0, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <Lock size={16} color="#fbbf24" /> Applications in Central Admin Queue ({pendingVettingApps.length})
+                    </h4>
+                    <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                      Candidate profiles undergoing academic check, ATS analysis, and proctoring. Details are unlocked upon Admin forwarding.
+                    </span>
+                  </div>
+                  <span className="badge badge-pending">
+                    🔒 Identity Protected
+                  </span>
+                </div>
+
+                <div className="data-table-container">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Candidate Profile</th>
+                        <th>Contact Details</th>
+                        <th>Academic Info</th>
+                        <th>Applied Role</th>
+                        <th>Status</th>
+                        <th>Recruiter Access</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pendingVettingApps.map(app => (
+                        <tr key={app.id}>
+                          <td>
+                            <strong style={{ color: '#94a3b8', display: 'block', fontSize: '0.9rem' }}>
+                              Candidate #{app.id?.slice(-4) || 'QUEUED'}
+                            </strong>
+                            <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                              Registered Application
+                            </span>
+                          </td>
+                          <td>
+                            <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                              <Lock size={12} color="#fbbf24" /> Hidden until Admin Forwarding
+                            </span>
+                          </td>
+                          <td>
+                            <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                              <ShieldCheck size={12} color="#38bdf8" /> Under Admin Review
+                            </span>
+                          </td>
+                          <td>
+                            <strong style={{ color: '#e2e8f0', fontSize: '0.85rem' }}>
+                              {app.internshipTitle}
+                            </strong>
+                            <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block' }}>
+                              Applied: {app.appliedDate}
+                            </span>
+                          </td>
+                          <td>
+                            <span className="badge badge-pending" style={{ fontSize: '0.74rem' }}>
+                              ⏳ In Admin Screening Queue
+                            </span>
+                          </td>
+                          <td>
+                            <span style={{ fontSize: '0.78rem', color: '#94a3b8', fontStyle: 'italic' }}>
+                              🔒 Unlocked when Admin forwards
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>
