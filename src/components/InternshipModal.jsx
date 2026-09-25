@@ -116,37 +116,29 @@ export default function InternshipModal({
           <X size={20} />
         </button>
 
-        {/* Modal Header - Role Title & Domain Track (Company identity withheld from student view) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-          <div style={{
-            width: '60px',
-            height: '60px',
-            borderRadius: '14px',
-            background: 'linear-gradient(135deg, #1e3a8a, #0284c7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#ffffff',
-            boxShadow: '0 4px 14px rgba(2, 132, 199, 0.25)',
-            flexShrink: 0
-          }}>
-            <Layers size={30} />
+        {/* Modal Header - Role Title & Domain Track */}
+        <div style={{ marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid #f1f5f9' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.4rem' }}>
+            <span style={{ 
+              background: '#eff6ff', 
+              color: '#1d4ed8', 
+              border: '1px solid #bfdbfe', 
+              borderRadius: '6px', 
+              fontSize: '0.82rem', 
+              padding: '0.2rem 0.65rem', 
+              fontWeight: '700' 
+            }}>
+              {internship.domain || 'Domain Track'}
+            </span>
+            <span className="badge badge-verified">
+              <ShieldCheck size={13} /> Verified Role
+            </span>
           </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '0.95rem', color: '#1e3a8a', fontWeight: '800' }}>
-                {internship.domain || 'Domain Track'}
-              </span>
-              <span className="badge badge-verified">
-                <ShieldCheck size={13} /> Verified Role
-              </span>
-            </div>
-            <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#0f172a', marginTop: '2px' }}>
-              {internship.title}
-            </h2>
-            <div style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '2px' }}>
-              <Briefcase size={12} /> Partner Corporate Hiring Pool (Centrally Vetted)
-            </div>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', margin: '0.25rem 0' }}>
+            {internship.title}
+          </h2>
+          <div style={{ fontSize: '0.8rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '4px' }}>
+            <Briefcase size={13} /> Partner Corporate Hiring Pool (Centrally Vetted)
           </div>
         </div>
 

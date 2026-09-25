@@ -1428,26 +1428,25 @@ export default function StudentDashboard({
                   }}>
                     <div>
                       {/* Track Header */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.85rem' }}>
-                        <div style={{
-                          width: '46px',
-                          height: '46px',
-                          borderRadius: '10px',
-                          background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
-                          color: '#ffffff',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                          boxShadow: '0 2px 6px rgba(30, 58, 138, 0.25)'
-                        }}>
-                          <Briefcase size={22} />
-                        </div>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '0.85rem' }}>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <h4 style={{ fontSize: '1rem', fontWeight: '800', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {comp.industry || `Enterprise Track #${idx + 1}`}
-                          </h4>
-                          <span className="badge badge-verified" style={{ fontSize: '0.68rem', padding: '0.1rem 0.45rem', marginTop: '2px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
+                            <span style={{
+                              background: '#eff6ff',
+                              color: '#1d4ed8',
+                              border: '1px solid #bfdbfe',
+                              fontSize: '0.7rem',
+                              fontWeight: '700',
+                              padding: '0.15rem 0.5rem',
+                              borderRadius: '5px'
+                            }}>
+                              Track #{idx + 1}
+                            </span>
+                            <h4 style={{ fontSize: '1rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+                              {comp.industry || `Enterprise Track #${idx + 1}`}
+                            </h4>
+                          </div>
+                          <span style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '3px', marginTop: '3px' }}>
                             <ShieldCheck size={11} /> Verified Partner Pool
                           </span>
                         </div>

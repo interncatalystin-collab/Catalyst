@@ -17,68 +17,57 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
       boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
       transition: 'all 0.2s ease'
     }}>
-      {/* Top Header - Domain Track & Verified Status (Company identity withheld for student view) */}
+      {/* Top Header - Domain Track & Verified Status */}
       <div style={{ 
         display: 'flex', 
         alignItems: 'flex-start', 
         justifyContent: 'space-between', 
         gap: '0.5rem', 
-        marginBottom: '0.85rem',
-        flexWrap: 'wrap'
+        marginBottom: '0.85rem'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minWidth: 0, flex: '1 1 180px' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #1e3a8a, #0284c7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#ffffff',
-            boxShadow: '0 2px 8px rgba(2, 132, 199, 0.25)',
-            flexShrink: 0
-          }}>
-            <Layers size={20} />
-          </div>
-          <div style={{ minWidth: 0, flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
-              <span style={{ fontWeight: '800', fontSize: '0.875rem', color: '#1e3a8a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
-                {internship.domain || 'Domain Track'}
-              </span>
-              <span style={{ 
-                background: '#f0fdf4', 
-                color: '#15803d', 
-                border: '1px solid #bbf7d0', 
-                borderRadius: '4px', 
-                fontSize: '0.68rem', 
-                padding: '1px 5px', 
-                fontWeight: '700',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '3px',
-                flexShrink: 0
-              }}>
-                <ShieldCheck size={11} /> Verified Role
-              </span>
-            </div>
-            <span style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '2px' }}>
-              <Briefcase size={12} /> Partner Enterprise Pool
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
+            <span style={{ 
+              background: '#eff6ff', 
+              color: '#1d4ed8', 
+              border: '1px solid #bfdbfe', 
+              borderRadius: '6px', 
+              fontSize: '0.78rem', 
+              padding: '0.2rem 0.55rem', 
+              fontWeight: '700'
+            }}>
+              {internship.domain || 'Domain Track'}
+            </span>
+            <span style={{ 
+              background: '#f0fdf4', 
+              color: '#15803d', 
+              border: '1px solid #bbf7d0', 
+              borderRadius: '6px', 
+              fontSize: '0.72rem', 
+              padding: '0.2rem 0.5rem', 
+              fontWeight: '700',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '3px'
+            }}>
+              <ShieldCheck size={12} /> Verified Role
             </span>
           </div>
+          <span style={{ fontSize: '0.76rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.3rem', marginTop: '4px' }}>
+            <Briefcase size={12} /> Partner Enterprise Pool
+          </span>
         </div>
 
         {/* Work Mode & Type Badge */}
-        <div style={{ display: 'flex', gap: '0.3rem', flexShrink: 0, flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '0.3rem', flexShrink: 0, alignItems: 'center' }}>
           <span style={{
             background: '#f8fafc',
             border: '1px solid #e2e8f0',
             color: '#334155',
             borderRadius: '6px',
             fontSize: '0.725rem',
-            padding: '2px 7px',
-            fontWeight: '600',
-            whiteSpace: 'nowrap'
+            padding: '2px 8px',
+            fontWeight: '600'
           }}>
             {internship.workMode}
           </span>
@@ -88,9 +77,8 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
             color: '#334155',
             borderRadius: '6px',
             fontSize: '0.725rem',
-            padding: '2px 7px',
-            fontWeight: '600',
-            whiteSpace: 'nowrap'
+            padding: '2px 8px',
+            fontWeight: '600'
           }}>
             {isFullTime ? 'Full-Time' : 'Part-Time'}
           </span>
