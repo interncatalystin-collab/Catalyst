@@ -754,12 +754,7 @@ export default function AptitudeAssessment({ onAddToast, studentName = 'Candidat
         </div>
 
         {/* Main Grid: Left Question Pane, Right Palette */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1fr) 320px',
-          gap: '1.5rem',
-          alignItems: 'start'
-        }}>
+        <div className="assessment-main-grid">
           {/* Question Card */}
           <div style={{
             background: '#ffffff',

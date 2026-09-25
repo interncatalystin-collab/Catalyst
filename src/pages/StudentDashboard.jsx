@@ -436,8 +436,8 @@ export default function StudentDashboard({
       id: `app-domain-${Date.now()}`,
       internshipTitle: `${currentDomainRole.roleTitle} (Domain Track)`,
       domain: currentDomainRole.domainName,
-      companyName: `Connected Partner Pool (${currentDomainRole.connectedCompanies?.length || 0} Companies)`,
-      connectedCompanies: (currentDomainRole.connectedCompanies || []).map(c => c.name)
+      companyName: `Domain Partner Pool (${currentDomainRole.connectedCompanies?.length || 0} Enterprise Tracks)`,
+      connectedCompanies: (currentDomainRole.connectedCompanies || []).map((c, idx) => c.industry || `Enterprise Track #${idx + 1}`)
     };
     setPostApplyModalApp(targetAssessmentApp);
   };
@@ -1168,23 +1168,23 @@ export default function StudentDashboard({
               gap: '1rem',
               boxShadow: 'var(--shadow-sm)'
             }}>
-              <div>
+              <div style={{ flex: 1, minWidth: 'min(100%, 280px)' }}>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <Sparkles size={18} style={{ color: '#1e3a8a' }} /> Domain-Based Central Placement
                 </h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '2px' }}>
-                  Students apply directly for their <strong>Domain Role</strong>. You cannot apply to individual companies. Your single domain application pools you across all connected partner companies below.
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.5' }}>
+                  Students apply directly for their specialized <strong>Domain Role</strong>. Candidate privacy and enterprise partner tracks are centrally governed until official administrative shortlisting.
                 </p>
               </div>
 
               {/* Domain Selector */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '0.825rem', fontWeight: '700', color: 'var(--text-muted)' }}>Target Domain:</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', width: '100%', maxWidth: '420px' }}>
+                <span style={{ fontSize: '0.825rem', fontWeight: '700', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Target Domain:</span>
                 <select 
                   value={selectedDomainId || currentDomainRole.id}
                   onChange={(e) => setSelectedDomainId(e.target.value)}
                   className="form-select"
-                  style={{ width: 'auto', padding: '0.45rem 0.85rem', fontSize: '0.85rem', fontWeight: '600' }}
+                  style={{ flex: 1, minWidth: 'min(100%, 200px)', maxWidth: '100%', padding: '0.45rem 0.85rem', fontSize: '0.85rem', fontWeight: '600' }}
                 >
                   {DOMAIN_ROLES_DATA.map(d => (
                     <option key={d.id} value={d.id}>
@@ -1197,14 +1197,14 @@ export default function StudentDashboard({
 
             {/* Current Domain Role Card */}
             <div className="glass-card" style={{
-              padding: '2rem',
+              padding: '1.75rem',
               marginBottom: '2rem',
               border: '1px solid #cbd5e1',
               boxShadow: 'var(--shadow-md)'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1.25rem' }}>
+                <div style={{ flex: 1, minWidth: 'min(100%, 280px)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
                     <span className="badge badge-verified" style={{ background: '#1e3a8a', color: '#fff' }}>
                       Verified Domain Track
                     </span>
@@ -1216,7 +1216,7 @@ export default function StudentDashboard({
                     </span>
                   </div>
 
-                  <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
+                  <h2 style={{ fontSize: '1.65rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
                     {currentDomainRole.roleTitle}
                   </h2>
                   <p style={{ color: 'var(--text-dim)', fontSize: '0.925rem', maxWidth: '850px', lineHeight: '1.6' }}>
@@ -1225,7 +1225,7 @@ export default function StudentDashboard({
                 </div>
 
                 {/* Application Status / Action Button */}
-                <div>
+                <div style={{ width: '100%', maxWidth: '300px' }}>
                   {existingDomainApp ? (
                     <div style={{
                       background: '#f0fdf4',
@@ -1233,7 +1233,7 @@ export default function StudentDashboard({
                       borderRadius: 'var(--radius-md)',
                       padding: '1rem 1.25rem',
                       textAlign: 'center',
-                      minWidth: '270px'
+                      width: '100%'
                     }}>
                       <div style={{ color: '#15803d', fontWeight: '800', fontSize: '0.92rem', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}>
                         <CheckCircle size={16} /> Applied for this Domain!
@@ -1307,14 +1307,7 @@ export default function StudentDashboard({
               </div>
 
               {/* 4 Stat Metric Cards */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                gap: '1rem',
-                marginTop: '1.75rem',
-                paddingTop: '1.5rem',
-                borderTop: '1px solid var(--border-color)'
-              }}>
+              <div className="domain-stats-grid">
                 <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                     <Users size={14} style={{ color: '#1e3a8a' }} /> ROLE VACANCIES
@@ -1323,19 +1316,19 @@ export default function StudentDashboard({
                     {currentDomainRole.totalVacancies} Open Seats
                   </strong>
                   <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: '600' }}>
-                    Available across {currentDomainRole.connectedCompanies.length} companies
+                    Available across {currentDomainRole.connectedCompanies.length} Enterprise Tracks
                   </span>
                 </div>
 
                 <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                    <Building2 size={14} style={{ color: '#0284c7' }} /> CONNECTED COMPANIES
+                    <Building2 size={14} style={{ color: '#0284c7' }} /> HIRING PARTNERS
                   </span>
                   <strong style={{ fontSize: '1.4rem', color: '#0f172a', display: 'block', marginTop: '4px' }}>
-                    {currentDomainRole.connectedCompanies.length} Partners
+                    {currentDomainRole.connectedCompanies.length} Enterprise Tracks
                   </strong>
                   <span style={{ fontSize: '0.75rem', color: '#0284c7', fontWeight: '600' }}>
-                    100% Verified Corporate Badges
+                    100% Verified Corporate Tracks
                   </span>
                 </div>
 
@@ -1393,62 +1386,69 @@ export default function StudentDashboard({
               </div>
             </div>
 
-            {/* List of Connected Companies */}
+            {/* List of Available Domain Vacancy Tracks */}
             <div style={{ marginBottom: '2.5rem' }}>
-              <div style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '0.75rem' }}>
                 <div>
-                  <h3 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                    <Building2 size={20} style={{ color: '#1e3a8a' }} />
-                    Connected Companies Hiring for this Role ({currentDomainRole.connectedCompanies.length})
+                  <h3 style={{ fontSize: '1.3rem', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                    <Briefcase size={20} style={{ color: '#1e3a8a' }} />
+                    Available Vacancy Tracks for this Domain ({currentDomainRole.connectedCompanies.length} Verified Tracks)
                   </h3>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '2px' }}>
-                    All companies listed below hire from your domain application pool. Individual company applications are disabled.
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '3px' }}>
+                    All verified partner openings are pooled under this single Domain Application. Admin manages candidate vetting and company matching.
                   </p>
                 </div>
 
                 <div style={{
                   background: '#f1f5f9',
-                  padding: '0.35rem 0.75rem',
+                  padding: '0.4rem 0.85rem',
                   borderRadius: '6px',
                   fontSize: '0.78rem',
                   color: '#475569',
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.35rem'
+                  gap: '0.35rem',
+                  fontWeight: '600'
                 }}>
                   <Lock size={12} /> Apply to Domain Role only
                 </div>
               </div>
 
-              {/* Grid of Connected Company Cards */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-                gap: '1.25rem'
-              }}>
-                {currentDomainRole.connectedCompanies.map((comp) => (
-                  <div key={comp.id} className="glass-card" style={{
+              {/* Grid of Vacancy Track Cards */}
+              <div className="domain-tracks-grid">
+                {currentDomainRole.connectedCompanies.map((comp, idx) => (
+                  <div key={comp.id || idx} className="glass-card" style={{
                     padding: '1.25rem',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     border: '1px solid var(--border-color)',
-                    background: '#ffffff'
+                    background: '#ffffff',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
                   }}>
                     <div>
-                      {/* Company Header */}
+                      {/* Track Header */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.85rem' }}>
-                        <img 
-                          src={comp.logo} 
-                          alt={comp.name}
-                          style={{ width: '48px', height: '48px', borderRadius: '10px', objectFit: 'cover', border: '1px solid var(--border-color)' }}
-                        />
-                        <div style={{ flex: 1 }}>
-                          <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                            {comp.name}
+                        <div style={{
+                          width: '46px',
+                          height: '46px',
+                          borderRadius: '10px',
+                          background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+                          color: '#ffffff',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                          boxShadow: '0 2px 6px rgba(30, 58, 138, 0.25)'
+                        }}>
+                          <Briefcase size={22} />
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <h4 style={{ fontSize: '1rem', fontWeight: '800', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {comp.industry || `Enterprise Track #${idx + 1}`}
                           </h4>
-                          <span className="badge badge-verified" style={{ fontSize: '0.68rem', padding: '0.1rem 0.4rem', marginTop: '2px' }}>
-                            <ShieldCheck size={11} /> Verified Partner
+                          <span className="badge badge-verified" style={{ fontSize: '0.68rem', padding: '0.1rem 0.45rem', marginTop: '2px' }}>
+                            <ShieldCheck size={11} /> Verified Partner Pool
                           </span>
                         </div>
                         <div style={{
@@ -1459,29 +1459,30 @@ export default function StudentDashboard({
                           borderRadius: '6px',
                           fontSize: '0.78rem',
                           fontWeight: '800',
-                          textAlign: 'center'
+                          textAlign: 'center',
+                          flexShrink: 0
                         }}>
                           {comp.vacancies} Seats
                         </div>
                       </div>
 
                       {/* Details Strip */}
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.825rem', color: 'var(--text-dim)', marginBottom: '0.85rem' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', fontSize: '0.825rem', color: 'var(--text-dim)', marginBottom: '0.85rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                          <MapPin size={13} style={{ color: 'var(--text-muted)' }} />
+                          <MapPin size={13} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
                           <span>{comp.location} • <strong>{comp.workMode}</strong></span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                          <ShieldCheck size={13} style={{ color: '#16a34a' }} />
-                          <span style={{ color: '#16a34a', fontWeight: '600' }}>Verified Corporate Partner</span>
+                          <DollarSign size={13} style={{ color: '#16a34a', flexShrink: 0 }} />
+                          <span style={{ color: '#16a34a', fontWeight: '700' }}>Stipend: {comp.stipend || 'Competitive Domain Stipend'}</span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                          <Mail size={13} style={{ color: 'var(--text-muted)' }} />
-                          <span>Supervisor: {comp.supervisor} ({comp.supervisorEmail})</span>
+                          <ShieldCheck size={13} style={{ color: '#0284c7', flexShrink: 0 }} />
+                          <span style={{ color: '#0284c7', fontWeight: '600' }}>Central Placement Allocation Track</span>
                         </div>
                       </div>
 
-                      {/* Highlight */}
+                      {/* Highlight / Curriculum Scope */}
                       <div style={{
                         background: '#f8fafc',
                         padding: '0.65rem 0.85rem',
@@ -1489,9 +1490,9 @@ export default function StudentDashboard({
                         fontSize: '0.78rem',
                         color: 'var(--text-dim)',
                         border: '1px solid var(--border-color)',
-                        lineHeight: '1.4'
+                        lineHeight: '1.45'
                       }}>
-                        <strong>Focus:</strong> {comp.highlights}
+                        <strong style={{ color: '#0f172a' }}>Scope & Focus:</strong> {comp.highlights}
                       </div>
                     </div>
 
@@ -1503,10 +1504,12 @@ export default function StudentDashboard({
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      fontSize: '0.75rem'
+                      fontSize: '0.75rem',
+                      gap: '0.5rem',
+                      flexWrap: 'wrap'
                     }}>
                       <span style={{ color: '#1e3a8a', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                        <ShieldCheck size={12} /> Pooled Hiring Partner
+                        <ShieldCheck size={12} /> Pooled Hiring Track
                       </span>
                       <span style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
                         <Lock size={11} /> Covered under Domain App
@@ -1638,7 +1641,7 @@ export default function StudentDashboard({
                               <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#334155', marginBottom: '0.65rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                                 📍 Live Hiring Pipeline Tracker for {app.domain}
                               </div>
-                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', textAlign: 'center' }}>
+                              <div className="pipeline-stepper-grid">
                                 <div style={{ background: '#f0fdf4', padding: '0.5rem', borderRadius: '8px', border: '1px solid #bbf7d0' }}>
                                   <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#16a34a', display: 'block' }}>STAGE 1 ✓</span>
                                   <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>Admin Registered</strong>
@@ -1657,7 +1660,7 @@ export default function StudentDashboard({
                                   <span style={{ fontSize: '0.7rem', fontWeight: '800', color: app.forwardedToEmployer || app.status === 'Selected' || app.status === 'Hired' ? '#16a34a' : '#64748b', display: 'block' }}>
                                     STAGE 3 {app.forwardedToEmployer || app.status === 'Selected' || app.status === 'Hired' ? '✓' : '🔒'}
                                   </span>
-                                  <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>Sent to Company</strong>
+                                  <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>Sent to Partner</strong>
                                   <span style={{ fontSize: '0.68rem', color: app.forwardedToEmployer ? '#166534' : '#64748b' }}>
                                     {app.forwardedToEmployer ? 'Top Candidate Shortlisted & Forwarded to Hiring Partner' : 'Admin Selection Queue'}
                                   </span>
@@ -1666,7 +1669,7 @@ export default function StudentDashboard({
                                   <span style={{ fontSize: '0.7rem', fontWeight: '800', color: app.status === 'Selected' || app.status === 'Hired' ? '#16a34a' : '#64748b', display: 'block' }}>
                                     STAGE 4 {app.status === 'Selected' || app.status === 'Hired' ? '🎉' : '⏳'}
                                   </span>
-                                  <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>Recruiter Contact & Hire</strong>
+                                  <strong style={{ fontSize: '0.78rem', color: '#0f172a', display: 'block' }}>Placement Offer & Hire</strong>
                                   <span style={{ fontSize: '0.68rem', color: app.status === 'Selected' || app.status === 'Hired' ? '#166534' : '#64748b' }}>
                                     {app.status === 'Selected' || app.status === 'Hired' ? 'Offered & Contacted!' : 'Awaiting Recruiter Call'}
                                   </span>
@@ -1801,7 +1804,7 @@ export default function StudentDashboard({
                 paddingTop: '1.25rem',
                 borderTop: '1px solid #e2e8f0',
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
                 gap: '1rem'
               }}>
                 <div style={{ background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
@@ -1834,7 +1837,7 @@ export default function StudentDashboard({
                 Personalized Guidance Modules & Services
               </h3>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '1.25rem' }}>
                 
                 {/* Module 1: 1-on-1 Mock Interview */}
                 <div className="glass-card" style={{ padding: '1.5rem', background: '#ffffff', borderRadius: '14px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -1955,7 +1958,7 @@ export default function StudentDashboard({
                 </span>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: '1rem' }}>
                 
                 {/* Mentor Pool Item 1 */}
                 <div style={{ padding: '1rem', border: '1px solid #f1f5f9', borderRadius: '12px', background: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.85rem' }}>

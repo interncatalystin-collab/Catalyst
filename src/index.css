@@ -1169,3 +1169,92 @@ html, body {
   }
 }
 
+/* ==========================================================================
+   Domain Role, Vacancy Tracks & Stepper Mobile Responsive Classes
+   ========================================================================== */
+
+.domain-tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .domain-tracks-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+}
+
+.domain-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 1rem;
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 480px) {
+  .domain-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.65rem !important;
+  }
+}
+
+@media (max-width: 340px) {
+  .domain-stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.pipeline-stepper-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .pipeline-stepper-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.65rem !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .pipeline-stepper-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+}
+
+.assessment-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .assessment-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Data Table Clean Mobile Swipe */
+@media (max-width: 768px) {
+  .data-table-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    border-radius: 10px !important;
+  }
+
+  .data-table {
+    display: table !important;
+    min-width: 660px !important;
+    width: 100% !important;
+  }
+}
+

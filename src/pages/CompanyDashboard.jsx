@@ -216,14 +216,23 @@ export default function CompanyDashboard({
   return (
     <div style={{ padding: '3rem 0' }}>
       <div className="container">
-        {/* Header Summary */}
         <div className="glass-card" style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-            <img 
-              src={company.logo} 
-              alt={company.name}
-              style={{ width: '70px', height: '70px', borderRadius: '14px', objectFit: 'cover', background: '#fff', border: '1px solid #e2e8f0' }}
-            />
+            <div style={{ position: 'relative', width: '70px', height: '70px', flexShrink: 0 }}>
+              <img 
+                src={company.logo || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=120&q=80'} 
+                alt={company.name}
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  const fb = e.currentTarget.nextElementSibling;
+                  if (fb) fb.style.display = 'flex';
+                }}
+                style={{ width: '70px', height: '70px', borderRadius: '14px', objectFit: 'cover', background: '#fff', border: '1px solid #e2e8f0' }}
+              />
+              <div style={{ display: 'none', width: '70px', height: '70px', borderRadius: '14px', background: '#eff6ff', border: '1px solid #bfdbfe', color: '#1e3a8a', alignItems: 'center', justifyContent: 'center' }}>
+                <Building2 size={32} />
+              </div>
+            </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
                 <h1 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#0f172a' }}>{company.name}</h1>
