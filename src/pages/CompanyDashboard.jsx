@@ -57,6 +57,7 @@ export default function CompanyDashboard({
 
   // Post Role Wizard Form
   const [roleTitle, setRoleTitle] = useState('');
+  const [trackType, setTrackType] = useState('IT'); // 'IT' or 'Non-IT'
   const [industry, setIndustry] = useState(company.industry || 'Software & IT');
   const [workMode, setWorkMode] = useState('Online');
   const [internshipType, setInternshipType] = useState('Full-time'); // 'Full-time' or 'Part-time'
@@ -140,6 +141,7 @@ export default function CompanyDashboard({
     const newOpportunity = {
       id: `int-${Date.now()}`,
       title: roleTitle,
+      trackType,
       companyId: company.id,
       companyName: company.name,
       logo: company.logo,
@@ -401,7 +403,7 @@ export default function CompanyDashboard({
               Handwritten Requirements: Include specific role title, required skills, duration, work mode (Online/Offline), stipend amount, working hours, openings count, application deadline, and supervisor details.
             </p>
 
-            <div className="grid-2">
+            <div className="grid-3">
               <div className="form-group">
                 <label className="form-label">Role Title <span className="required">*</span></label>
                 <input 
@@ -414,13 +416,30 @@ export default function CompanyDashboard({
                 />
               </div>
               <div className="form-group">
+                <label className="form-label">Internship Track <span className="required">*</span></label>
+                <select className="form-select" value={trackType} onChange={(e) => setTrackType(e.target.value)}>
+                  <option value="IT">💻 IT Track (Tech, Software & AI)</option>
+                  <option value="Non-IT">🏢 Non-IT Track (Business, HR & Finance)</option>
+                </select>
+              </div>
+              <div className="form-group">
                 <label className="form-label">Industry Category</label>
                 <select className="form-select" value={industry} onChange={(e) => setIndustry(e.target.value)}>
-                  <option value="Software & IT">Software & IT</option>
-                  <option value="Artificial Intelligence">Artificial Intelligence</option>
-                  <option value="Design & Media">Design & Media</option>
-                  <option value="Cybersecurity">Cybersecurity</option>
-                  <option value="Marketing & Sales">Marketing & Sales</option>
+                  <optgroup label="💻 IT Domains">
+                    <option value="Software & IT">Software & IT</option>
+                    <option value="Artificial Intelligence">Artificial Intelligence & ML</option>
+                    <option value="Data & Analytics">Data Science & Analytics</option>
+                    <option value="Cloud & DevOps">Cloud Infrastructure & DevOps</option>
+                    <option value="Cybersecurity">Cybersecurity & Networking</option>
+                  </optgroup>
+                  <optgroup label="🏢 Non-IT Domains">
+                    <option value="Human Resources">Human Resources & Talent Acquisition</option>
+                    <option value="Finance & Accounting">Finance & Accounting</option>
+                    <option value="Business Development">Business Development & Sales</option>
+                    <option value="Operations & Logistics">Operations & Supply Chain</option>
+                    <option value="Content & Marketing">Content Writing, PR & Marketing</option>
+                    <option value="Design & Media">UI/UX & Creative Design</option>
+                  </optgroup>
                 </select>
               </div>
             </div>
@@ -810,7 +829,23 @@ export default function CompanyDashboard({
                       const hired = item.hiredCount || 0;
                       return (
                         <tr key={item.id}>
-                          <td><strong style={{ color: '#fff' }}>{item.title}</strong></td>
+                          <td>
+                            <strong style={{ color: '#fff' }}>{item.title}</strong>
+                            {item.trackType && (
+                              <span style={{ 
+                                marginLeft: '8px', 
+                                fontSize: '0.7rem', 
+                                padding: '2px 7px', 
+                                borderRadius: '4px', 
+                                background: item.trackType === 'Non-IT' ? 'rgba(245, 158, 11, 0.2)' : 'rgba(59, 130, 246, 0.2)', 
+                                color: item.trackType === 'Non-IT' ? '#fbbf24' : '#60a5fa', 
+                                fontWeight: '700',
+                                border: `1px solid ${item.trackType === 'Non-IT' ? 'rgba(245, 158, 11, 0.35)' : 'rgba(59, 130, 246, 0.35)'}`
+                              }}>
+                                {item.trackType === 'Non-IT' ? '🏢 Non-IT' : '💻 IT'}
+                              </span>
+                            )}
+                          </td>
                           <td>{item.workMode}</td>
                           <td style={{ color: '#10b981', fontWeight: '600' }}>{item.stipendAmount}</td>
                           <td><strong>{item.openings} Seats</strong></td>

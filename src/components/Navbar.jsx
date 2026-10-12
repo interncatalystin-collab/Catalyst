@@ -19,7 +19,17 @@ import {
   Lock
 } from 'lucide-react';
 
-export default function Navbar({ activeTab, setActiveTab, currentRole, setCurrentRole, unreadNotificationsCount }) {
+export default function Navbar({ 
+  activeTab, 
+  setActiveTab, 
+  currentRole, 
+  setCurrentRole, 
+  unreadNotificationsCount,
+  onGoBack,
+  hasHistory = false,
+  previousTab = 'home',
+  getTabLabel = (t) => t
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleNavClick = (tabId) => {
@@ -40,18 +50,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
         <div className="nav-container">
           {/* Logo & Mobile Back Button */}
           <div className="nav-brand-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
-            {activeTab !== 'home' && (
-              <button 
-                type="button"
-                className="mobile-header-back-btn"
-                onClick={() => handleNavClick('home')}
-                aria-label="Back to Home"
-                title="Back to Home"
-              >
-                <ArrowLeft size={16} />
-                <span>Home</span>
-              </button>
-            )}
+
 
             <Logo 
               height={38} 
@@ -192,31 +191,7 @@ export default function Navbar({ activeTab, setActiveTab, currentRole, setCurren
           gap: '0.5rem',
           boxShadow: '0 12px 30px rgba(0,0,0,0.5)'
         }}>
-          {/* Quick Return to Home Button when on another page */}
-          {activeTab !== 'home' && (
-            <button 
-              type="button"
-              className="btn" 
-              style={{ 
-                background: 'rgba(56, 189, 248, 0.15)', 
-                color: '#38bdf8', 
-                border: '1px solid #38bdf8', 
-                fontWeight: '700', 
-                padding: '0.75rem 1rem', 
-                fontSize: '0.9rem', 
-                borderRadius: '8px', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '0.5rem', 
-                minHeight: '44px',
-                marginBottom: '0.25rem'
-              }} 
-              onClick={() => handleNavClick('home')}
-            >
-              <ArrowLeft size={18} />
-              <span>← Back to Home Page</span>
-            </button>
-          )}
+
 
           {currentRole === 'visitor' ? (
             <button 

@@ -45,7 +45,7 @@ import {
   Shield,
   Key
 } from 'lucide-react';
-import { DOMAIN_ROLES_DATA, getDomainRoleForStudent } from '../data/domainRolesData';
+import { DOMAIN_ROLES_DATA, IT_DOMAINS, NON_IT_DOMAINS, getDomainRoleForStudent } from '../data/domainRolesData';
 import ProctoredAssessmentModal from '../components/ProctoredAssessmentModal';
 import { ALL_CITIES } from '../data/citiesData';
 
@@ -279,6 +279,35 @@ export default function StudentDashboard({
       }
     }
   }, [safeProfile]);
+
+  // Profile Completion Percentage Calculation
+  const calculateProfileCompletion = () => {
+    const checks = [
+      { name: 'Full Name', completed: Boolean(name && name.trim()) },
+      { name: 'Email Address', completed: Boolean(email && email.trim()) },
+      { name: 'Phone Number', completed: Boolean(phone && phone.trim()) },
+      { name: 'Profile Photo', completed: Boolean(avatar && !avatar.includes('default') && avatar.trim()) },
+      { name: 'Domain Preference', completed: Boolean(domain && domain.trim()) },
+      { name: 'College / Institution', completed: Boolean(institution && institution.trim()) },
+      { name: 'Degree & Branch', completed: Boolean(degree && branch) },
+      { name: 'Year of Study', completed: Boolean(yearOfStudy) },
+      { name: 'CGPA / Percentage', completed: Boolean(cgpa && String(cgpa).trim()) },
+      { name: 'Graduation Year', completed: Boolean(graduationYear) },
+      { name: 'City & State', completed: Boolean(city && city.trim()) },
+      { name: 'Work Mode Preference', completed: Boolean(internshipPreference) },
+      { name: 'Key Skills', completed: Boolean(skillsInput && skillsInput.trim()) },
+      { name: 'Resume Link', completed: Boolean(resumeUrl && resumeUrl.trim()) },
+      { name: 'LinkedIn or GitHub', completed: Boolean((linkedinUrl && linkedinUrl.trim()) || (githubUrl && githubUrl.trim())) },
+    ];
+
+    const completedCount = checks.filter(c => c.completed).length;
+    const percentage = Math.round((completedCount / checks.length) * 100);
+    const missing = checks.filter(c => !c.completed).map(c => c.name);
+
+    return { percentage, completedCount, totalCount: checks.length, missing };
+  };
+
+  const profileCompletion = calculateProfileCompletion();
 
 
   // Photo Upload Handler with validation & FileReader dataURL
@@ -531,6 +560,21 @@ export default function StudentDashboard({
                   gap: '0.35rem'
                 }}>
                   🔥 {currentDomainRole.totalVacancies} Open Vacancies
+                </span>
+
+                <span style={{
+                  background: profileCompletion.percentage >= 80 ? '#f0fdf4' : 'rgba(37, 99, 235, 0.08)',
+                  color: profileCompletion.percentage >= 80 ? '#16a34a' : '#1e3a8a',
+                  border: profileCompletion.percentage >= 80 ? '1px solid #bbf7d0' : '1px solid #bfdbfe',
+                  fontSize: '0.8rem',
+                  fontWeight: '700',
+                  padding: '0.2rem 0.6rem',
+                  borderRadius: '6px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem'
+                }}>
+                  <CheckCircle2 size={13} /> Profile {profileCompletion.percentage}% Completed
                 </span>
 
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
@@ -1001,14 +1045,14 @@ export default function StudentDashboard({
           >
             <User size={16} /> Student Profile
             <span style={{
-              background: '#1e3a8a',
+              background: profileCompletion.percentage >= 80 ? '#16a34a' : '#1e3a8a',
               color: '#ffffff',
               fontSize: '0.7rem',
               fontWeight: '800',
-              padding: '0.15rem 0.45rem',
+              padding: '0.15rem 0.5rem',
               borderRadius: '10px'
             }}>
-              Profile
+              {profileCompletion.percentage}%
             </span>
           </button>
 
@@ -1186,11 +1230,20 @@ export default function StudentDashboard({
                   className="form-select"
                   style={{ flex: 1, minWidth: 'min(100%, 200px)', maxWidth: '100%', padding: '0.45rem 0.85rem', fontSize: '0.85rem', fontWeight: '600' }}
                 >
-                  {DOMAIN_ROLES_DATA.map(d => (
-                    <option key={d.id} value={d.id}>
-                      {d.domainName} ({d.totalVacancies} Vacancies)
-                    </option>
-                  ))}
+                  <optgroup label="💻 IT Placement Domains">
+                    {IT_DOMAINS.map(d => (
+                      <option key={d.id} value={d.id}>
+                        {d.domainName} ({d.totalVacancies} Vacancies)
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="🏢 Non-IT Placement Domains">
+                    {NON_IT_DOMAINS.map(d => (
+                      <option key={d.id} value={d.id}>
+                        {d.domainName} ({d.totalVacancies} Vacancies)
+                      </option>
+                    ))}
+                  </optgroup>
                 </select>
               </div>
             </div>
@@ -1205,6 +1258,14 @@ export default function StudentDashboard({
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1.25rem' }}>
                 <div style={{ flex: 1, minWidth: 'min(100%, 280px)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+                    <span className="badge" style={{ 
+                      background: currentDomainRole.trackType === 'Non-IT' ? '#d97706' : '#2563eb', 
+                      color: '#ffffff',
+                      fontWeight: '800',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                    }}>
+                      {currentDomainRole.trackType === 'Non-IT' ? '🏢 Non-IT Track' : '💻 IT Track'}
+                    </span>
                     <span className="badge badge-verified" style={{ background: '#1e3a8a', color: '#fff' }}>
                       Verified Domain Track
                     </span>
@@ -2014,7 +2075,7 @@ export default function StudentDashboard({
 
             {/* Profile Tab Header */}
             <div style={{
-              marginBottom: '2rem',
+              marginBottom: '1.5rem',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -2045,39 +2106,129 @@ export default function StudentDashboard({
                   </p>
                 </div>
               </div>
+            </div>
 
+            {/* Live Profile Completion Strength Meter */}
+            <div style={{
+              background: 'linear-gradient(135deg, #f8fafc 0%, #f0fdf4 100%)',
+              border: '1px solid #cbd5e1',
+              borderRadius: '14px',
+              padding: '1.25rem 1.5rem',
+              marginBottom: '2rem',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.85rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  <div style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '9px',
+                    background: profileCompletion.percentage >= 80 ? '#10b981' : '#0284c7',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: profileCompletion.percentage >= 80 ? '0 2px 6px rgba(16, 185, 129, 0.3)' : '0 2px 6px rgba(2, 132, 199, 0.3)'
+                  }}>
+                    {profileCompletion.percentage === 100 ? <CheckCircle2 size={18} /> : <Sparkles size={18} />}
+                  </div>
+                  <div>
+                    <strong style={{ fontSize: '1rem', color: '#0f172a', display: 'block' }}>
+                      Profile Completion Strength
+                    </strong>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                      {profileCompletion.completedCount} of {profileCompletion.totalCount} placement criteria fulfilled
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  <span style={{
+                    fontSize: '1.45rem',
+                    fontWeight: '900',
+                    color: profileCompletion.percentage >= 80 ? '#059669' : profileCompletion.percentage >= 50 ? '#0284c7' : '#d97706'
+                  }}>
+                    {profileCompletion.percentage}%
+                  </span>
+                  <span className="badge" style={{
+                    background: profileCompletion.percentage >= 80 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(2, 132, 199, 0.12)',
+                    color: profileCompletion.percentage >= 80 ? '#047857' : '#0369a1',
+                    border: profileCompletion.percentage >= 80 ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(2, 132, 199, 0.25)',
+                    fontWeight: '700',
+                    fontSize: '0.78rem'
+                  }}>
+                    {profileCompletion.percentage === 100 
+                      ? 'Recruiter Ready' 
+                      : profileCompletion.percentage >= 80 
+                        ? 'Strong Profile' 
+                        : profileCompletion.percentage >= 50 
+                          ? 'Good Progress' 
+                          : 'Incomplete'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Animated Progress Bar */}
+              <div style={{
+                width: '100%',
+                height: '10px',
+                background: '#e2e8f0',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                marginBottom: '0.75rem',
+                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.06)'
+              }}>
+                <div style={{
+                  width: `${profileCompletion.percentage}%`,
+                  height: '100%',
+                  background: profileCompletion.percentage >= 80 
+                    ? 'linear-gradient(90deg, #10b981 0%, #059669 100%)' 
+                    : profileCompletion.percentage >= 50 
+                      ? 'linear-gradient(90deg, #0284c7 0%, #2563eb 100%)' 
+                      : 'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)',
+                  borderRadius: '8px',
+                  transition: 'width 0.4s ease'
+                }} />
+              </div>
+
+              {/* Actionable Recommendations Checklist */}
+              {profileCompletion.percentage === 100 ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', color: '#16a34a', fontWeight: '700' }}>
+                  <CheckCircle2 size={16} /> All essential credentials and placement records verified. Partner enterprises have full visibility into your profile!
+                </div>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', fontSize: '0.8rem', color: '#64748b' }}>
+                  <span style={{ fontWeight: '700', color: '#334155' }}>Recommended to reach 100%:</span>
+                  {profileCompletion.missing.slice(0, 4).map((item, idx) => (
+                    <span 
+                      key={idx} 
+                      style={{
+                        background: '#ffffff',
+                        border: '1px solid #cbd5e1',
+                        padding: '0.2rem 0.55rem',
+                        borderRadius: '6px',
+                        fontSize: '0.75rem',
+                        color: '#1e40af',
+                        fontWeight: '600',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem'
+                      }}
+                    >
+                      + {item}
+                    </span>
+                  ))}
+                  {profileCompletion.missing.length > 4 && (
+                    <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '600' }}>
+                      +{profileCompletion.missing.length - 4} more
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* CANDIDATE REGISTRATION PROFILE FORM */}
             <div>
-                {/* Form Header Alert */}
-                <div style={{
-                  background: 'rgba(37, 99, 235, 0.08)',
-                  border: '1px solid #bfdbfe',
-                  borderRadius: '12px',
-                  padding: '1rem 1.25rem',
-                  marginBottom: '1.75rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  flexWrap: 'wrap',
-                  gap: '0.75rem'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <GraduationCap size={22} style={{ color: '#1e3a8a' }} />
-                    <div>
-                      <strong style={{ fontSize: '0.95rem', color: '#1e40af', display: 'block' }}>
-                        Official Candidate Registration Form
-                      </strong>
-                      <span style={{ fontSize: '0.8rem', color: '#3b82f6' }}>
-                        Keep your candidate photo, mandatory phone number, and academic credentials updated for corporate placement.
-                      </span>
-                    </div>
-                  </div>
-                  <span className="badge badge-verified" style={{ background: '#1e3a8a', color: '#ffffff' }}>
-                    Live Registration Mode
-                  </span>
-                </div>
 
                 {/* ======================================================== */}
                 {/* CANDIDATE PHOTO UPLOAD STATION                           */}
@@ -2335,9 +2486,16 @@ export default function StudentDashboard({
                       <div className="form-group">
                         <label className="form-label">Primary Placement Domain <span className="required">*</span></label>
                         <select className="form-select" value={domain} onChange={(e) => setDomain(e.target.value)}>
-                          {DOMAIN_ROLES_DATA.map(d => (
-                            <option key={d.id} value={d.domainName}>{d.domainName}</option>
-                          ))}
+                          <optgroup label="💻 IT Domains">
+                            {IT_DOMAINS.map(d => (
+                              <option key={d.id} value={d.domainName}>{d.domainName}</option>
+                            ))}
+                          </optgroup>
+                          <optgroup label="🏢 Non-IT Domains">
+                            {NON_IT_DOMAINS.map(d => (
+                              <option key={d.id} value={d.domainName}>{d.domainName}</option>
+                            ))}
+                          </optgroup>
                         </select>
                       </div>
 
@@ -2471,25 +2629,14 @@ export default function StudentDashboard({
                   </div>
 
                   {/* Submit Actions */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem' }}>
                     <button 
-                      type="button" 
-                      className="btn btn-emerald"
-                      onClick={() => setActiveTab('domain-role')}
-                      style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                      type="submit" 
+                      className="btn btn-primary"
+                      style={{ padding: '0.75rem 2rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                     >
-                      <Briefcase size={15} /> Proceed to Domain Roles ({currentDomainRole.totalVacancies} Seats) →
+                      <CheckCircle2 size={16} /> Save Registration Profile
                     </button>
-
-                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                      <button 
-                        type="submit" 
-                        className="btn btn-primary"
-                        style={{ padding: '0.75rem 2rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                      >
-                        <CheckCircle2 size={16} /> Save Registration Profile
-                      </button>
-                    </div>
                   </div>
                 </form>
               </div>

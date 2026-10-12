@@ -27,10 +27,54 @@ import {
   INITIAL_TESTIMONIALS 
 } from './data/mockData';
 
+export const getTabLabel = (tab) => {
+  switch (tab) {
+    case 'browse': return 'Find Internships';
+    case 'how-it-works': return 'How It Works';
+    case 'resume-templates':
+    case 'resources': return 'Resume Templates';
+    case 'about': return 'About Us';
+    case 'login': return 'Portal Sign In';
+    case 'register': return 'Student Registration';
+    case 'student-dash':
+    case 'student-profile': return 'Student Dashboard';
+    case 'company-dash':
+    case 'for-companies': return 'Company Dashboard';
+    case 'admin-dash': return 'Admin Dashboard';
+    case 'home':
+    default: return 'Home';
+  }
+};
+
 export default function App() {
-  // Navigation & Role State
+  // Navigation & Role State with History Tracking
   const [activeTab, setActiveTab] = useState('home'); // 'home', 'browse', 'how-it-works', 'resume-templates', 'for-companies', 'about', 'student-dash', 'company-dash', 'admin-dash', 'login'
+  const [navHistory, setNavHistory] = useState([]);
   const [currentRole, setCurrentRole] = useState('visitor'); // 'visitor', 'student', 'company', 'admin'
+
+  const handleNavigate = (nextTab) => {
+    if (typeof nextTab === 'function') {
+      setActiveTab(nextTab);
+      return;
+    }
+    if (nextTab === activeTab) return;
+    setNavHistory(prev => [...prev, activeTab]);
+    setActiveTab(nextTab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleGoBack = () => {
+    if (navHistory.length > 0) {
+      const prevTab = navHistory[navHistory.length - 1];
+      setNavHistory(prev => prev.slice(0, -1));
+      setActiveTab(prevTab);
+    } else {
+      setActiveTab('home');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const previousTab = navHistory.length > 0 ? navHistory[navHistory.length - 1] : 'home';
 
   // Portal Login Authentication State (Guards dashboards until credentials entered)
   const [authenticatedRoles, setAuthenticatedRoles] = useState({
@@ -509,42 +553,16 @@ export default function App() {
       {/* Global Navigation Header with RBAC Persona Switcher */}
       <Navbar 
         activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
+        setActiveTab={handleNavigate} 
         currentRole={currentRole} 
         setCurrentRole={setCurrentRole} 
         unreadNotificationsCount={3}
+        onGoBack={handleGoBack}
+        hasHistory={navHistory.length > 0}
+        previousTab={previousTab}
+        getTabLabel={getTabLabel}
       />
 
-      {/* Dedicated Mobile Back-to-Home Bar (Visible on mobile/tablet screens when outside Home) */}
-      {activeTab !== 'home' && (
-        <aside className="mobile-back-to-home-bar" aria-label="Mobile Navigation Back Bar">
-          <div className="mobile-back-bar-inner">
-            <button 
-              type="button"
-              className="mobile-back-home-btn-action"
-              onClick={() => {
-                setActiveTab('home');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              aria-label="Back to Home"
-            >
-              <ArrowLeft size={16} />
-              <span>Back to Home</span>
-            </button>
-            <span className="mobile-back-route-badge">
-              {activeTab === 'browse' && 'Browse Internships'}
-              {activeTab === 'how-it-works' && 'How It Works'}
-              {(activeTab === 'resume-templates' || activeTab === 'resources') && 'Resume Templates'}
-              {activeTab === 'about' && 'About Us'}
-              {activeTab === 'login' && 'Portal Sign In'}
-              {activeTab === 'register' && 'Student Enrollment'}
-              {(activeTab === 'student-dash' || activeTab === 'student-profile') && 'Student Dashboard'}
-              {activeTab === 'company-dash' && 'Company Dashboard'}
-              {activeTab === 'admin-dash' && 'Admin Dashboard'}
-            </span>
-          </div>
-        </aside>
-      )}
 
       {/* Main Content Router View */}
       <main style={{ flex: 1 }}>
@@ -553,7 +571,7 @@ export default function App() {
             internships={internships}
             onSelectInternship={(job) => setModalInternship(job)}
             onApplyInternship={handleAttemptApply}
-            setActiveTab={setActiveTab}
+            setActiveTab={handleNavigate}
             setCurrentRole={setCurrentRole}
             testimonials={testimonials}
             blogs={blogs}
@@ -565,36 +583,67 @@ export default function App() {
             internships={internships}
             onSelectInternship={(job) => setModalInternship(job)}
             onApplyInternship={handleAttemptApply}
+            onGoBack={handleGoBack}
+            previousTab={previousTab}
           />
         )}
 
         {activeTab === 'how-it-works' && (
           <HowItWorksPage 
-            setActiveTab={setActiveTab} 
+            setActiveTab={handleNavigate} 
             setCurrentRole={setCurrentRole} 
+            onGoBack={handleGoBack}
+            previousTab={previousTab}
           />
         )}
 
         {(activeTab === 'resume-templates' || activeTab === 'resources') && (
-          <ResumeTemplatesPage />
+          <ResumeTemplatesPage 
+            onGoBack={handleGoBack}
+            previousTab={previousTab}
+          />
         )}
 
 
         {activeTab === 'about' && (
-          <AboutUsPage />
+          <AboutUsPage 
+            onGoBack={handleGoBack}
+            previousTab={previousTab}
+          />
         )}
 
         {activeTab === 'login' && (
-          <LoginPage targetRole="student" companies={companies} onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
+          <LoginPage 
+            targetRole="student" 
+            companies={companies} 
+            onLoginSuccess={handleLoginSuccess} 
+            setActiveTab={handleNavigate} 
+            onGoBack={handleGoBack}
+            previousTab={previousTab}
+          />
         )}
 
         {activeTab === 'register' && !authenticatedRoles.student && (
-          <StudentRegisterPage onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} onUpdateProfile={handleUpdateStudentProfile} onAddToast={addToast} />
+          <StudentRegisterPage 
+            onLoginSuccess={handleLoginSuccess} 
+            setActiveTab={handleNavigate} 
+            onUpdateProfile={handleUpdateStudentProfile} 
+            onAddToast={addToast} 
+            onGoBack={handleGoBack}
+            previousTab={previousTab}
+          />
         )}
 
         {(activeTab === 'student-dash' || activeTab === 'student-profile' || activeTab === 'student-register') && (
           !authenticatedRoles.student ? (
-            <LoginPage targetRole="student" companies={companies} onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
+            <LoginPage 
+              targetRole="student" 
+              companies={companies} 
+              onLoginSuccess={handleLoginSuccess} 
+              setActiveTab={handleNavigate} 
+              onGoBack={handleGoBack}
+              previousTab={previousTab}
+            />
           ) : (
             <StudentDashboard 
               profile={studentProfile}
@@ -610,13 +659,22 @@ export default function App() {
               onLogout={() => handleLogoutRole('student')}
               onLoginSuccess={handleLoginSuccess}
               initialTab="profile"
+              onGoBack={handleGoBack}
+              previousTab={previousTab}
             />
           )
         )}
 
         {(activeTab === 'company-dash' || activeTab === 'for-companies') && (
           !authenticatedRoles.company ? (
-            <LoginPage targetRole="company" companies={companies} onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
+            <LoginPage 
+              targetRole="company" 
+              companies={companies} 
+              onLoginSuccess={handleLoginSuccess} 
+              setActiveTab={handleNavigate} 
+              onGoBack={handleGoBack}
+              previousTab={previousTab}
+            />
           ) : (
             <CompanyDashboard 
               company={companies.find(c => c.id === currentLoggedInCompanyId) || companies[0] || DEFAULT_COMPANY}
@@ -627,13 +685,22 @@ export default function App() {
               onUpdateAppStatus={handleEmployerSelectCandidate}
               onAddToast={addToast}
               onLogout={() => handleLogoutRole('company')}
+              onGoBack={handleGoBack}
+              previousTab={previousTab}
             />
           )
         )}
 
         {activeTab === 'admin-dash' && (
           !authenticatedRoles.admin ? (
-            <LoginPage targetRole="admin" companies={companies} onLoginSuccess={handleLoginSuccess} setActiveTab={setActiveTab} />
+            <LoginPage 
+              targetRole="admin" 
+              companies={companies} 
+              onLoginSuccess={handleLoginSuccess} 
+              setActiveTab={handleNavigate} 
+              onGoBack={handleGoBack}
+              previousTab={previousTab}
+            />
           ) : (
             <AdminDashboard 
               students={students}
@@ -652,13 +719,15 @@ export default function App() {
               onAddAuditLog={addAuditLog}
               onAddToast={addToast}
               onLogout={() => handleLogoutRole('admin')}
+              onGoBack={handleGoBack}
+              previousTab={previousTab}
             />
           )
         )}
       </main>
 
       {/* Global Footer */}
-      <Footer setActiveTab={setActiveTab} />
+      <Footer setActiveTab={handleNavigate} />
 
       {/* Detail & Application Modal */}
       {modalInternship && (
@@ -671,9 +740,8 @@ export default function App() {
           currentRole={currentRole}
           setCurrentRole={setCurrentRole}
           authenticatedRoles={authenticatedRoles}
-          setActiveTab={setActiveTab}
+          setActiveTab={handleNavigate}
           onAddToast={addToast}
-          onUpdateStudentProfile={setStudentProfile}
         />
       )}
 

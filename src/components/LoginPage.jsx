@@ -65,7 +65,14 @@ export const OFFICIAL_ADMINS = [
   }
 ];
 
-export default function LoginPage({ targetRole = 'student', companies = [], onLoginSuccess, setActiveTab }) {
+export default function LoginPage({ 
+  targetRole = 'student', 
+  companies = [], 
+  onLoginSuccess, 
+  setActiveTab,
+  onGoBack,
+  previousTab
+}) {
   const [selectedRole, setSelectedRole] = useState(targetRole);
   const [authMode, setAuthMode] = useState('signin'); // 'signin' | 'signup'
   const [emailOrPhone, setEmailOrPhone] = useState(''); // Blank by default
@@ -391,12 +398,13 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
   return (
     <div style={{ padding: '2.5rem 1rem 5rem', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ width: '100%', maxWidth: '520px' }}>
-        {/* Back to Home Button */}
+        {/* Back Button */}
         <div style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'flex-start' }}>
           <button
             type="button"
             onClick={() => {
-              if (setActiveTab) setActiveTab('home');
+              if (onGoBack) onGoBack();
+              else if (setActiveTab) setActiveTab('home');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             style={{
@@ -415,7 +423,7 @@ export default function LoginPage({ targetRole = 'student', companies = [], onLo
               transition: 'all 0.15s ease'
             }}
           >
-            <ArrowLeft size={16} /> Back to Home
+            <ArrowLeft size={16} /> Back
           </button>
         </div>
 

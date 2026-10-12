@@ -28,6 +28,20 @@ export default function InternshipCard({ internship, onSelect, onApply }) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
             <span style={{ 
+              background: (internship.trackType === 'Non-IT') ? 'rgba(217, 70, 239, 0.1)' : 'rgba(2, 132, 199, 0.1)', 
+              color: (internship.trackType === 'Non-IT') ? '#a21caf' : '#0369a1', 
+              border: (internship.trackType === 'Non-IT') ? '1px solid rgba(217, 70, 239, 0.3)' : '1px solid rgba(2, 132, 199, 0.3)', 
+              borderRadius: '6px', 
+              fontSize: '0.74rem', 
+              padding: '0.2rem 0.5rem', 
+              fontWeight: '800',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}>
+              {(internship.trackType === 'Non-IT') ? '🏢 Non-IT' : '💻 IT'}
+            </span>
+            <span style={{ 
               background: '#eff6ff', 
               color: '#1d4ed8', 
               border: '1px solid #bfdbfe', 

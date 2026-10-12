@@ -13,6 +13,7 @@ export const DOMAIN_ROLES_DATA = [
   {
     id: 'domain-software-web',
     domainName: 'Software & Full-Stack Web Development',
+    trackType: 'IT',
     aliases: [
       'software development',
       'web development',
@@ -109,6 +110,7 @@ export const DOMAIN_ROLES_DATA = [
   {
     id: 'domain-ai-ml',
     domainName: 'Artificial Intelligence & Machine Learning',
+    trackType: 'IT',
     aliases: [
       'ai & machine learning',
       'artificial intelligence & machine learning',
@@ -189,6 +191,7 @@ export const DOMAIN_ROLES_DATA = [
   {
     id: 'domain-data-analytics',
     domainName: 'Data Science & Business Intelligence',
+    trackType: 'IT',
     aliases: [
       'data science & business intelligence',
       'data science & analytics',
@@ -268,6 +271,7 @@ export const DOMAIN_ROLES_DATA = [
   {
     id: 'domain-ui-ux',
     domainName: 'UI/UX & Product Design',
+    trackType: 'Non-IT',
     aliases: [
       'ui/ux & product design',
       'ui/ux design',
@@ -346,6 +350,7 @@ export const DOMAIN_ROLES_DATA = [
   {
     id: 'domain-cybersecurity',
     domainName: 'Cybersecurity & Cloud Audit',
+    trackType: 'IT',
     aliases: [
       'cybersecurity & cloud audit',
       'cybersecurity',
@@ -424,6 +429,7 @@ export const DOMAIN_ROLES_DATA = [
   {
     id: 'domain-digital-marketing',
     domainName: 'Digital Marketing & Growth Analytics',
+    trackType: 'Non-IT',
     aliases: [
       'digital marketing & growth analytics',
       'digital marketing',
@@ -496,8 +502,490 @@ export const DOMAIN_ROLES_DATA = [
         highlights: 'Meta ad tracking, landing page A/B testing, and ROAS optimization'
       }
     ]
+  },
+  {
+    id: 'domain-cloud-devops',
+    domainName: 'Cloud Infrastructure & DevOps',
+    trackType: 'IT',
+    aliases: [
+      'cloud infrastructure & devops',
+      'cloud & devops',
+      'devops',
+      'cloud infrastructure',
+      'site reliability'
+    ],
+    roleTitle: 'Cloud DevOps & Site Reliability Intern',
+    badge: 'Enterprise Cloud',
+    category: 'Cloud & Infrastructure',
+    overview: 'Build automated CI/CD deployment pipelines, manage containerized Docker & Kubernetes clusters, configure AWS/GCP cloud networks, and monitor high-availability infrastructure.',
+    skillsRequired: [
+      'Docker & Containerization',
+      'Kubernetes (K8s)',
+      'AWS / GCP Cloud',
+      'CI/CD (GitHub Actions / Jenkins)',
+      'Linux & Bash Scripting',
+      'Terraform & IaC'
+    ],
+    eligibility: 'B.Tech / B.E. (CS/IT/ECE) / MCA Students with Cloud Fundamentals',
+    stipendRange: '₹18,000 – ₹28,000 / month',
+    duration: '3 to 6 Months',
+    workMode: 'Online / Hybrid',
+    totalVacancies: 11,
+    connectedCompanies: [
+      {
+        id: 'comp-701',
+        name: 'TerraCloud Infrastructure Labs',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=120&q=80',
+        industry: 'Cloud Infrastructure',
+        location: 'Bangalore, Karnataka',
+        workMode: 'Hybrid',
+        stipend: '₹22,000 / month',
+        vacancies: 4,
+        hired: 1,
+        supervisor: 'Sunil K. Varma',
+        supervisorTitle: 'Director of Cloud Operations',
+        supervisorEmail: 'ops@terracloud.io',
+        highlights: 'Kubernetes multi-region clusters and automated Terraform workflows'
+      },
+      {
+        id: 'comp-702',
+        name: 'DevOpsForge Technologies',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=120&q=80',
+        industry: 'DevOps & Automation',
+        location: 'Hyderabad, Telangana',
+        workMode: 'Online',
+        stipend: '₹20,000 / month',
+        vacancies: 4,
+        hired: 0,
+        supervisor: 'Deepa Narayan',
+        supervisorTitle: 'Lead SRE Architect',
+        supervisorEmail: 'careers@devopsforge.tech',
+        highlights: 'GitOps CI/CD delivery pipelines and Prometheus telemetry'
+      },
+      {
+        id: 'comp-703',
+        name: 'SkyScale Systems India',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=120&q=80',
+        industry: 'Cloud Architecture',
+        location: 'Pune / Remote',
+        workMode: 'Online',
+        stipend: '₹24,000 / month',
+        vacancies: 3,
+        hired: 1,
+        supervisor: 'Manish Bhatia',
+        supervisorTitle: 'Cloud Delivery Head',
+        supervisorEmail: 'skyscale@talentconnect.in',
+        highlights: 'Serverless architecture, AWS Lambda, and security hardening'
+      }
+    ]
+  },
+  {
+    id: 'domain-hr-talent',
+    domainName: 'Human Resources & Talent Acquisition',
+    trackType: 'Non-IT',
+    aliases: [
+      'human resources & talent acquisition',
+      'human resources',
+      'hr & talent acquisition',
+      'talent acquisition',
+      'human resource management',
+      'hr'
+    ],
+    roleTitle: 'Human Resources & Talent Acquisition Intern',
+    badge: 'People & Culture',
+    category: 'Human Resources',
+    overview: 'Drive candidate recruitment pipelines, screen resumes, coordinate interview rounds with corporate hiring managers, manage onboarding logistics, and maintain employee engagement records.',
+    skillsRequired: [
+      'Talent Sourcing & Screening',
+      'HRMS & ATS Portals',
+      'Interview Coordination',
+      'Employee Onboarding & Documentation',
+      'Campus Recruitment Liaison',
+      'Professional Communication'
+    ],
+    eligibility: 'BBA / MBA (HR) / B.Com / BA / Any Degree with Strong Interpersonal Skills',
+    stipendRange: '₹12,000 – ₹18,000 / month',
+    duration: '3 to 6 Months',
+    workMode: 'Online / Hybrid',
+    totalVacancies: 15,
+    connectedCompanies: [
+      {
+        id: 'comp-801',
+        name: 'PeopleFirst HR Advisory Group',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80',
+        industry: 'HR Consulting & Staffing',
+        location: 'Bangalore, Karnataka',
+        workMode: 'Hybrid',
+        stipend: '₹16,000 / month',
+        vacancies: 5,
+        hired: 2,
+        supervisor: 'Malini Deshpande',
+        supervisorTitle: 'Head of Talent Acquisition',
+        supervisorEmail: 'hr@peoplefirst.co.in',
+        highlights: 'Pan-India corporate recruitment, LinkedIn Recruiter sourcing, and campus hiring drives'
+      },
+      {
+        id: 'comp-802',
+        name: 'TalentBridge Corporate Solutions',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=120&q=80',
+        industry: 'Executive Search & Placement',
+        location: 'Mumbai, Maharashtra',
+        workMode: 'Online',
+        stipend: '₹15,000 / month',
+        vacancies: 6,
+        hired: 1,
+        supervisor: 'Gaurav Singhal',
+        supervisorTitle: 'Managing Partner - People Ops',
+        supervisorEmail: 'internships@talentbridge.in',
+        highlights: 'Structured interview frameworks, ATS tracking, and compensation benchmarking'
+      },
+      {
+        id: 'comp-803',
+        name: 'Vanguard People Operations',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=120&q=80',
+        industry: 'Corporate Talent Management',
+        location: 'Delhi NCR / Remote',
+        workMode: 'Online',
+        stipend: '₹14,000 / month',
+        vacancies: 4,
+        hired: 0,
+        supervisor: 'Anushka Banerjee',
+        supervisorTitle: 'Director of HR & Culture',
+        supervisorEmail: 'careers@vanguardpeople.com',
+        highlights: 'Employee lifecycle programs, performance appraisal records, and diversity hiring'
+      }
+    ]
+  },
+  {
+    id: 'domain-finance-accounts',
+    domainName: 'Finance, Accounting & Equity Research',
+    trackType: 'Non-IT',
+    aliases: [
+      'finance, accounting & equity research',
+      'finance & accounting',
+      'corporate finance',
+      'accounting',
+      'financial analysis',
+      'finance'
+    ],
+    roleTitle: 'Financial Analyst & Corporate Accounts Intern',
+    badge: 'Core Finance',
+    category: 'Finance & Banking',
+    overview: 'Analyze financial statements, build DCF and valuation models in Excel, reconcile GST & TDS accounts in Tally, prepare audit workpapers, and evaluate market investment opportunities.',
+    skillsRequired: [
+      'Advanced MS Excel (VLOOKUP, Pivot, Macros)',
+      'Financial Statement Analysis',
+      'TallyPrime & GST Compliance',
+      'Valuation Modeling & DCF',
+      'Budget Variance Analysis',
+      'Corporate Tax Principles'
+    ],
+    eligibility: 'B.Com / M.Com / BBA (Finance) / MBA (Finance) / CA Inter / Economics',
+    stipendRange: '₹14,000 – ₹22,000 / month',
+    duration: '3 to 6 Months',
+    workMode: 'Hybrid / Online',
+    totalVacancies: 14,
+    connectedCompanies: [
+      {
+        id: 'comp-901',
+        name: 'FinTrust Advisory & Capital Partners',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=120&q=80',
+        industry: 'Investment Banking & Advisory',
+        location: 'Mumbai, Maharashtra',
+        workMode: 'Hybrid',
+        stipend: '₹20,000 / month',
+        vacancies: 5,
+        hired: 1,
+        supervisor: 'Pradeep K. Somani, CFA',
+        supervisorTitle: 'Partner - Corporate Finance',
+        supervisorEmail: 'equity@fintrustcapital.com',
+        highlights: 'M&A pitch deck preparation, EBITDA multiple valuation, and portfolio risk telemetry'
+      },
+      {
+        id: 'comp-902',
+        name: 'BlueChip Wealth & Audit Associates',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=120&q=80',
+        industry: 'Wealth Advisory & Tax Audit',
+        location: 'Bangalore, Karnataka',
+        workMode: 'Online',
+        stipend: '₹18,000 / month',
+        vacancies: 5,
+        hired: 2,
+        supervisor: 'Radhika Mehra, CA',
+        supervisorTitle: 'Chief Financial Advisor',
+        supervisorEmail: 'audit@bluechipwealth.in',
+        highlights: 'Statutory audit verification, TDS e-filing reconciliations, and cash flow forecasting'
+      },
+      {
+        id: 'comp-903',
+        name: 'Credence Equity Research Labs',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=120&q=80',
+        industry: 'Equity Research & Market Insights',
+        location: 'Gurugram, Haryana',
+        workMode: 'Online',
+        stipend: '₹17,000 / month',
+        vacancies: 4,
+        hired: 0,
+        supervisor: 'Saurabh Agarwal',
+        supervisorTitle: 'Head of Equity Strategy',
+        supervisorEmail: 'research@credence-equity.org',
+        highlights: 'Quarterly earnings modeling, sector deep dives, and macro economic indicators'
+      }
+    ]
+  },
+  {
+    id: 'domain-business-dev',
+    domainName: 'Business Development & Corporate Sales',
+    trackType: 'Non-IT',
+    aliases: [
+      'business development & corporate sales',
+      'business development',
+      'corporate sales',
+      'b2b sales',
+      'sales & marketing',
+      'sales'
+    ],
+    roleTitle: 'Business Development & B2B Client Solutions Intern',
+    badge: 'Revenue Growth',
+    category: 'Sales & Growth',
+    overview: 'Drive enterprise lead qualification, pitch software & service solutions to corporate executives, manage sales funnels in CRM, and negotiate strategic partnership agreements.',
+    skillsRequired: [
+      'B2B Sales Pitching & Cold Calling',
+      'Lead Qualification & Prospecting',
+      'CRM Pipeline Management (HubSpot/Zoho)',
+      'Client Negotiation & Objection Handling',
+      'Market Opportunity Research',
+      'High-Impact Presentation Skills'
+    ],
+    eligibility: 'BBA / MBA / B.Com / Any Graduate with Strong Persuasive Skills',
+    stipendRange: '₹15,000 – ₹25,000 / month + Incentives',
+    duration: '3 to 6 Months',
+    workMode: 'Hybrid / Online',
+    totalVacancies: 18,
+    connectedCompanies: [
+      {
+        id: 'comp-1001',
+        name: 'Apex Global Enterprises',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=120&q=80',
+        industry: 'Enterprise Solutions & SaaS',
+        location: 'Hyderabad, Telangana',
+        workMode: 'Hybrid',
+        stipend: '₹20,000 / month',
+        vacancies: 6,
+        hired: 2,
+        supervisor: 'Raghavendra Rao',
+        supervisorTitle: 'VP - Global Business Development',
+        supervisorEmail: 'sales@apexglobal.in',
+        highlights: 'B2B enterprise pipeline conversion, C-suite demonstrations, and deal contract reviews'
+      },
+      {
+        id: 'comp-1002',
+        name: 'MarketLead Corporate Ventures',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=120&q=80',
+        industry: 'Corporate Alliances',
+        location: 'Bangalore, Karnataka',
+        workMode: 'Online',
+        stipend: '₹18,000 / month',
+        vacancies: 7,
+        hired: 1,
+        supervisor: 'Tanvi Nair',
+        supervisorTitle: 'Director of Strategic Alliances',
+        supervisorEmail: 'partnerships@marketlead.co',
+        highlights: 'Outbound sales automation, LinkedIn enterprise outreach, and partnership proposals'
+      },
+      {
+        id: 'comp-1003',
+        name: 'Zenith Business Network India',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=120&q=80',
+        industry: 'Corporate Sales & Expansion',
+        location: 'Delhi NCR / Remote',
+        workMode: 'Online',
+        stipend: '₹17,000 / month',
+        vacancies: 5,
+        hired: 0,
+        supervisor: 'Aditya Mathur',
+        supervisorTitle: 'National Sales Head',
+        supervisorEmail: 'growth@zenithbusiness.in',
+        highlights: 'Account mapping, institutional sales cycles, and cross-sell expansion'
+      }
+    ]
+  },
+  {
+    id: 'domain-operations-logistics',
+    domainName: 'Operations, Logistics & Supply Chain',
+    trackType: 'Non-IT',
+    aliases: [
+      'operations, logistics & supply chain',
+      'operations & supply chain',
+      'operations management',
+      'supply chain',
+      'logistics',
+      'operations'
+    ],
+    roleTitle: 'Operations & Supply Chain Management Intern',
+    badge: 'Core Operations',
+    category: 'Operations & Logistics',
+    overview: 'Monitor warehouse order fulfillment, coordinate vendor procurement timelines, analyze inventory stock turnover, optimize freight logistics, and design lean operational procedures.',
+    skillsRequired: [
+      'Supply Chain & Logistics Workflow',
+      'Vendor Coordination & Procurement',
+      'Inventory Control & Stock Auditing',
+      'ERP / WMS Software Platforms',
+      'Process Bottleneck Optimization',
+      'MIS Reporting & Dashboarding'
+    ],
+    eligibility: 'BBA (Operations) / MBA / B.Tech (Mechanical/Production) / B.Com / Any Graduate',
+    stipendRange: '₹14,000 – ₹20,000 / month',
+    duration: '3 to 6 Months',
+    workMode: 'Hybrid / On-Site / Online',
+    totalVacancies: 13,
+    connectedCompanies: [
+      {
+        id: 'comp-1101',
+        name: 'LogiXpress Supply Chain India',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=120&q=80',
+        industry: 'Supply Chain & Freight Logistics',
+        location: 'Chennai, Tamil Nadu',
+        workMode: 'Hybrid',
+        stipend: '₹18,000 / month',
+        vacancies: 5,
+        hired: 1,
+        supervisor: 'Karthik Subramanian',
+        supervisorTitle: 'Senior Operations Director',
+        supervisorEmail: 'ops@logixpress.in',
+        highlights: 'Real-time multi-modal shipment tracking, 3PL vendor SLA audits, and warehouse hub logistics'
+      },
+      {
+        id: 'comp-1102',
+        name: 'SwiftCargo Distribution Systems',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=120&q=80',
+        industry: 'Express Freight & Warehousing',
+        location: 'Mumbai, Maharashtra',
+        workMode: 'On-Site',
+        stipend: '₹16,000 / month',
+        vacancies: 4,
+        hired: 0,
+        supervisor: 'Milind Deodhar',
+        supervisorTitle: 'Head of Hub Operations',
+        supervisorEmail: 'careers@swiftcargo.com',
+        highlights: 'Order dispatch reconciliation, safety compliance, and last-mile route optimization'
+      },
+      {
+        id: 'comp-1103',
+        name: 'OmniFlow Operations Consulting',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=120&q=80',
+        industry: 'Process Consulting & Automation',
+        location: 'Bangalore, Karnataka',
+        workMode: 'Online',
+        stipend: '₹17,000 / month',
+        vacancies: 4,
+        hired: 1,
+        supervisor: 'Shailaja Hegde',
+        supervisorTitle: 'Operations Excellence Manager',
+        supervisorEmail: 'internships@omniflow.io',
+        highlights: 'Standard Operating Procedure (SOP) documentation, Six Sigma DMAIC projects'
+      }
+    ]
+  },
+  {
+    id: 'domain-content-pr',
+    domainName: 'Content Writing, PR & Corporate Communications',
+    trackType: 'Non-IT',
+    aliases: [
+      'content writing, pr & corporate communications',
+      'content writing',
+      'public relations',
+      'corporate communications',
+      'content & pr',
+      'content creation'
+    ],
+    roleTitle: 'Content Writing & Corporate PR Communications Intern',
+    badge: 'Media & Brand',
+    category: 'Media & Communications',
+    overview: 'Draft corporate press releases, research and write thought-leadership blog articles, craft engaging executive LinkedIn posts, and coordinate editorial relationships with news media.',
+    skillsRequired: [
+      'Editorial Copywriting & Storytelling',
+      'Press Release Drafting (AP Style)',
+      'SEO Content Writing & Keyword Research',
+      'Media Outreach & PR Liaison',
+      'Brand Tone of Voice Consistency',
+      'Proofreading & Fact-Checking'
+    ],
+    eligibility: 'BA (English / Journalism) / Mass Communication / Any Graduate with Exceptional Writing Skills',
+    stipendRange: '₹12,000 – ₹18,000 / month',
+    duration: '3 to 6 Months',
+    workMode: 'Online',
+    totalVacancies: 11,
+    connectedCompanies: [
+      {
+        id: 'comp-1201',
+        name: 'WordSmith Media & Editorial Group',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=120&q=80',
+        industry: 'Digital Publishing & Media',
+        location: 'Delhi NCR',
+        workMode: 'Online',
+        stipend: '₹16,000 / month',
+        vacancies: 4,
+        hired: 1,
+        supervisor: 'Nandita Sengupta',
+        supervisorTitle: 'Editor-in-Chief',
+        supervisorEmail: 'editorial@wordsmithmedia.in',
+        highlights: 'Authoritative B2B whitepapers, executive interview feature articles, and technical blogs'
+      },
+      {
+        id: 'comp-1202',
+        name: 'NarrativePR Strategic Communications',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=120&q=80',
+        industry: 'Public Relations Agency',
+        location: 'Mumbai, Maharashtra',
+        workMode: 'Online',
+        stipend: '₹15,000 / month',
+        vacancies: 4,
+        hired: 0,
+        supervisor: 'Farhan Zaidi',
+        supervisorTitle: 'Senior PR Account Director',
+        supervisorEmail: 'press@narrativepr.com',
+        highlights: 'Tech startup funding announcements, media journalist pitching, and crisis PR memos'
+      },
+      {
+        id: 'comp-1203',
+        name: 'ContentCraft Creative Communications',
+        verified: true,
+        logo: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=120&q=80',
+        industry: 'Content Strategy Agency',
+        location: 'Bangalore / Remote',
+        workMode: 'Online',
+        stipend: '₹14,000 / month',
+        vacancies: 3,
+        hired: 1,
+        supervisor: 'Trisha Chhabra',
+        supervisorTitle: 'Content Strategy Lead',
+        supervisorEmail: 'hello@contentcraft.agency',
+        highlights: 'Website copy overhauls, conversion copywriting, and viral newsletter editions'
+      }
+    ]
   }
 ];
+
+export const IT_DOMAINS = DOMAIN_ROLES_DATA.filter(d => d.trackType === 'IT');
+export const NON_IT_DOMAINS = DOMAIN_ROLES_DATA.filter(d => d.trackType === 'Non-IT');
 
 /**
  * Finds the matching domain role based on the student's profile domain string,

@@ -27,13 +27,16 @@ export default function HomePage({
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIndustry, setSelectedIndustry] = useState('All');
+  const [homeTrack, setHomeTrack] = useState('All'); // 'All', 'IT', 'Non-IT'
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setActiveTab('browse');
   };
 
-  const featuredInternships = internships.filter(i => i.status === 'Approved').slice(0, 3);
+  const featuredInternships = internships
+    .filter(i => i.status === 'Approved' && (homeTrack === 'All' || i.trackType === homeTrack))
+    .slice(0, 6);
 
   return (
     <div className="home-page">
@@ -233,11 +236,37 @@ export default function HomePage({
               <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#0f172a' }}>
                 Featured <span className="text-gradient">Internship Opportunities</span>
               </h2>
-              <p style={{ color: 'var(--text-muted)' }}>Explore top openings from verified tech & design partners</p>
+              <p style={{ color: 'var(--text-muted)' }}>Explore top IT & Non-IT openings from verified corporate & enterprise partners</p>
             </div>
-            <button className="btn btn-secondary" onClick={() => setActiveTab('browse')}>
-              View All Openings <ArrowRight size={16} />
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+              <button 
+                type="button"
+                onClick={() => setHomeTrack('All')}
+                className={`btn btn-sm ${homeTrack === 'All' ? 'btn-primary' : 'btn-secondary'}`}
+                style={{ borderRadius: '20px', fontWeight: '700' }}
+              >
+                All Roles
+              </button>
+              <button 
+                type="button"
+                onClick={() => setHomeTrack('IT')}
+                className={`btn btn-sm ${homeTrack === 'IT' ? 'btn-primary' : 'btn-secondary'}`}
+                style={{ borderRadius: '20px', fontWeight: '700' }}
+              >
+                💻 IT Roles
+              </button>
+              <button 
+                type="button"
+                onClick={() => setHomeTrack('Non-IT')}
+                className={`btn btn-sm ${homeTrack === 'Non-IT' ? 'btn-primary' : 'btn-secondary'}`}
+                style={{ borderRadius: '20px', fontWeight: '700' }}
+              >
+                🏢 Non-IT Roles
+              </button>
+              <button className="btn btn-secondary btn-sm" onClick={() => setActiveTab('browse')} style={{ borderRadius: '20px' }}>
+                View All <ArrowRight size={14} />
+              </button>
+            </div>
           </div>
 
           {featuredInternships.length > 0 ? (
@@ -271,40 +300,6 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section style={{ padding: '4rem 0', background: '#f1f5f9', borderTop: '1px solid var(--border-color)' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#0f172a' }}>
-              Student & Employer <span className="text-gradient">Success Stories</span>
-            </h2>
-            <p style={{ color: 'var(--text-muted)' }}>Real feedback from candidates and hiring leaders</p>
-          </div>
-
-          <div className="grid-2">
-            {testimonials.map((item, idx) => (
-              <div key={idx} className="glass-card" style={{ padding: '2rem' }}>
-                <p style={{ fontSize: '1rem', color: '#334155', fontStyle: 'italic', marginBottom: '1.5rem' }}>
-                  "{item.quote}"
-                </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-                  <img 
-                    src={item.avatar} 
-                    alt={item.name} 
-                    style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
-                  />
-                  <div>
-                    <h4 style={{ color: '#0f172a', fontSize: '1rem', fontWeight: '700' }}>{item.name}</h4>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                      {item.role} {item.college ? `• ${item.college}` : `• ${item.company}`}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Professional Resume Templates Section */}
       <section style={{ padding: '4rem 0' }}>

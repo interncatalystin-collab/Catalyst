@@ -9,6 +9,7 @@ export default function BrowseInternshipsPage({
   onApplyInternship 
 }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTrack, setSelectedTrack] = useState('All'); // 'All', 'IT', 'Non-IT'
   const [selectedDomain, setSelectedDomain] = useState('All');
   const [selectedIndustry, setSelectedIndustry] = useState('All');
   const [selectedWorkMode, setSelectedWorkMode] = useState('All');
@@ -16,8 +17,22 @@ export default function BrowseInternshipsPage({
   const [selectedStipend, setSelectedStipend] = useState('All'); // 'All', 'Paid', 'Free'
   const [verifiedOnly, setVerifiedOnly] = useState(false);
 
-  // Industries list
-  const industries = ['All', 'Software & IT', 'Artificial Intelligence', 'Data Science & Analytics', 'UI/UX & Product Design', 'Cybersecurity', 'Marketing & Growth'];
+  // Industries list (IT & Non-IT)
+  const industries = [
+    'All',
+    'Software & IT',
+    'Artificial Intelligence',
+    'Data Science & Analytics',
+    'Cybersecurity',
+    'Cloud & Infrastructure',
+    'Human Resources',
+    'Finance & Banking',
+    'Sales & Growth',
+    'Operations & Logistics',
+    'Media & Communications',
+    'UI/UX & Product Design',
+    'Marketing & Growth'
+  ];
 
   // Filtering Logic
   const filteredInternships = internships.filter(item => {
@@ -39,11 +54,16 @@ export default function BrowseInternshipsPage({
     const matchesStipend = selectedStipend === 'All' || (item.stipendType || 'Paid') === selectedStipend;
     const matchesVerified = !verifiedOnly || item.verified === true;
 
-    return matchesSearch && matchesDomain && matchesIndustry && matchesWorkMode && matchesType && matchesStipend && matchesVerified;
+    const matchesTrack = selectedTrack === 'All' || 
+      (selectedTrack === 'IT' && item.trackType === 'IT') ||
+      (selectedTrack === 'Non-IT' && item.trackType === 'Non-IT');
+
+    return matchesTrack && matchesSearch && matchesDomain && matchesIndustry && matchesWorkMode && matchesType && matchesStipend && matchesVerified;
   });
 
   const handleResetFilters = () => {
     setSearchQuery('');
+    setSelectedTrack('All');
     setSelectedDomain('All');
     setSelectedIndustry('All');
     setSelectedWorkMode('All');
@@ -93,13 +113,88 @@ export default function BrowseInternshipsPage({
           </div>
         </div>
 
+        {/* Track Category Filter: All / IT / Non-IT */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          marginBottom: '2rem',
+          flexWrap: 'wrap'
+        }}>
+          <button
+            type="button"
+            onClick={() => { setSelectedTrack('All'); setSelectedDomain('All'); }}
+            style={{
+              padding: '0.65rem 1.35rem',
+              borderRadius: '30px',
+              border: selectedTrack === 'All' ? '2px solid #0284c7' : '1px solid #cbd5e1',
+              background: selectedTrack === 'All' ? '#0284c7' : '#ffffff',
+              color: selectedTrack === 'All' ? '#ffffff' : '#334155',
+              fontWeight: '800',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              boxShadow: selectedTrack === 'All' ? '0 4px 12px rgba(2, 132, 199, 0.25)' : 'none',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <Layers size={16} /> All Internships ({internships.filter(i => i.status === 'Approved').length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { setSelectedTrack('IT'); setSelectedDomain('All'); }}
+            style={{
+              padding: '0.65rem 1.35rem',
+              borderRadius: '30px',
+              border: selectedTrack === 'IT' ? '2px solid #1e3a8a' : '1px solid #cbd5e1',
+              background: selectedTrack === 'IT' ? 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)' : '#ffffff',
+              color: selectedTrack === 'IT' ? '#ffffff' : '#334155',
+              fontWeight: '800',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              boxShadow: selectedTrack === 'IT' ? '0 4px 12px rgba(37, 99, 235, 0.25)' : 'none',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <span>💻 IT Internships ({internships.filter(i => i.status === 'Approved' && i.trackType === 'IT').length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { setSelectedTrack('Non-IT'); setSelectedDomain('All'); }}
+            style={{
+              padding: '0.65rem 1.35rem',
+              borderRadius: '30px',
+              border: selectedTrack === 'Non-IT' ? '2px solid #c026d3' : '1px solid #cbd5e1',
+              background: selectedTrack === 'Non-IT' ? 'linear-gradient(135deg, #a21caf 0%, #c026d3 100%)' : '#ffffff',
+              color: selectedTrack === 'Non-IT' ? '#ffffff' : '#334155',
+              fontWeight: '800',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              boxShadow: selectedTrack === 'Non-IT' ? '0 4px 12px rgba(192, 38, 211, 0.25)' : 'none',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <span>🏢 Non-IT Internships ({internships.filter(i => i.status === 'Approved' && i.trackType === 'Non-IT').length})</span>
+          </button>
+        </div>
+
         {/* Specialized Domain Tracks List Section */}
         <div style={{ marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Layers size={18} color="#1e3a8a" />
               <h2 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
-                Specialized Placement Domain Tracks
+                {selectedTrack === 'IT' ? '💻 IT Placement Domain Tracks' : selectedTrack === 'Non-IT' ? '🏢 Non-IT Placement Domain Tracks' : 'Specialized Placement Domain Tracks'}
               </h2>
             </div>
             <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '600' }}>
@@ -127,13 +222,13 @@ export default function BrowseInternshipsPage({
                 transition: 'all 0.15s ease'
               }}
             >
-              <span>All Domain Tracks</span>
+              <span>All {selectedTrack === 'All' ? '' : selectedTrack} Domains</span>
               <span className="badge" style={{ background: selectedDomain === 'All' ? 'rgba(255,255,255,0.2)' : '#f1f5f9', color: selectedDomain === 'All' ? '#ffffff' : '#64748b', fontSize: '0.72rem' }}>
-                {internships.filter(i => i.status === 'Approved').length}
+                {internships.filter(i => i.status === 'Approved' && (selectedTrack === 'All' || i.trackType === selectedTrack)).length}
               </span>
             </button>
 
-            {DOMAIN_ROLES_DATA.map(d => {
+            {DOMAIN_ROLES_DATA.filter(d => selectedTrack === 'All' || d.trackType === selectedTrack).map(d => {
               const count = internships.filter(i => i.status === 'Approved' && i.domain && i.domain.toLowerCase().includes(d.domainName.toLowerCase())).length;
               const isSelected = selectedDomain.toLowerCase().includes(d.domainName.toLowerCase());
               return (

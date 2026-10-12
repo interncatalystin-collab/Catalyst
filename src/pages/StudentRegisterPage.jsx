@@ -27,7 +27,15 @@ import {
 } from 'lucide-react';
 import { ALL_CITIES } from '../data/citiesData';
 
-export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUpdateProfile, onAddToast, isEmbeddedInDashboard = false }) {
+export default function StudentRegisterPage({ 
+  onLoginSuccess, 
+  setActiveTab, 
+  onUpdateProfile, 
+  onAddToast, 
+  isEmbeddedInDashboard = false,
+  onGoBack,
+  previousTab
+}) {
   const photoInputRef = useRef(null);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -229,12 +237,13 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
       {/* Header */}
       {!isEmbeddedInDashboard ? (
         <div style={{ marginBottom: '2.5rem' }}>
-          {/* Back to Home Button */}
+          {/* Back Button */}
           <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '1.25rem' }}>
             <button
               type="button"
               onClick={() => {
-                if (setActiveTab) setActiveTab('home');
+                if (onGoBack) onGoBack();
+                else if (setActiveTab) setActiveTab('home');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               style={{
@@ -253,7 +262,7 @@ export default function StudentRegisterPage({ onLoginSuccess, setActiveTab, onUp
                 transition: 'all 0.15s ease'
               }}
             >
-              <ArrowLeft size={16} /> Back to Home
+              <ArrowLeft size={16} /> Back
             </button>
           </div>
 
