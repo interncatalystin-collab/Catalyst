@@ -231,6 +231,12 @@ export default function App() {
           linkedin: merged.linkedinUrl || merged.linkedin || '',
           githubUrl: merged.githubUrl || merged.github || '',
           github: merged.githubUrl || merged.github || '',
+          leetcodeUrl: merged.leetcodeUrl || merged.leetcode || '',
+          leetcode: merged.leetcodeUrl || merged.leetcode || '',
+          codechefUrl: merged.codechefUrl || merged.codechef || '',
+          codechef: merged.codechefUrl || merged.codechef || '',
+          hackerrankUrl: merged.hackerrankUrl || merged.hackerrank || '',
+          hackerrank: merged.hackerrankUrl || merged.hackerrank || '',
           createdAt: merged.createdAt || new Date().toISOString(),
           status: merged.status || 'Active'
         };

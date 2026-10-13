@@ -2107,11 +2107,20 @@ export default function AdminDashboard({
                     {selectedStudentForDetail.resumeLink && (
                       <div><strong>Resume / Drive Link:</strong> <a href={selectedStudentForDetail.resumeLink} target="_blank" rel="noreferrer" style={{ color: '#2563eb' }}>{selectedStudentForDetail.resumeLink}</a></div>
                     )}
-                    {selectedStudentForDetail.linkedin && (
-                      <div><strong>LinkedIn:</strong> <a href={selectedStudentForDetail.linkedin} target="_blank" rel="noreferrer" style={{ color: '#2563eb' }}>{selectedStudentForDetail.linkedin}</a></div>
+                    {(selectedStudentForDetail.linkedin || selectedStudentForDetail.linkedinUrl) && (
+                      <div><strong>LinkedIn:</strong> <a href={selectedStudentForDetail.linkedin || selectedStudentForDetail.linkedinUrl} target="_blank" rel="noreferrer" style={{ color: '#2563eb' }}>{selectedStudentForDetail.linkedin || selectedStudentForDetail.linkedinUrl}</a></div>
                     )}
-                    {selectedStudentForDetail.github && (
-                      <div><strong>GitHub:</strong> <a href={selectedStudentForDetail.github} target="_blank" rel="noreferrer" style={{ color: '#2563eb' }}>{selectedStudentForDetail.github}</a></div>
+                    {(selectedStudentForDetail.github || selectedStudentForDetail.githubUrl) && (
+                      <div><strong>GitHub:</strong> <a href={selectedStudentForDetail.github || selectedStudentForDetail.githubUrl} target="_blank" rel="noreferrer" style={{ color: '#0f172a' }}>{selectedStudentForDetail.github || selectedStudentForDetail.githubUrl}</a></div>
+                    )}
+                    {(selectedStudentForDetail.leetcode || selectedStudentForDetail.leetcodeUrl) && (
+                      <div><strong>LeetCode:</strong> <a href={selectedStudentForDetail.leetcode || selectedStudentForDetail.leetcodeUrl} target="_blank" rel="noreferrer" style={{ color: '#ea580c' }}>{selectedStudentForDetail.leetcode || selectedStudentForDetail.leetcodeUrl}</a></div>
+                    )}
+                    {(selectedStudentForDetail.codechef || selectedStudentForDetail.codechefUrl) && (
+                      <div><strong>CodeChef:</strong> <a href={selectedStudentForDetail.codechef || selectedStudentForDetail.codechefUrl} target="_blank" rel="noreferrer" style={{ color: '#854d0e' }}>{selectedStudentForDetail.codechef || selectedStudentForDetail.codechefUrl}</a></div>
+                    )}
+                    {(selectedStudentForDetail.hackerrank || selectedStudentForDetail.hackerrankUrl) && (
+                      <div><strong>HackerRank:</strong> <a href={selectedStudentForDetail.hackerrank || selectedStudentForDetail.hackerrankUrl} target="_blank" rel="noreferrer" style={{ color: '#16a34a' }}>{selectedStudentForDetail.hackerrank || selectedStudentForDetail.hackerrankUrl}</a></div>
                     )}
                   </div>
                 </div>

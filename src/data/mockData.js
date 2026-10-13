@@ -193,6 +193,9 @@ export const INITIAL_STUDENT_PROFILE = {
   portfolioUrl: "",
   githubUrl: "",
   linkedinUrl: "",
+  leetcodeUrl: "",
+  codechefUrl: "",
+  hackerrankUrl: "",
   status: "Active",
   isRegistered: false
 };

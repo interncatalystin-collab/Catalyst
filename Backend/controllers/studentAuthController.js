@@ -272,6 +272,9 @@ export const updateStudentProfileHandler = async (req, res, body) => {
       resumeLink: body.resumeLink || body.resumeUrl || '',
       linkedin: body.linkedin || body.linkedinUrl || '',
       github: body.github || body.githubUrl || '',
+      leetcode: body.leetcode || body.leetcodeUrl || '',
+      codechef: body.codechef || body.codechefUrl || '',
+      hackerrank: body.hackerrank || body.hackerrankUrl || '',
       city: body.city || '',
       state: body.state || '',
       internshipPreference: body.internshipPreference || 'Remote / Online'

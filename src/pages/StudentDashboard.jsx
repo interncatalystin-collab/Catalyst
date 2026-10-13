@@ -253,6 +253,9 @@ export default function StudentDashboard({
   const resumeFileInputRef = useRef(null);
   const [linkedinUrl, setLinkedinUrl] = useState(safeProfile.linkedinUrl || safeProfile.linkedin || '');
   const [githubUrl, setGithubUrl] = useState(safeProfile.githubUrl || safeProfile.github || '');
+  const [leetcodeUrl, setLeetcodeUrl] = useState(safeProfile.leetcodeUrl || safeProfile.leetcode || '');
+  const [codechefUrl, setCodechefUrl] = useState(safeProfile.codechefUrl || safeProfile.codechef || '');
+  const [hackerrankUrl, setHackerrankUrl] = useState(safeProfile.hackerrankUrl || safeProfile.hackerrank || '');
   const [skillsInput, setSkillsInput] = useState(
     Array.isArray(safeProfile.skills) ? safeProfile.skills.join(', ') : (safeProfile.skills || '')
   );
@@ -306,6 +309,9 @@ export default function StudentDashboard({
       if (safeProfile.resumeUrl || safeProfile.resumeLink) setResumeUrl(safeProfile.resumeUrl || safeProfile.resumeLink);
       if (safeProfile.linkedinUrl || safeProfile.linkedin) setLinkedinUrl(safeProfile.linkedinUrl || safeProfile.linkedin);
       if (safeProfile.githubUrl || safeProfile.github) setGithubUrl(safeProfile.githubUrl || safeProfile.github);
+      if (safeProfile.leetcodeUrl || safeProfile.leetcode) setLeetcodeUrl(safeProfile.leetcodeUrl || safeProfile.leetcode);
+      if (safeProfile.codechefUrl || safeProfile.codechef) setCodechefUrl(safeProfile.codechefUrl || safeProfile.codechef);
+      if (safeProfile.hackerrankUrl || safeProfile.hackerrank) setHackerrankUrl(safeProfile.hackerrankUrl || safeProfile.hackerrank);
       if (safeProfile.skills) {
         setSkillsInput(Array.isArray(safeProfile.skills) ? safeProfile.skills.join(', ') : safeProfile.skills);
       }
@@ -454,6 +460,12 @@ export default function StudentDashboard({
       linkedin: linkedinUrl.trim(),
       githubUrl: githubUrl.trim(),
       github: githubUrl.trim(),
+      leetcodeUrl: leetcodeUrl.trim(),
+      leetcode: leetcodeUrl.trim(),
+      codechefUrl: codechefUrl.trim(),
+      codechef: codechefUrl.trim(),
+      hackerrankUrl: hackerrankUrl.trim(),
+      hackerrank: hackerrankUrl.trim(),
       skills: skillsInput.split(',').map(s => s.trim()).filter(Boolean)
     };
 
@@ -614,6 +626,32 @@ export default function StudentDashboard({
                   <Phone size={12} style={{ display: 'inline', marginRight: '3px', color: '#16a34a' }} />
                   {safeProfile.phone || '9876543210'}
                 </span>
+
+                {(safeProfile.linkedinUrl || safeProfile.linkedin || linkedinUrl) && (
+                  <a href={safeProfile.linkedinUrl || safeProfile.linkedin || linkedinUrl} target="_blank" rel="noreferrer" style={{ background: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe', fontSize: '0.75rem', fontWeight: '700', padding: '0.15rem 0.5rem', borderRadius: '6px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                    🔗 LinkedIn
+                  </a>
+                )}
+                {(safeProfile.githubUrl || safeProfile.github || githubUrl) && (
+                  <a href={safeProfile.githubUrl || safeProfile.github || githubUrl} target="_blank" rel="noreferrer" style={{ background: '#f8fafc', color: '#0f172a', border: '1px solid #cbd5e1', fontSize: '0.75rem', fontWeight: '700', padding: '0.15rem 0.5rem', borderRadius: '6px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                    💻 GitHub
+                  </a>
+                )}
+                {(safeProfile.leetcodeUrl || safeProfile.leetcode || leetcodeUrl) && (
+                  <a href={safeProfile.leetcodeUrl || safeProfile.leetcode || leetcodeUrl} target="_blank" rel="noreferrer" style={{ background: '#fff7ed', color: '#c2410c', border: '1px solid #fed7aa', fontSize: '0.75rem', fontWeight: '700', padding: '0.15rem 0.5rem', borderRadius: '6px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                    🟧 LeetCode
+                  </a>
+                )}
+                {(safeProfile.codechefUrl || safeProfile.codechef || codechefUrl) && (
+                  <a href={safeProfile.codechefUrl || safeProfile.codechef || codechefUrl} target="_blank" rel="noreferrer" style={{ background: '#fefce8', color: '#854d0e', border: '1px solid #fef08a', fontSize: '0.75rem', fontWeight: '700', padding: '0.15rem 0.5rem', borderRadius: '6px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                    🟫 CodeChef
+                  </a>
+                )}
+                {(safeProfile.hackerrankUrl || safeProfile.hackerrank || hackerrankUrl) && (
+                  <a href={safeProfile.hackerrankUrl || safeProfile.hackerrank || hackerrankUrl} target="_blank" rel="noreferrer" style={{ background: '#f0fdf4', color: '#15803d', border: '1px solid #bbf7d0', fontSize: '0.75rem', fontWeight: '700', padding: '0.15rem 0.5rem', borderRadius: '6px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                    🟩 HackerRank
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -2685,6 +2723,39 @@ export default function StudentDashboard({
                           value={githubUrl} 
                           onChange={(e) => setGithubUrl(e.target.value)} 
                           placeholder="https://github.com/username" 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid-3" style={{ marginTop: '0.85rem' }}>
+                      <div className="form-group">
+                        <label className="form-label">🟧 LeetCode Profile URL</label>
+                        <input 
+                          type="url" 
+                          className="form-input" 
+                          value={leetcodeUrl} 
+                          onChange={(e) => setLeetcodeUrl(e.target.value)} 
+                          placeholder="https://leetcode.com/u/username" 
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">🟫 CodeChef Profile URL</label>
+                        <input 
+                          type="url" 
+                          className="form-input" 
+                          value={codechefUrl} 
+                          onChange={(e) => setCodechefUrl(e.target.value)} 
+                          placeholder="https://codechef.com/users/username" 
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">🟩 HackerRank / Codeforces URL</label>
+                        <input 
+                          type="url" 
+                          className="form-input" 
+                          value={hackerrankUrl} 
+                          onChange={(e) => setHackerrankUrl(e.target.value)} 
+                          placeholder="https://hackerrank.com/profile/username" 
                         />
                       </div>
                     </div>

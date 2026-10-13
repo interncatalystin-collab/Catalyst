@@ -84,6 +84,18 @@ const studentSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  leetcode: {
+    type: String,
+    default: ''
+  },
+  codechef: {
+    type: String,
+    default: ''
+  },
+  hackerrank: {
+    type: String,
+    default: ''
+  },
   // Location & Preferences
   city: {
     type: String,

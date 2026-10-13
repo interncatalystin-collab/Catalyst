@@ -90,6 +90,9 @@ export default function StudentRegisterPage({
     resumeLink: '',
     linkedin: '',
     github: '',
+    leetcode: '',
+    codechef: '',
+    hackerrank: '',
     city: '',
     state: '',
     internshipPreference: 'Remote / Online'
@@ -172,7 +175,13 @@ export default function StudentRegisterPage({
       linkedinUrl: formData.linkedin || '',
       linkedin: formData.linkedin || '',
       githubUrl: formData.github || '',
-      github: formData.github || ''
+      github: formData.github || '',
+      leetcodeUrl: formData.leetcode || '',
+      leetcode: formData.leetcode || '',
+      codechefUrl: formData.codechef || '',
+      codechef: formData.codechef || '',
+      hackerrankUrl: formData.hackerrank || '',
+      hackerrank: formData.hackerrank || ''
     };
 
     if (onUpdateProfile) {
@@ -717,6 +726,30 @@ export default function StudentRegisterPage({
                 <div style={{ position: 'relative' }}>
                   <Code size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
                   <input type="url" name="github" className="form-input" style={{ paddingLeft: '2.5rem' }} placeholder="https://github.com/username" value={formData.github} onChange={handleChange} />
+                </div>
+              </div>
+
+              <div>
+                <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>🟧 LeetCode Profile URL</label>
+                <div style={{ position: 'relative' }}>
+                  <Code size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#ea580c' }} />
+                  <input type="url" name="leetcode" className="form-input" style={{ paddingLeft: '2.5rem' }} placeholder="https://leetcode.com/u/username" value={formData.leetcode} onChange={handleChange} />
+                </div>
+              </div>
+
+              <div>
+                <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>🟫 CodeChef Profile URL</label>
+                <div style={{ position: 'relative' }}>
+                  <Code size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#854d0e' }} />
+                  <input type="url" name="codechef" className="form-input" style={{ paddingLeft: '2.5rem' }} placeholder="https://codechef.com/users/username" value={formData.codechef} onChange={handleChange} />
+                </div>
+              </div>
+
+              <div>
+                <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>🟩 HackerRank / Codeforces URL</label>
+                <div style={{ position: 'relative' }}>
+                  <Code size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#16a34a' }} />
+                  <input type="url" name="hackerrank" className="form-input" style={{ paddingLeft: '2.5rem' }} placeholder="https://hackerrank.com/profile/username" value={formData.hackerrank} onChange={handleChange} />
                 </div>
               </div>
             </div>
