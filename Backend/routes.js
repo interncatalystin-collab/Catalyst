@@ -13,16 +13,23 @@ import { sendApplicationConfirmationEmail, sendRegistrationConfirmationMail, ver
 
 // Utility helper to parse JSON payload (supports standalone Node streams, serverless pre-parsed req.body, and resilient fallback)
 const parseJson = (req) => {
-  if (req.body !== undefined && req.body !== null) {
-    if (typeof req.body === 'object') {
-      return Promise.resolve(req.body);
+  let vercelBody = null;
+  try {
+    vercelBody = req.body;
+  } catch (bErr) {
+    // req.body getter throws if invalid or unconsumed
+  }
+
+  if (vercelBody !== undefined && vercelBody !== null) {
+    if (typeof vercelBody === 'object') {
+      return Promise.resolve(vercelBody);
     }
-    if (typeof req.body === 'string') {
+    if (typeof vercelBody === 'string') {
       try {
-        return Promise.resolve(req.body ? JSON.parse(req.body) : {});
+        return Promise.resolve(vercelBody ? JSON.parse(vercelBody) : {});
       } catch (err) {
         try {
-          const fixed = req.body.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":').replace(/'/g, '"');
+          const fixed = vercelBody.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":').replace(/'/g, '"');
           return Promise.resolve(JSON.parse(fixed));
         } catch (e2) {
           return Promise.reject(err);
