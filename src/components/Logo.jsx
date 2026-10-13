@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import logoIcon from '../assets/logo-icon.png';
 import logoHorizDark from '../assets/logo-horizontal-dark.png';
 import logoHorizLight from '../assets/logo-horizontal-light.png';
@@ -7,7 +7,7 @@ import logoVertLight from '../assets/logo-vertical-light.png';
 
 /**
  * InternCatalyst Official Logo Component
- * Accepts variant ('horizontal', 'vertical', 'icon', 'image'), mode ('dark', 'light'), height, showTagline, onClick.
+ * Accepts variant ('horizontal', 'vertical', 'icon', 'image'), mode ('dark', 'light'), height, showTagline, onClick, onLongPress.
  */
 export default function Logo({ 
   variant = 'horizontal', 
@@ -15,17 +15,64 @@ export default function Logo({
   height = 42, 
   showTagline = true, 
   onClick, 
+  onLongPress,
   className = '',
   style = {} 
 }) {
   const isDark = mode === 'dark';
+  const timerRef = useRef(null);
+  const isLongPressRef = useRef(false);
+
+  const startPress = () => {
+    if (!onLongPress) return;
+    isLongPressRef.current = false;
+    timerRef.current = setTimeout(() => {
+      isLongPressRef.current = true;
+      if (typeof window !== 'undefined' && window.navigator?.vibrate) {
+        try { window.navigator.vibrate(60); } catch (_) {}
+      }
+      onLongPress();
+    }, 1100); // 1.1s hold to open admin portal
+  };
+
+  const endPress = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  const handleClick = (e) => {
+    if (isLongPressRef.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      isLongPressRef.current = false;
+      return;
+    }
+    if (onClick) onClick(e);
+  };
+
+  const sharedHandlers = {
+    onClick: handleClick,
+    onMouseDown: startPress,
+    onMouseUp: endPress,
+    onMouseLeave: endPress,
+    onTouchStart: startPress,
+    onTouchEnd: endPress,
+    onTouchCancel: endPress,
+    onContextMenu: (e) => {
+      if (onLongPress && isLongPressRef.current) {
+        e.preventDefault();
+      }
+    }
+  };
   
   if (variant === 'icon') {
     return (
       <div 
-        onClick={onClick} 
+        {...sharedHandlers}
         className={`brand-logo-wrapper ${className}`}
-        style={{ display: 'inline-flex', alignItems: 'center', cursor: onClick ? 'pointer' : 'default', ...style }}
+        style={{ display: 'inline-flex', alignItems: 'center', cursor: (onClick || onLongPress) ? 'pointer' : 'default', ...style }}
       >
         <img 
           src={logoIcon} 
@@ -48,9 +95,9 @@ export default function Logo({
 
     return (
       <div 
-        onClick={onClick} 
+        {...sharedHandlers}
         className={`brand-logo-wrapper ${className}`}
-        style={{ display: 'inline-flex', alignItems: 'center', cursor: onClick ? 'pointer' : 'default', ...style }}
+        style={{ display: 'inline-flex', alignItems: 'center', cursor: (onClick || onLongPress) ? 'pointer' : 'default', ...style }}
       >
         <img 
           src={imgSrc} 
@@ -65,13 +112,13 @@ export default function Logo({
     const imgSrc = isDark ? logoVertDark : logoVertLight;
     return (
       <div 
-        onClick={onClick} 
+        {...sharedHandlers}
         className={`brand-logo-wrapper vertical ${className}`}
         style={{ 
           display: 'inline-flex', 
           flexDirection: 'column', 
           alignItems: 'center', 
-          cursor: onClick ? 'pointer' : 'default',
+          cursor: (onClick || onLongPress) ? 'pointer' : 'default',
           ...style 
         }}
       >
@@ -95,14 +142,15 @@ export default function Logo({
 
   return (
     <div 
-      onClick={onClick} 
+      {...sharedHandlers}
       className={`brand-logo-wrapper horizontal ${className}`}
       style={{ 
         display: 'inline-flex', 
         alignItems: 'center', 
         gap: `${Math.max(8, height * 0.22)}px`, 
-        cursor: onClick ? 'pointer' : 'default',
+        cursor: (onClick || onLongPress) ? 'pointer' : 'default',
         userSelect: 'none',
+        WebkitUserSelect: 'none',
         flexShrink: 0,
         whiteSpace: 'nowrap',
         ...style 

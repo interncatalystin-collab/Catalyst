@@ -6,11 +6,12 @@
 import { sendOtpHandler, verifyOtpHandler, passwordLoginHandler } from './controllers/authController.js';
 import { getInternshipsHandler, createInternshipHandler } from './controllers/internshipController.js';
 import { getApplicationsHandler, submitApplicationHandler, forwardApplicationHandler, employerSelectApplicationHandler, submitAssessmentHandler } from './controllers/applicationController.js';
-import { registerStudentHandler, loginStudentHandler, getStudentProfileHandler, changeStudentPasswordHandler } from './controllers/studentAuthController.js';
+import { registerStudentHandler, loginStudentHandler, getStudentProfileHandler, updateStudentProfileHandler, changeStudentPasswordHandler } from './controllers/studentAuthController.js';
 import { adminLoginHandler, getAdminDashboardMetricsHandler, getAllStudentsHandler, getStudentByIdHandler } from './controllers/adminController.js';
 import { exportStudentsExcelHandler } from './controllers/excelController.js';
+import { sendApplicationConfirmationEmail, sendRegistrationConfirmationMail, verifyEmailService } from './services/emailService.js';
 
-// Utility helper to parse JSON payload (supports standalone Node streams and serverless pre-parsed req.body)
+// Utility helper to parse JSON payload (supports standalone Node streams, serverless pre-parsed req.body, and resilient fallback)
 const parseJson = (req) => {
   if (req.body !== undefined && req.body !== null) {
     if (typeof req.body === 'object') {
@@ -20,7 +21,12 @@ const parseJson = (req) => {
       try {
         return Promise.resolve(req.body ? JSON.parse(req.body) : {});
       } catch (err) {
-        return Promise.reject(err);
+        try {
+          const fixed = req.body.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":').replace(/'/g, '"');
+          return Promise.resolve(JSON.parse(fixed));
+        } catch (e2) {
+          return Promise.reject(err);
+        }
       }
     }
   }
@@ -29,10 +35,16 @@ const parseJson = (req) => {
     let body = '';
     req.on('data', chunk => { body += chunk.toString(); });
     req.on('end', () => {
+      if (!body || !body.trim()) return resolve({});
       try {
-        resolve(body ? JSON.parse(body) : {});
+        resolve(JSON.parse(body));
       } catch (err) {
-        reject(err);
+        try {
+          const fixed = body.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":').replace(/'/g, '"');
+          resolve(JSON.parse(fixed));
+        } catch (e2) {
+          reject(err);
+        }
       }
     });
     req.on('error', (err) => reject(err));
@@ -51,6 +63,49 @@ export const routeDispatcher = async (req, res, pathname) => {
       message: 'InternCatalyst Backend REST API Running',
       timestamp: new Date().toISOString()
     }));
+    return true;
+  }
+
+  // --- NODEMAILER EMAIL SERVICE ROUTES ---
+  if (req.method === 'GET' && pathname === '/api/mail/status') {
+    const status = await verifyEmailService();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(status));
+    return true;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/mail/test') {
+    const body = await parseJson(req);
+    const targetEmail = body.email || body.to;
+    if (!targetEmail) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Recipient email address (email) is required' }));
+      return true;
+    }
+    const result = await sendRegistrationConfirmationMail({
+      fullName: body.name || 'InternCatalyst Candidate',
+      email: targetEmail,
+      collegeName: 'InternCatalyst Test University',
+      preferredDomain: 'Software Development'
+    });
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
+    return true;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/mail/application-confirmation') {
+    const body = await parseJson(req);
+    const result = await sendApplicationConfirmationEmail(body);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
+    return true;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/mail/registration-confirmation') {
+    const body = await parseJson(req);
+    const result = await sendRegistrationConfirmationMail(body);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
     return true;
   }
 
@@ -75,6 +130,12 @@ export const routeDispatcher = async (req, res, pathname) => {
 
   if (req.method === 'GET' && pathname === '/api/student/profile') {
     await getStudentProfileHandler(req, res);
+    return true;
+  }
+
+  if ((req.method === 'POST' || req.method === 'PUT') && pathname === '/api/student/profile') {
+    const body = await parseJson(req);
+    await updateStudentProfileHandler(req, res, body);
     return true;
   }
 

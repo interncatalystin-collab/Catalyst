@@ -246,11 +246,43 @@ export default function StudentDashboard({
   const [isCustomCity, setIsCustomCity] = useState(false);
   const [internshipPreference, setInternshipPreference] = useState(safeProfile.internshipPreference || 'Remote / Online');
   const [resumeUrl, setResumeUrl] = useState(safeProfile.resumeUrl || safeProfile.resumeLink || '');
+  const [resumeName, setResumeName] = useState(
+    safeProfile.resumeName || 
+    (safeProfile.resumeUrl?.startsWith('data:') ? 'ATS_Resume.pdf' : (safeProfile.resumeUrl ? (safeProfile.resumeUrl.split('/').pop() || 'Candidate_Resume.pdf') : ''))
+  );
+  const resumeFileInputRef = useRef(null);
   const [linkedinUrl, setLinkedinUrl] = useState(safeProfile.linkedinUrl || safeProfile.linkedin || '');
   const [githubUrl, setGithubUrl] = useState(safeProfile.githubUrl || safeProfile.github || '');
   const [skillsInput, setSkillsInput] = useState(
     Array.isArray(safeProfile.skills) ? safeProfile.skills.join(', ') : (safeProfile.skills || '')
   );
+
+  // Resume PDF Upload Handler
+  const handleResumePdfUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
+      if (onAddToast) onAddToast('Invalid format: Please upload a valid PDF document (.pdf only).', 'danger');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      if (onAddToast) onAddToast('File size limit exceeded: Resume PDF must be under 10MB.', 'danger');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      const dataUrl = uploadEvent.target?.result;
+      if (dataUrl) {
+        setResumeUrl(dataUrl);
+        setResumeName(file.name);
+        if (onAddToast) onAddToast(`📄 Resume PDF '${file.name}' attached successfully!`, 'success');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   // Sync state if safeProfile prop updates externally
   useEffect(() => {
@@ -296,7 +328,7 @@ export default function StudentDashboard({
       { name: 'City & State', completed: Boolean(city && city.trim()) },
       { name: 'Work Mode Preference', completed: Boolean(internshipPreference) },
       { name: 'Key Skills', completed: Boolean(skillsInput && skillsInput.trim()) },
-      { name: 'Resume Link', completed: Boolean(resumeUrl && resumeUrl.trim()) },
+      { name: 'ATS Resume PDF', completed: Boolean(resumeUrl && resumeUrl.trim()) },
       { name: 'LinkedIn or GitHub', completed: Boolean((linkedinUrl && linkedinUrl.trim()) || (githubUrl && githubUrl.trim())) },
     ];
 
@@ -417,6 +449,7 @@ export default function StudentDashboard({
       internshipPreference,
       resumeUrl: resumeUrl.trim(),
       resumeLink: resumeUrl.trim(),
+      resumeName: resumeName || 'Candidate_Resume.pdf',
       linkedinUrl: linkedinUrl.trim(),
       linkedin: linkedinUrl.trim(),
       githubUrl: githubUrl.trim(),
@@ -2501,21 +2534,124 @@ export default function StudentDashboard({
 
                       <div className="form-group">
                         <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span>ATS Resume Drive Link <span className="required">*</span></span>
-                          {resumeUrl && (
-                            <a href={resumeUrl} target="_blank" rel="noreferrer" style={{ fontSize: '0.75rem', color: '#1e3a8a', fontWeight: '700' }}>
-                              Test Link ↗
-                            </a>
-                          )}
+                          <span>ATS Resume PDF <span className="required">*</span></span>
+                          <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                            Accepted: .PDF (Max 10MB)
+                          </span>
                         </label>
+
+                        {/* Hidden Resume PDF file input */}
                         <input 
-                          type="url" 
-                          className="form-input" 
-                          value={resumeUrl} 
-                          onChange={(e) => setResumeUrl(e.target.value)} 
-                          placeholder="https://drive.google.com/..." 
-                          required 
+                          type="file" 
+                          ref={resumeFileInputRef} 
+                          accept=".pdf,application/pdf" 
+                          onChange={handleResumePdfUpload} 
+                          style={{ display: 'none' }} 
                         />
+
+                        {resumeUrl ? (
+                          <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '0.65rem 0.9rem',
+                            background: '#f8fafc',
+                            border: '1.5px solid #cbd5e1',
+                            borderRadius: '8px',
+                            gap: '0.5rem',
+                            flexWrap: 'wrap'
+                          }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 0, flex: 1 }}>
+                              <div style={{
+                                width: '34px',
+                                height: '34px',
+                                borderRadius: '6px',
+                                background: '#fee2e2',
+                                color: '#dc2626',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0
+                              }}>
+                                <FileText size={18} />
+                              </div>
+                              <div style={{ minWidth: 0, flex: 1 }}>
+                                <strong style={{ fontSize: '0.85rem', color: '#0f172a', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                  {resumeName || 'Candidate_Resume.pdf'}
+                                </strong>
+                                <span style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: '600' }}>
+                                  ✓ Resume PDF Attached
+                                </span>
+                              </div>
+                            </div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                              <a 
+                                href={resumeUrl} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className="btn btn-secondary btn-sm"
+                                style={{ fontSize: '0.75rem', padding: '0.35rem 0.65rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}
+                              >
+                                <Eye size={12} /> View PDF
+                              </a>
+                              <button 
+                                type="button" 
+                                onClick={() => resumeFileInputRef.current?.click()} 
+                                className="btn btn-primary btn-sm"
+                                style={{ fontSize: '0.75rem', padding: '0.35rem 0.65rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}
+                              >
+                                <Upload size={12} /> Replace
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div 
+                            onClick={() => resumeFileInputRef.current?.click()}
+                            style={{
+                              border: '2px dashed #94a3b8',
+                              borderRadius: '8px',
+                              padding: '1.1rem 1rem',
+                              textAlign: 'center',
+                              cursor: 'pointer',
+                              background: '#f8fafc',
+                              transition: 'all 0.2s ease',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              gap: '0.4rem'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.borderColor = '#2563eb';
+                              e.currentTarget.style.background = '#eff6ff';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.borderColor = '#94a3b8';
+                              e.currentTarget.style.background = '#f8fafc';
+                            }}
+                          >
+                            <div style={{
+                              width: '38px',
+                              height: '38px',
+                              borderRadius: '50%',
+                              background: '#eff6ff',
+                              color: '#2563eb',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}>
+                              <Upload size={18} />
+                            </div>
+                            <div>
+                              <strong style={{ fontSize: '0.85rem', color: '#1e3a8a', display: 'block' }}>
+                                Click to Upload ATS Resume PDF <span className="required">*</span>
+                              </strong>
+                              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                                Only .pdf documents accepted (Max 10MB)
+                              </span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
 

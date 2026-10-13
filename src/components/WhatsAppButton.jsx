@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 
 export default function WhatsAppButton({ 
-  phoneNumber = '919876543210', 
+  phoneNumber = '919014088240', 
   defaultMessage = 'Hi InternCatalyst Support, I have a query regarding internships and applications.' 
 }) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(defaultMessage)}`;
+  // Normalize phone number (strip non-digits and ensure India 91 prefix)
+  const cleanPhone = (phoneNumber || '919014088240').replace(/[^0-9]/g, '');
+  const targetPhone = cleanPhone.startsWith('91') && cleanPhone.length === 12
+    ? cleanPhone
+    : (cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone);
+
+  const whatsappUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(defaultMessage)}`;
 
   return (
     <div

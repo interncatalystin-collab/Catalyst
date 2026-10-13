@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -47,10 +47,38 @@ export const getTabLabel = (tab) => {
 };
 
 export default function App() {
-  // Navigation & Role State with History Tracking
+  // Navigation & Role State with Browser History (HTML5 popstate) Tracking
   const [activeTab, setActiveTab] = useState('home'); // 'home', 'browse', 'how-it-works', 'resume-templates', 'for-companies', 'about', 'student-dash', 'company-dash', 'admin-dash', 'login'
   const [navHistory, setNavHistory] = useState([]);
   const [currentRole, setCurrentRole] = useState('visitor'); // 'visitor', 'student', 'company', 'admin'
+  const isPopStateRef = useRef(false);
+
+  // Synchronize SPA tabs with browser history so the browser and in-app back buttons step through visited pages
+  useEffect(() => {
+    // Set initial history state if not present
+    if (!window.history.state || !window.history.state.tab) {
+      window.history.replaceState({ tab: 'home' }, '');
+    }
+
+    const handlePopState = (event) => {
+      isPopStateRef.current = true;
+      const targetTab = event.state?.tab || 'home';
+      setActiveTab(targetTab);
+      setNavHistory(prev => {
+        if (prev.length > 0 && prev[prev.length - 1] === targetTab) {
+          return prev.slice(0, -1);
+        }
+        return prev;
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        isPopStateRef.current = false;
+      }, 50);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const handleNavigate = (nextTab) => {
     if (typeof nextTab === 'function') {
@@ -60,6 +88,9 @@ export default function App() {
     if (nextTab === activeTab) return;
     setNavHistory(prev => [...prev, activeTab]);
     setActiveTab(nextTab);
+    if (!isPopStateRef.current) {
+      window.history.pushState({ tab: nextTab }, '');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -68,8 +99,19 @@ export default function App() {
       const prevTab = navHistory[navHistory.length - 1];
       setNavHistory(prev => prev.slice(0, -1));
       setActiveTab(prevTab);
+      // Synchronize browser history stack if pushed
+      if (window.history.state?.tab && window.history.length > 1) {
+        isPopStateRef.current = true;
+        window.history.back();
+        setTimeout(() => {
+          isPopStateRef.current = false;
+        }, 50);
+      }
+    } else if (window.history.length > 1) {
+      window.history.back();
     } else {
       setActiveTab('home');
+      window.history.replaceState({ tab: 'home' }, '');
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -77,17 +119,29 @@ export default function App() {
   const previousTab = navHistory.length > 0 ? navHistory[navHistory.length - 1] : 'home';
 
   // Portal Login Authentication State (Guards dashboards until credentials entered)
-  const [authenticatedRoles, setAuthenticatedRoles] = useState({
-    student: false,
-    company: false,
-    admin: false
+  const [authenticatedRoles, setAuthenticatedRoles] = useState(() => {
+    try {
+      const saved = localStorage.getItem('authenticatedRoles');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return {
+      student: false,
+      company: false,
+      admin: false
+    };
   });
 
   // Application Datasets State
   const [internships, setInternships] = useState(INITIAL_INTERNSHIPS);
   const [companies, setCompanies] = useState(INITIAL_COMPANIES);
   const [currentLoggedInCompanyId, setCurrentLoggedInCompanyId] = useState('comp-101');
-  const [studentProfile, setStudentProfile] = useState(INITIAL_STUDENT_PROFILE);
+  const [studentProfile, setStudentProfile] = useState(() => {
+    try {
+      const saved = localStorage.getItem('studentProfile');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return INITIAL_STUDENT_PROFILE;
+  });
   const [students, setStudents] = useState(INITIAL_STUDENTS_LIST);
   const [applications, setApplications] = useState(INITIAL_APPLICATIONS);
   const [complaints, setComplaints] = useState(INITIAL_COMPLAINTS);
@@ -121,11 +175,27 @@ export default function App() {
     setAuditLogs(prev => [newLog, ...prev]);
   };
 
-  // Unified Student Profile & Admin Store 1 Synchronizer (No Duplicates)
+  // Unified Student Profile & Admin Store 1 Synchronizer with LocalStorage & Backend API Persistence
   const handleUpdateStudentProfile = (updatedProfile) => {
     setStudentProfile(prev => {
       const merged = typeof updatedProfile === 'function' ? updatedProfile(prev) : { ...prev, ...updatedProfile };
       
+      // 1. Immediately persist to localStorage
+      try {
+        localStorage.setItem('studentProfile', JSON.stringify(merged));
+      } catch (e) {}
+
+      // 2. Persist to Backend REST API (MongoDB Atlas & Server Memory)
+      if (merged.email || merged.id) {
+        fetch('/api/student/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(merged)
+        }).catch(err => {
+          console.warn('Backend student profile sync note:', err.message);
+        });
+      }
+
       // Synchronize into students array for Admin Dashboard (Store 1)
       setStudents(prevList => {
         const emailToMatch = (merged.email || '').toLowerCase();
@@ -191,7 +261,11 @@ export default function App() {
   };
 
   const handleLoginSuccess = (role, userEmail, userObj = null, token = null) => {
-    setAuthenticatedRoles(prev => ({ ...prev, [role]: true }));
+    setAuthenticatedRoles(prev => {
+      const updated = { ...prev, [role]: true };
+      try { localStorage.setItem('authenticatedRoles', JSON.stringify(updated)); } catch (e) {}
+      return updated;
+    });
     setCurrentRole(role);
 
     if (role === 'student') {
@@ -227,7 +301,16 @@ export default function App() {
   };
 
   const handleLogoutRole = (role) => {
-    setAuthenticatedRoles(prev => ({ ...prev, [role]: false }));
+    setAuthenticatedRoles(prev => {
+      const updated = { ...prev, [role]: false };
+      try { localStorage.setItem('authenticatedRoles', JSON.stringify(updated)); } catch (e) {}
+      return updated;
+    });
+    if (role === 'student') {
+      try {
+        localStorage.removeItem('studentToken');
+      } catch (e) {}
+    }
     setCurrentRole('visitor');
     setActiveTab('home');
     addAuditLog('USER_LOGOUT', `Logged out from ${role.toUpperCase()} portal.`);
@@ -541,10 +624,10 @@ export default function App() {
   const handleAttemptApply = () => {
     if (currentRole !== 'student' || !authenticatedRoles.student) {
       addToast('Please log in to your Student account to apply for domain roles.', 'info');
-      setActiveTab('login');
+      handleNavigate('login');
     } else {
       addToast('In accordance with platform rules, students apply for their Domain Role across connected companies. Redirecting to your Student Dashboard!', 'info');
-      setActiveTab('student-dash');
+      handleNavigate('student-dash');
     }
   };
 
@@ -561,6 +644,10 @@ export default function App() {
         hasHistory={navHistory.length > 0}
         previousTab={previousTab}
         getTabLabel={getTabLabel}
+        onOpenAdminLogin={() => {
+          addToast('🔒 Secret Admin Access: Opening Central Administration Portal...', 'info');
+          handleNavigate('admin-dash');
+        }}
       />
 
 
@@ -746,7 +833,7 @@ export default function App() {
       )}
 
       {/* Floating WhatsApp Support Button for Queries */}
-      <WhatsAppButton />
+      <WhatsAppButton phoneNumber="919014088240" />
 
       {/* Toast Notification Popups */}
       <div className="toast-container">

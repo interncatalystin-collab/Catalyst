@@ -28,7 +28,8 @@ export default function Navbar({
   onGoBack,
   hasHistory = false,
   previousTab = 'home',
-  getTabLabel = (t) => t
+  getTabLabel = (t) => t,
+  onOpenAdminLogin
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -57,6 +58,13 @@ export default function Navbar({
               mode="dark" 
               showTagline={true}
               onClick={() => handleNavClick('home')} 
+              onLongPress={() => {
+                if (onOpenAdminLogin) {
+                  onOpenAdminLogin();
+                } else {
+                  handleNavClick('admin-dash');
+                }
+              }}
               style={{ flexShrink: 0, marginRight: '0.5rem' }}
             />
           </div>

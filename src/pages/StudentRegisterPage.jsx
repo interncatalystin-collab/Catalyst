@@ -37,6 +37,39 @@ export default function StudentRegisterPage({
   previousTab
 }) {
   const photoInputRef = useRef(null);
+  const resumeInputRef = useRef(null);
+  const [resumeFileName, setResumeFileName] = useState('');
+
+  const handleResumePdfUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
+      if (onAddToast) onAddToast('Invalid format: Please upload a valid PDF document (.pdf only).', 'danger');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      if (onAddToast) onAddToast('File size limit exceeded: Resume PDF must be under 10MB.', 'danger');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      const dataUrl = uploadEvent.target?.result;
+      if (dataUrl) {
+        setFormData(prev => ({
+          ...prev,
+          resumeLink: dataUrl,
+          resumeUrl: dataUrl,
+          resumeName: file.name
+        }));
+        setResumeFileName(file.name);
+        if (onAddToast) onAddToast(`📄 Resume PDF '${file.name}' attached successfully!`, 'success');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -210,7 +243,7 @@ export default function StudentRegisterPage({
       const data = await response.json();
 
       if (response.ok && data.success) {
-        setSuccessMsg('Registration successful! Logging you in...');
+        setSuccessMsg(`Registration successful! A welcome confirmation email has been sent to ${formData.email}. Logging you in...`);
         if (data.token) {
           localStorage.setItem('studentToken', data.token);
         }
@@ -610,11 +643,65 @@ export default function StudentRegisterPage({
               </div>
 
               <div>
-                <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700' }}>Resume / Portfolio Drive Link</label>
-                <div style={{ position: 'relative' }}>
-                  <FileText size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
-                  <input type="url" name="resumeLink" className="form-input" style={{ paddingLeft: '2.5rem' }} placeholder="https://drive.google.com/..." value={formData.resumeLink} onChange={handleChange} />
-                </div>
+                <label className="form-label" style={{ fontSize: '0.825rem', fontWeight: '700', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>ATS Resume PDF (.pdf)</span>
+                  <span style={{ fontSize: '0.72rem', color: '#64748b' }}>Max 10MB</span>
+                </label>
+                <input 
+                  type="file" 
+                  ref={resumeInputRef} 
+                  accept=".pdf,application/pdf" 
+                  onChange={handleResumePdfUpload} 
+                  style={{ display: 'none' }} 
+                />
+                {formData.resumeLink ? (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0.55rem 0.85rem',
+                    background: '#f8fafc',
+                    border: '1.5px solid #cbd5e1',
+                    borderRadius: '8px',
+                    gap: '0.5rem'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0, flex: 1 }}>
+                      <FileText size={18} style={{ color: '#dc2626', flexShrink: 0 }} />
+                      <span style={{ fontSize: '0.825rem', fontWeight: '600', color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {resumeFileName || 'Candidate_Resume.pdf'}
+                      </span>
+                    </div>
+                    <button 
+                      type="button" 
+                      onClick={() => resumeInputRef.current?.click()} 
+                      className="btn btn-primary btn-sm"
+                      style={{ fontSize: '0.725rem', padding: '0.25rem 0.6rem' }}
+                    >
+                      Replace
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => resumeInputRef.current?.click()}
+                    className="form-input"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      cursor: 'pointer',
+                      border: '1.5px dashed #94a3b8',
+                      background: '#f8fafc',
+                      color: '#1e3a8a',
+                      fontWeight: '600',
+                      fontSize: '0.825rem',
+                      padding: '0.65rem 1rem'
+                    }}
+                  >
+                    <Upload size={15} /> Upload Resume PDF (.pdf)
+                  </button>
+                )}
               </div>
 
               <div>

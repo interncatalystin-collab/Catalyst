@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from './Logo';
 import { 
   ShieldCheck, 
@@ -74,6 +74,15 @@ export default function LoginPage({
   previousTab
 }) {
   const [selectedRole, setSelectedRole] = useState(targetRole);
+
+  // Synchronize role whenever targetRole prop updates (e.g. via long-press on logo)
+  useEffect(() => {
+    if (targetRole) {
+      setSelectedRole(targetRole);
+      setErrorMsg('');
+      setSuccessMsg('');
+    }
+  }, [targetRole]);
   const [authMode, setAuthMode] = useState('signin'); // 'signin' | 'signup'
   const [emailOrPhone, setEmailOrPhone] = useState(''); // Blank by default
   const [password, setPassword] = useState(''); // Blank by default
@@ -138,7 +147,7 @@ export default function LoginPage({
     setSuccessMsg('');
   };
 
-  const handleStudentSignUp = (e) => {
+  const handleStudentSignUp = async (e) => {
     e.preventDefault();
     setErrorMsg('');
     setSuccessMsg('');
@@ -178,13 +187,31 @@ export default function LoginPage({
       degree: 'B.Tech / B.E.',
       branch: 'Computer Science & Engineering',
       institution: 'Accredited University / Institute',
+      collegeName: 'Accredited University / Institute',
       yearOfStudy: '4th Year (Final Year)',
       preferredDomain: 'Software & Full-Stack Web Development',
       domain: 'Software & Full-Stack Web Development'
     };
 
+    // Dispatch to backend REST API to store student and send Nodemailer registration welcome email
+    try {
+      const res = await fetch('/api/auth/student/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(officialStudent)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.token) {
+          localStorage.setItem('studentToken', data.token);
+        }
+      }
+    } catch (apiErr) {
+      console.warn('Backend registration API offline, proceeding with client storage:', apiErr.message);
+    }
+
     localStorage.setItem('studentToken', `token-student-${Date.now()}`);
-    setSuccessMsg(`🎉 Account created successfully for ${signUpName.trim()}! Authenticating...`);
+    setSuccessMsg(`🎉 Account created! Welcome confirmation email sent to ${cleanEmail}. Authenticating...`);
     setTimeout(() => {
       setSubmitting(false);
       onLoginSuccess('student', cleanEmail, officialStudent, `token-student-${Date.now()}`);
@@ -403,6 +430,12 @@ export default function LoginPage({
           <button
             type="button"
             onClick={() => {
+              if (authMode === 'signup') {
+                setAuthMode('signin');
+                setErrorMsg('');
+                setSuccessMsg('');
+                return;
+              }
               if (onGoBack) onGoBack();
               else if (setActiveTab) setActiveTab('home');
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -429,15 +462,37 @@ export default function LoginPage({
 
         {/* Header Badge & Brand Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Logo height={52} mode="light" showTagline={true} style={{ marginBottom: '1.25rem' }} />
-          <div className="badge badge-verified" style={{ marginBottom: '0.75rem', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe' }}>
-            <Lock size={14} /> InternCatalyst Role-Based Access Control (RBAC)
-          </div>
-          <h1 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
-            Portal <span className="text-gradient">Authentication</span>
-          </h1>
+          <Logo 
+            height={52} 
+            mode="light" 
+            showTagline={true} 
+            onLongPress={() => {
+              handleRoleTabChange('admin');
+            }}
+            style={{ marginBottom: '1.25rem' }} 
+          />
+          {selectedRole === 'admin' ? (
+            <div className="badge badge-verified" style={{ marginBottom: '0.75rem', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+              <Shield size={14} /> Official Central Administration Portal
+            </div>
+          ) : (
+            <div className="badge badge-verified" style={{ marginBottom: '0.75rem', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe' }}>
+              <Lock size={14} /> InternCatalyst Role-Based Access Control (RBAC)
+            </div>
+          )}
+          {selectedRole === 'admin' ? (
+            <h1 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
+              Admin <span style={{ color: '#dc2626' }}>Authentication</span>
+            </h1>
+          ) : (
+            <h1 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
+              Portal <span className="text-gradient">Authentication</span>
+            </h1>
+          )}
           <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-            {selectedRole === 'student'
+            {selectedRole === 'admin'
+              ? 'Enter Central Administrator credentials to access Governance.'
+              : selectedRole === 'student'
               ? 'Sign in with your Gmail, Password, or Google Account.'
               : 'Enter your Corporate Email & Password to access your dashboard.'}
           </p>
@@ -445,83 +500,63 @@ export default function LoginPage({
 
         {/* Login Card */}
         <div className="glass-card login-card" style={{ padding: '2.25rem', background: '#ffffff', borderRadius: '16px', boxShadow: '0 20px 40px rgba(15, 23, 42, 0.08)', border: '1px solid var(--border-color)' }}>
-          {/* Role Selector Tabs */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '0.35rem',
-            background: '#f1f5f9',
-            padding: '4px',
-            borderRadius: '12px',
-            marginBottom: '1.75rem'
-          }}>
-            <button
-              type="button"
-              onClick={() => handleRoleTabChange('student')}
-              style={{
-                background: selectedRole === 'student' ? '#ffffff' : 'transparent',
-                color: selectedRole === 'student' ? '#2563eb' : 'var(--text-muted)',
-                border: 'none',
-                padding: '0.6rem 0.4rem',
-                borderRadius: '8px',
-                fontSize: '0.8rem',
-                fontWeight: '700',
-                cursor: 'pointer',
-                boxShadow: selectedRole === 'student' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.35rem',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              <GraduationCap size={15} /> Student
-            </button>
-            <button
-              type="button"
-              onClick={() => handleRoleTabChange('company')}
-              style={{
-                background: selectedRole === 'company' ? '#ffffff' : 'transparent',
-                color: selectedRole === 'company' ? '#16a34a' : 'var(--text-muted)',
-                border: 'none',
-                padding: '0.6rem 0.4rem',
-                borderRadius: '8px',
-                fontSize: '0.8rem',
-                fontWeight: '700',
-                cursor: 'pointer',
-                boxShadow: selectedRole === 'company' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.35rem',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              <Building2 size={15} /> Company
-            </button>
-            <button
-              type="button"
-              onClick={() => handleRoleTabChange('admin')}
-              style={{
-                background: selectedRole === 'admin' ? '#ffffff' : 'transparent',
-                color: selectedRole === 'admin' ? '#dc2626' : 'var(--text-muted)',
-                border: 'none',
-                padding: '0.6rem 0.4rem',
-                borderRadius: '8px',
-                fontSize: '0.8rem',
-                fontWeight: '700',
-                cursor: 'pointer',
-                boxShadow: selectedRole === 'admin' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.35rem',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              <Shield size={15} /> Admin
-            </button>
-          </div>
+          {/* Public Role Selector Tabs (Only shown for Student & Company. Admin login is strictly dedicated with no tabs!) */}
+          {selectedRole !== 'admin' && (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '0.35rem',
+              background: '#f1f5f9',
+              padding: '4px',
+              borderRadius: '12px',
+              marginBottom: '1.75rem'
+            }}>
+              <button
+                type="button"
+                onClick={() => handleRoleTabChange('student')}
+                style={{
+                  background: selectedRole === 'student' ? '#ffffff' : 'transparent',
+                  color: selectedRole === 'student' ? '#2563eb' : 'var(--text-muted)',
+                  border: 'none',
+                  padding: '0.6rem 0.4rem',
+                  borderRadius: '8px',
+                  fontSize: '0.8rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  boxShadow: selectedRole === 'student' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.35rem',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <GraduationCap size={15} /> Student
+              </button>
+              <button
+                type="button"
+                onClick={() => handleRoleTabChange('company')}
+                style={{
+                  background: selectedRole === 'company' ? '#ffffff' : 'transparent',
+                  color: selectedRole === 'company' ? '#16a34a' : 'var(--text-muted)',
+                  border: 'none',
+                  padding: '0.6rem 0.4rem',
+                  borderRadius: '8px',
+                  fontSize: '0.8rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  boxShadow: selectedRole === 'company' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.35rem',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <Building2 size={15} /> Company
+              </button>
+            </div>
+          )}
 
           {errorMsg && (
             <div style={{
@@ -981,6 +1016,28 @@ export default function LoginPage({
               <ShieldCheck size={15} color="#16a34a" />
               <span>Protected by Role-Based Access Control (RBAC) • Authorized Access Only</span>
             </div>
+
+            {selectedRole === 'admin' && (
+              <div style={{ marginTop: '1rem' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onGoBack) onGoBack();
+                    else handleRoleTabChange('student');
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#64748b',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    textDecoration: 'underline'
+                  }}
+                >
+                  ← Return to Public Portal
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

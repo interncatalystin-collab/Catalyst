@@ -26,6 +26,7 @@ export default function Footer({ setActiveTab }) {
               mode="dark" 
               showTagline={true} 
               onClick={() => handleTabClick('home')} 
+              onLongPress={() => handleTabClick('admin-dash')}
             />
             <p style={{ fontSize: '0.875rem', color: '#94a3b8', lineHeight: '1.6' }}>
               InternCatalyst connects students, colleges, and verified employers for real, transparent, scam-free internship opportunities.
@@ -85,7 +86,6 @@ export default function Footer({ setActiveTab }) {
                 { label: 'Post Internship Opportunity', tab: 'company-dash' },
                 { label: 'Company Verification Badge', tab: 'company-dash' },
                 { label: 'Subscription Pricing Plans', tab: 'company-dash' },
-                { label: 'Admin Governance', tab: 'admin-dash' },
               ].map((link, idx) => (
                 <li key={idx}>
                   <button 

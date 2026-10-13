@@ -4,7 +4,8 @@ const studentSchema = new mongoose.Schema({
   fullName: {
     type: String,
     required: [true, 'Full Name is required'],
-    trim: true
+    trim: true,
+    default: 'Registered Student'
   },
   email: {
     type: String,
@@ -15,11 +16,11 @@ const studentSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required']
+    default: ''
   },
   phone: {
     type: String,
-    required: [true, 'Phone Number is required'],
+    default: '',
     trim: true
   },
   avatar: {
@@ -37,22 +38,22 @@ const studentSchema = new mongoose.Schema({
   // Education Information
   collegeName: {
     type: String,
-    required: [true, 'College Name is required'],
+    default: 'Accredited Institution',
     trim: true
   },
   degree: {
     type: String,
-    required: [true, 'Degree is required'],
+    default: 'B.Tech / B.E.',
     trim: true
   },
   branch: {
     type: String,
-    required: [true, 'Branch / Department is required'],
+    default: 'Computer Science & Engineering',
     trim: true
   },
   currentYearOrSemester: {
     type: String,
-    default: ''
+    default: '4th Year'
   },
   cgpaOrPercentage: {
     type: String,
@@ -60,7 +61,7 @@ const studentSchema = new mongoose.Schema({
   },
   graduationYear: {
     type: String,
-    default: ''
+    default: '2026'
   },
   // Professional Information
   skills: {

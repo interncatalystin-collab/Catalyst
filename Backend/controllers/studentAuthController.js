@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Student from '../models/Student.js';
@@ -34,31 +35,35 @@ export const registerStudentHandler = async (req, res, body) => {
       internshipPreference
     } = body;
 
-    // Validation
-    if (!fullName || !email || !password || !phone || !collegeName || !degree || !branch) {
+    // Validation: Require Full Name, Email, Password
+    if (!fullName || !email || !password) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ 
-        error: 'Missing required fields. Full Name, Email, Password, Phone, College, Degree, and Branch are required.' 
+        error: 'Missing required fields. Full Name, Email, and Password are required.' 
       }));
       return;
     }
 
-    // Password Complexity: Min 8 chars, at least 1 uppercase letter and 1 special character
-    if (password.length < 8 || !/[A-Z]/.test(password) || !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password)) {
+    // Password requirement (min 6 characters)
+    if (password.length < 6) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ 
-        error: 'Password must be at least 8 characters long and contain at least one capital letter and one special character.' 
+        error: 'Password must be at least 6 characters long.' 
       }));
       return;
     }
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    // Check unique email in DB
+    // Check unique email in DB (resilient to connection buffer timeouts)
     let existingStudent = null;
-    try {
-      existingStudent = await Student.findOne({ email: normalizedEmail });
-    } catch (dbErr) {
+    if (mongoose.connection && mongoose.connection.readyState === 1) {
+      try {
+        existingStudent = await Student.findOne({ email: normalizedEmail });
+      } catch (dbErr) {
+        existingStudent = memoryStudents.find(s => s.email === normalizedEmail);
+      }
+    } else {
       existingStudent = memoryStudents.find(s => s.email === normalizedEmail);
     }
 
@@ -76,13 +81,13 @@ export const registerStudentHandler = async (req, res, body) => {
       fullName: fullName.trim(),
       email: normalizedEmail,
       password: hashedPassword,
-      phone: phone.trim(),
-      avatar: avatar || '',
+      phone: (phone || '').trim() || 'Not Provided',
+      avatar: avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(fullName.trim())}`,
       dateOfBirth: dateOfBirth || '',
       gender: gender || '',
-      collegeName: collegeName.trim(),
-      degree: degree.trim(),
-      branch: branch.trim(),
+      collegeName: (collegeName || '').trim() || 'Accredited Institution',
+      degree: (degree || '').trim() || 'B.Tech / B.E.',
+      branch: (branch || '').trim() || 'Computer Science & Engineering',
       currentYearOrSemester: currentYearOrSemester || '3rd Year',
       cgpaOrPercentage: cgpaOrPercentage || '',
       graduationYear: graduationYear || '2026',
@@ -236,6 +241,88 @@ export const getStudentProfileHandler = async (req, res) => {
   } catch (error) {
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Failed to fetch student profile', details: error.message }));
+  }
+};
+
+export const updateStudentProfileHandler = async (req, res, body) => {
+  try {
+    const email = body.email ? body.email.trim().toLowerCase() : null;
+    const id = body.id || body._id;
+
+    if (!email && !id) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Student email or ID is required to update profile' }));
+      return;
+    }
+
+    const updates = {
+      fullName: body.fullName || body.name || 'Registered Student',
+      phone: body.phone || '',
+      avatar: body.avatar || '',
+      dateOfBirth: body.dateOfBirth || '',
+      gender: body.gender || '',
+      collegeName: body.collegeName || body.institution || '',
+      degree: body.degree || '',
+      branch: body.branch || '',
+      currentYearOrSemester: body.currentYearOrSemester || body.yearOfStudy || '',
+      cgpaOrPercentage: body.cgpaOrPercentage || body.cgpa || '',
+      graduationYear: body.graduationYear || '',
+      skills: Array.isArray(body.skills) ? body.skills : (body.skills ? body.skills.split(',').map(s => s.trim()) : []),
+      preferredDomain: body.preferredDomain || body.domain || '',
+      resumeLink: body.resumeLink || body.resumeUrl || '',
+      linkedin: body.linkedin || body.linkedinUrl || '',
+      github: body.github || body.githubUrl || '',
+      city: body.city || '',
+      state: body.state || '',
+      internshipPreference: body.internshipPreference || 'Remote / Online'
+    };
+
+    let updatedStudent = null;
+
+    if (mongoose.connection && mongoose.connection.readyState === 1) {
+      try {
+        const query = email ? { email } : { _id: id };
+        updatedStudent = await Student.findOneAndUpdate(
+          query,
+          { $set: updates },
+          { new: true, upsert: true, setDefaultsOnInsert: true }
+        ).select('-password');
+      } catch (dbErr) {
+        console.warn('DB update fallback to memory:', dbErr.message);
+      }
+    }
+
+    // In-memory fallback/mirror
+    const memIdx = memoryStudents.findIndex(s => 
+      (email && s.email && s.email.toLowerCase() === email) || 
+      (id && (s.id === id || s._id === id))
+    );
+
+    if (memIdx !== -1) {
+      memoryStudents[memIdx] = { ...memoryStudents[memIdx], ...updates, updatedAt: new Date().toISOString() };
+      if (!updatedStudent) updatedStudent = memoryStudents[memIdx];
+    } else {
+      const newMem = {
+        _id: id || `std-${Date.now()}`,
+        id: id || `std-${Date.now()}`,
+        email: email || '',
+        ...updates,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      memoryStudents.push(newMem);
+      if (!updatedStudent) updatedStudent = newMem;
+    }
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      success: true,
+      message: 'Student profile updated and saved successfully!',
+      student: updatedStudent
+    }));
+  } catch (error) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Failed to update student profile', details: error.message }));
   }
 };
 
