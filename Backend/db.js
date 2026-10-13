@@ -7,12 +7,14 @@ import mongoose from 'mongoose';
 import dns from 'dns';
 import { MONGODB_URI } from './config.js';
 
-// Configure DNS resolution for MongoDB Atlas SRV records on Windows
-try {
-  dns.setDefaultResultOrder('ipv4first');
-  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
-} catch (dnsErr) {
-  // Ignore DNS override errors if system policies restrict custom DNS
+// Configure DNS resolution for MongoDB Atlas SRV records on Windows only
+if (process.platform === 'win32' && !process.env.VERCEL) {
+  try {
+    dns.setDefaultResultOrder?.('ipv4first');
+    dns.setServers?.(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+  } catch (dnsErr) {
+    // Ignore DNS override errors if system policies restrict custom DNS
+  }
 }
 
 // Cache the connection promise across warm serverless lambdas
