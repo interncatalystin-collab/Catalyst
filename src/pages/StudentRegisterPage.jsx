@@ -343,7 +343,7 @@ export default function StudentRegisterPage({
       )}
 
       {/* Form Container */}
-      <div className="glass-card" style={{ padding: '2.5rem', background: '#ffffff', borderRadius: '16px', boxShadow: '0 20px 40px rgba(15, 23, 42, 0.08)', border: '1px solid var(--border-color)' }}>
+      <div className="glass-card register-card" style={{ padding: '2.5rem', background: '#ffffff', borderRadius: '16px', boxShadow: '0 20px 40px rgba(15, 23, 42, 0.08)', border: '1px solid var(--border-color)' }}>
         {errorMsg && (
           <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.85rem 1rem', borderRadius: '10px', fontSize: '0.875rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <AlertCircle size={18} /> {errorMsg}

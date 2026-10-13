@@ -1382,3 +1382,211 @@ html, body {
   }
 }
 
+/* ==========================================================================
+   Comprehensive Mobile View Alignment & Overflow Prevention System
+   ========================================================================== */
+
+/* Universal Responsive Navbar */
+@media (max-width: 768px) {
+  .nav-header nav {
+    padding: 0.5rem 0 !important;
+  }
+  .nav-container {
+    padding: 0 0.85rem !important;
+    gap: 0.5rem !important;
+  }
+  .mobile-menu-btn {
+    display: flex !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    padding: 0.4rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 0 0.6rem !important;
+    gap: 0.35rem !important;
+  }
+  .logo-tagline {
+    display: none !important;
+  }
+  .brand-logo-wrapper.horizontal .logo-title {
+    font-size: 15px !important;
+  }
+  .brand-logo-wrapper.horizontal img {
+    height: 30px !important;
+  }
+  .nav-login-btn {
+    padding: 0.38rem 0.65rem !important;
+    font-size: 0.78rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-login-btn {
+    padding: 0.32rem 0.45rem !important;
+    font-size: 0.72rem !important;
+  }
+}
+
+/* Mobile Nav Drawer Items */
+.mobile-nav-drawer {
+  animation: slideDown 0.2s ease-out;
+  border-top: 1px solid rgba(56, 189, 248, 0.2);
+  padding: 1rem 0.85rem !important;
+}
+
+@media (max-width: 480px) {
+  .mobile-nav-drawer {
+    padding: 0.85rem 0.65rem !important;
+    gap: 0.45rem !important;
+  }
+  .mobile-nav-drawer .btn {
+    padding: 0.65rem 0.85rem !important;
+    font-size: 0.85rem !important;
+    min-height: 42px !important;
+  }
+}
+
+/* Mobile Filter Track Scroll Bar */
+.track-filter-scroll {
+  display: flex !important;
+  gap: 0.6rem !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding-bottom: 0.35rem !important;
+  scrollbar-width: none !important;
+}
+
+.track-filter-scroll::-webkit-scrollbar {
+  display: none !important;
+}
+
+.track-filter-scroll > button {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 640px) {
+  .track-filter-scroll > button {
+    padding: 0.5rem 0.95rem !important;
+    font-size: 0.82rem !important;
+  }
+}
+
+/* Domain Tracks Selector Grid */
+.domain-tracks-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+@media (max-width: 520px) {
+  .domain-tracks-selector-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+}
+
+/* Browse Filters Responsive Card */
+.browse-filters-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 680px) {
+  .browse-filters-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 1rem 0.85rem !important;
+    gap: 0.75rem !important;
+  }
+  .browse-filters-card > div {
+    width: 100% !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.5rem !important;
+  }
+  .browse-filters-card select,
+  .browse-filters-card .form-select {
+    width: 100% !important;
+    min-height: 42px !important;
+  }
+}
+
+/* Browse Search Bar */
+.browse-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (max-width: 540px) {
+  .browse-search-bar {
+    padding: 0.6rem 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+  .browse-search-bar input {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* Universal Mobile Typography & Spacing Polish */
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem !important;
+  }
+  .hero-section {
+    padding: 2.25rem 0 1.5rem !important;
+  }
+  .hero-trust-pill {
+    max-width: 100% !important;
+    font-size: 0.78rem !important;
+    padding: 0.35rem 0.85rem !important;
+    border-radius: 20px !important;
+    line-height: 1.35 !important;
+  }
+  .glass-card {
+    padding: 1.15rem 0.95rem !important;
+    border-radius: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.75rem !important;
+  }
+  .hero-trust-pill {
+    font-size: 0.74rem !important;
+    padding: 0.32rem 0.7rem !important;
+  }
+  .badge {
+    font-size: 0.72rem !important;
+    padding: 0.2rem 0.5rem !important;
+  }
+  footer {
+    padding: 2.25rem 0 1.5rem !important;
+    margin-top: 2.5rem !important;
+  }
+  .footer-bottom-bar {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0.75rem !important;
+  }
+  .footer-legal-links {
+    justify-content: center !important;
+    gap: 0.5rem 1rem !important;
+  }
+}
+
+/* Media Elements within viewports */
+img, svg, video, canvas {
+  max-width: 100%;
+}
+
+

@@ -46,7 +46,7 @@ export default function HomePage({
         <div className="container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
           {/* Trust Pill */}
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
-            <div style={{
+            <div className="hero-trust-pill" style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',
@@ -59,14 +59,14 @@ export default function HomePage({
               fontWeight: '600',
               boxShadow: '0 2px 5px rgba(0, 0, 0, 0.03)'
             }}>
-              <ShieldCheck size={16} style={{ color: '#1e3a8a' }} />
+              <ShieldCheck size={16} style={{ color: '#1e3a8a', flexShrink: 0 }} />
               <span>100% Verified Internships & Scam-Free Guarantee</span>
             </div>
           </div>
 
           {/* Main Headline */}
           <h1 style={{
-            fontSize: 'clamp(2.4rem, 5vw, 4.2rem)',
+            fontSize: 'clamp(1.85rem, 5.5vw, 3.8rem)',
             fontWeight: '800',
             lineHeight: '1.15',
             letterSpacing: '-0.03em',
@@ -195,7 +195,9 @@ export default function HomePage({
       {/* Verified Employer Badge Commitment Banner */}
       <section style={{ padding: '3.5rem 0' }}>
         <div className="container">
-          <div style={{
+          <div 
+            className="responsive-banner-card"
+            style={{
             background: '#ffffff',
             border: '1px solid #e2e8f0',
             borderRadius: 'var(--radius-xl)',
@@ -238,7 +240,7 @@ export default function HomePage({
               </h2>
               <p style={{ color: 'var(--text-muted)' }}>Explore top IT & Non-IT openings from verified corporate & enterprise partners</p>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+            <div className="track-filter-scroll home-track-filter-bar">
               <button 
                 type="button"
                 onClick={() => setHomeTrack('All')}

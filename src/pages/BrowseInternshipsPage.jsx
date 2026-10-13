@@ -84,18 +84,15 @@ export default function BrowseInternshipsPage({
             Explore verified internship roles across specialized domain tracks. Students apply directly for their chosen domain role, with applications centrally vetted by Administration and routed to partner enterprises.
           </p>
 
-          <div style={{
+          <div className="browse-search-bar" style={{
             marginTop: '1.5rem',
             background: '#ffffff',
             border: '1px solid var(--border-color)',
             borderRadius: 'var(--radius-lg)',
             padding: '0.75rem 1rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
             boxShadow: 'var(--shadow-sm)'
           }}>
-            <Search size={20} style={{ color: 'var(--text-muted)' }} />
+            <Search size={20} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
             <input 
               type="text"
               placeholder="Search by available role, domain, or skills (e.g., Full Stack, React, Python, Data Analyst)..."
@@ -114,12 +111,8 @@ export default function BrowseInternshipsPage({
         </div>
 
         {/* Track Category Filter: All / IT / Non-IT */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem',
-          marginBottom: '2rem',
-          flexWrap: 'wrap'
+        <div className="track-filter-scroll" style={{
+          marginBottom: '2rem'
         }}>
           <button
             type="button"
@@ -202,7 +195,7 @@ export default function BrowseInternshipsPage({
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem' }}>
+          <div className="domain-tracks-selector-grid">
             <button
               type="button"
               onClick={() => setSelectedDomain('All')}
@@ -265,17 +258,12 @@ export default function BrowseInternshipsPage({
         </div>
 
         {/* Filter Controls Row */}
-        <div style={{
+        <div className="browse-filters-card" style={{
           background: '#f8fafc',
           border: '1px solid var(--border-color)',
           borderRadius: 'var(--radius-lg)',
           padding: '1.25rem',
-          marginBottom: '2rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '1rem'
+          marginBottom: '2rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#0f172a', fontSize: '0.875rem', fontWeight: '700' }}>
