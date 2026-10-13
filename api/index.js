@@ -24,15 +24,18 @@ export default async function handler(req, res) {
     return;
   }
 
-  // 3. Connect to Database & Seed Admins on cold start
+  // 3. Connect to Database & Seed Admins asynchronously on cold start (non-blocking)
   if (!isInitialized) {
-    try {
-      await connectDB();
-      await seedAdmins();
-    } catch (dbErr) {
-      console.warn('Serverless cold-start initialization note:', dbErr.message);
-    }
     isInitialized = true;
+    connectDB()
+      .then(async (conn) => {
+        if (conn) {
+          await seedAdmins().catch(() => {});
+        }
+      })
+      .catch((dbErr) => {
+        console.warn('Serverless cold-start initialization note:', dbErr.message);
+      });
   }
 
   // 4. Resolve the route pathname

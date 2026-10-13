@@ -55,8 +55,8 @@ const parseJson = (req) => {
 export const routeDispatcher = async (req, res, pathname) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
 
-  // Health Check
-  if (req.method === 'GET' && pathname === '/api/health') {
+  // Health Check & Root API Status
+  if (req.method === 'GET' && (pathname === '/api' || pathname === '/api/' || pathname === '/api/health')) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ 
       status: 'ok', 
