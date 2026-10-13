@@ -471,7 +471,7 @@ export default function StudentDashboard({
 
     if (onUpdateProfile) onUpdateProfile(updated);
     setIsEditing(false);
-    if (onAddToast) onAddToast('🎉 Candidate Profile & Registration saved successfully!', 'success');
+    if (onAddToast) onAddToast(`🎉 Candidate Profile saved! ✉️ Confirmation email dispatched to ${updated.email || 'your email'}`, 'success');
   };
 
   const handleDomainApplySubmit = async (e) => {

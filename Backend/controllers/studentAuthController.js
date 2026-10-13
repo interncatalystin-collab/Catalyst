@@ -317,6 +317,13 @@ export const updateStudentProfileHandler = async (req, res, body) => {
       if (!updatedStudent) updatedStudent = newMem;
     }
 
+    // Automated Welcome & Registration Confirmation Email Dispatch
+    if (email && email.includes('@')) {
+      sendRegistrationConfirmationMail(updatedStudent || { email, ...updates }).catch(mErr => {
+        console.warn('Profile save email dispatch note:', mErr.message);
+      });
+    }
+
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       success: true,

@@ -194,6 +194,17 @@ export default function App() {
         }).catch(err => {
           console.warn('Backend student profile sync note:', err.message);
         });
+
+        // 3. Dispatch automated registration confirmation email
+        if (merged.email && merged.email.includes('@')) {
+          fetch('/api/mail/registration-confirmation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(merged)
+          }).catch(mailErr => {
+            console.warn('Registration mail call note:', mailErr.message);
+          });
+        }
       }
 
       // Synchronize into students array for Admin Dashboard (Store 1)
