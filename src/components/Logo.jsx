@@ -29,10 +29,10 @@ export default function Logo({
     timerRef.current = setTimeout(() => {
       isLongPressRef.current = true;
       if (typeof window !== 'undefined' && window.navigator?.vibrate) {
-        try { window.navigator.vibrate(60); } catch (_) {}
+        try { window.navigator.vibrate(70); } catch (_) {}
       }
       onLongPress();
-    }, 1100); // 1.1s hold to open admin portal
+    }, 2000); // 2.0s hold to open admin portal
   };
 
   const endPress = () => {
