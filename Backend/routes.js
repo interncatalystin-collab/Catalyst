@@ -197,7 +197,7 @@ export const routeDispatcher = async (req, res, pathname) => {
 
   // --- INTERNSHIP ROUTES ---
   if (req.method === 'GET' && pathname === '/api/internships') {
-    getInternshipsHandler(req, res);
+    getInternshipsHandler(req, res, url);
     return true;
   }
 
@@ -209,7 +209,7 @@ export const routeDispatcher = async (req, res, pathname) => {
 
   // --- APPLICATION ROUTES ---
   if (req.method === 'GET' && pathname === '/api/applications') {
-    getApplicationsHandler(req, res);
+    getApplicationsHandler(req, res, url);
     return true;
   }
 

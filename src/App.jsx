@@ -134,7 +134,13 @@ export default function App() {
   // Application Datasets State
   const [internships, setInternships] = useState(INITIAL_INTERNSHIPS);
   const [companies, setCompanies] = useState(INITIAL_COMPANIES);
-  const [currentLoggedInCompanyId, setCurrentLoggedInCompanyId] = useState('comp-101');
+  const [currentLoggedInCompanyId, setCurrentLoggedInCompanyId] = useState(() => {
+    try {
+      const saved = localStorage.getItem('currentLoggedInCompanyId');
+      if (saved) return saved;
+    } catch (e) {}
+    return null;
+  });
   const [studentProfile, setStudentProfile] = useState(() => {
     try {
       const saved = localStorage.getItem('studentProfile');
@@ -302,11 +308,13 @@ export default function App() {
       }
       setActiveTab('student-dash');
     } else if (role === 'company') {
-      if (userObj && userObj.id) {
-        setCurrentLoggedInCompanyId(userObj.id);
-      } else {
-        const found = companies.find(c => c.businessEmail && c.businessEmail.toLowerCase() === (userEmail || '').toLowerCase());
-        if (found) setCurrentLoggedInCompanyId(found.id);
+      const compId = userObj?.id || companies.find(c => c.businessEmail && c.businessEmail.toLowerCase() === (userEmail || '').toLowerCase())?.id;
+      if (compId) {
+        setCurrentLoggedInCompanyId(compId);
+        try {
+          localStorage.setItem('currentLoggedInCompanyId', compId);
+          localStorage.setItem('companyToken', `token-company-${compId}-${Date.now()}`);
+        } catch (e) {}
       }
       setActiveTab('company-dash');
     } else {
@@ -327,6 +335,13 @@ export default function App() {
       try {
         localStorage.removeItem('studentToken');
       } catch (e) {}
+    }
+    if (role === 'company') {
+      try {
+        localStorage.removeItem('currentLoggedInCompanyId');
+        localStorage.removeItem('companyToken');
+      } catch (e) {}
+      setCurrentLoggedInCompanyId(null);
     }
     setCurrentRole('visitor');
     setActiveTab('home');
@@ -770,7 +785,7 @@ export default function App() {
         )}
 
         {(activeTab === 'company-dash' || activeTab === 'for-companies') && (
-          !authenticatedRoles.company ? (
+          (!authenticatedRoles.company || !currentLoggedInCompanyId || !companies.find(c => c.id === currentLoggedInCompanyId)) ? (
             <LoginPage 
               targetRole="company" 
               companies={companies} 
@@ -781,7 +796,7 @@ export default function App() {
             />
           ) : (
             <CompanyDashboard 
-              company={companies.find(c => c.id === currentLoggedInCompanyId) || companies[0] || DEFAULT_COMPANY}
+              company={companies.find(c => c.id === currentLoggedInCompanyId)}
               onUpdateCompany={(updated) => setCompanies(prev => prev.map(c => c.id === updated.id ? updated : c))}
               internships={internships}
               onAddInternship={handleAddInternship}

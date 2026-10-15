@@ -22,7 +22,8 @@ import {
   Zap,
   Check,
   ArrowRight,
-  Key
+  Key,
+  LogOut
 } from 'lucide-react';
 import { SUBSCRIPTION_PLANS } from '../data/mockData';
 
@@ -33,7 +34,8 @@ export default function CompanyDashboard({
   onAddInternship, 
   applications, 
   onUpdateAppStatus,
-  onAddToast 
+  onAddToast,
+  onLogout
 }) {
   const [activeTab, setActiveTab] = useState('post-role'); // 'post-role', 'company-profile', 'listings', 'applicants', 'verification', 'subscription'
 
@@ -119,10 +121,34 @@ export default function CompanyDashboard({
     onAddToast(`Corporate business email '${businessEmail}' verified successfully!`, 'success');
   };
 
-  const companyListings = internships.filter(i => i.companyName === company.name || i.companyId === company.id);
-  const allCompanyApplications = applications.filter(app => 
-    app.companyName === company.name || companyListings.some(l => l.id === app.internshipId)
-  );
+  // Strict Multi-Tenant Isolation: Only listings specifically owned by this company
+  const companyListings = (internships || []).filter(i => {
+    if (!company) return false;
+    const matchId = i.companyId && company.id && String(i.companyId).trim() === String(company.id).trim();
+    const matchName = i.companyName && company.name && i.companyName.trim().toLowerCase() === company.name.trim().toLowerCase();
+    return matchId || matchName;
+  });
+
+  // Strict Multi-Tenant Isolation: Only candidates applied to this specific company
+  const allCompanyApplications = (applications || []).filter(app => {
+    if (!company) return false;
+
+    // Explicit cross-company leak prevention:
+    if (app.companyId && company.id && String(app.companyId).trim() !== String(company.id).trim()) {
+      return false;
+    }
+    if (app.companyName && company.name && app.companyName.trim().toLowerCase() !== company.name.trim().toLowerCase()) {
+      const isOurListing = companyListings.some(l => String(l.id) === String(app.internshipId));
+      if (!isOurListing) return false;
+    }
+
+    const matchId = app.companyId && company.id && String(app.companyId).trim() === String(company.id).trim();
+    const matchName = app.companyName && company.name && app.companyName.trim().toLowerCase() === company.name.trim().toLowerCase();
+    const matchListing = companyListings.some(l => String(l.id) === String(app.internshipId));
+
+    return matchId || matchName || matchListing;
+  });
+
   const companyApps = allCompanyApplications.filter(app => 
     app.forwardedToEmployer || app.adminSelectionStatus === 'Shortlisted & Forwarded to Employer'
   );
@@ -258,12 +284,33 @@ export default function CompanyDashboard({
             </div>
           </div>
 
-          <button 
-            className="btn btn-emerald"
-            onClick={() => setActiveTab('post-role')}
-          >
-            <PlusCircle size={16} /> Post New Opportunity
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <button 
+              className="btn btn-emerald"
+              onClick={() => setActiveTab('post-role')}
+            >
+              <PlusCircle size={16} /> Post New Opportunity
+            </button>
+            {onLogout && (
+              <button 
+                type="button"
+                className="btn btn-secondary"
+                onClick={onLogout}
+                style={{ 
+                  background: '#fef2f2',
+                  border: '1px solid #fecaca',
+                  color: '#dc2626',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontWeight: '700',
+                  padding: '0.6rem 1rem'
+                }}
+              >
+                <LogOut size={15} /> Exit / Log Out
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Navigation Tabs */}

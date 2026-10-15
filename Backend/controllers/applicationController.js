@@ -22,7 +22,7 @@ const getAllApplications = async () => {
   return memoryApplications;
 };
 
-export const getApplicationsHandler = async (req, res) => {
+export const getApplicationsHandler = async (req, res, url) => {
   const admin = verifyAdminToken(req);
   const student = verifyStudentToken(req);
 
@@ -47,10 +47,24 @@ export const getApplicationsHandler = async (req, res) => {
     return;
   }
 
+  // Multi-Tenant Isolation for Employers:
+  // Must only return applications belonging to the specific company
+  const companyId = url?.searchParams?.get('companyId') || req.headers['x-company-id'];
+  const companyName = url?.searchParams?.get('companyName') || req.headers['x-company-name'];
+
+  let scopedApps = allApps;
+  if (companyId || companyName) {
+    scopedApps = allApps.filter(app => {
+      const matchId = companyId && app.companyId && String(app.companyId).trim() === String(companyId).trim();
+      const matchName = companyName && app.companyName && app.companyName.trim().toLowerCase() === companyName.trim().toLowerCase();
+      return matchId || matchName;
+    });
+  }
+
   // Employer Dashboard / Top selected candidate profile access:
   // Forwarded candidates retain full candidate profile (name, email, phone, college, degree, resume, links)
   // Non-forwarded applications have student details strictly hidden until Central Admin forwards them
-  const resultApps = allApps.map(app => {
+  const resultApps = scopedApps.map(app => {
     if (app.forwardedToEmployer) {
       return app;
     }

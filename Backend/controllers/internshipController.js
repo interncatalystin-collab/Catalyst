@@ -24,11 +24,21 @@ const ensureInternshipsSeeded = async () => {
   }
 };
 
-export const getInternshipsHandler = async (req, res) => {
+export const getInternshipsHandler = async (req, res, url) => {
   await ensureInternshipsSeeded();
 
+  const companyId = url?.searchParams?.get('companyId') || req.headers['x-company-id'];
+  const companyName = url?.searchParams?.get('companyName') || req.headers['x-company-name'];
+
+  let query = {};
+  if (companyId) {
+    query.companyId = companyId;
+  } else if (companyName) {
+    query.companyName = new RegExp(`^${companyName}$`, 'i');
+  }
+
   try {
-    const dbInternships = await InternshipModel.find().sort({ createdAt: -1 }).lean();
+    const dbInternships = await InternshipModel.find(query).sort({ createdAt: -1 }).lean();
     if (dbInternships && dbInternships.length > 0) {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(dbInternships));
@@ -38,8 +48,16 @@ export const getInternshipsHandler = async (req, res) => {
     // Database error, proceed to fallback
   }
 
+  let fallback = defaultInternships;
+  if (companyId || companyName) {
+    fallback = defaultInternships.filter(i => 
+      (companyId && i.companyId === companyId) ||
+      (companyName && i.companyName && i.companyName.toLowerCase() === companyName.toLowerCase())
+    );
+  }
+
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify(defaultInternships));
+  res.end(JSON.stringify(fallback));
 };
 
 export const createInternshipHandler = async (req, res, body) => {

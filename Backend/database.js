@@ -7,6 +7,7 @@ export let internships = [
   {
     id: 'int-101',
     title: 'Full-Stack Web Development Intern',
+    companyId: 'comp-101',
     companyName: 'Nexus Tech Solutions',
     verified: true,
     location: 'Bangalore, Karnataka',
@@ -23,6 +24,7 @@ export let internships = [
   {
     id: 'int-102',
     title: 'AI & Machine Learning Research Intern',
+    companyId: 'comp-104',
     companyName: 'Cognitive AI Labs',
     verified: true,
     location: 'Hyderabad, Telangana',
@@ -43,6 +45,7 @@ export let applications = [
     id: 'app-501',
     internshipId: 'int-101',
     internshipTitle: 'Full-Stack Web Development Intern',
+    companyId: 'comp-101',
     companyName: 'Nexus Tech Solutions',
     studentId: 'std-001',
     studentName: 'Aditya Verma',
