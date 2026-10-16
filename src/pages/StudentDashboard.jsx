@@ -1067,6 +1067,36 @@ export default function StudentDashboard({
 
                   <div style={{ height: '1px', background: '#f1f5f9', margin: '0.4rem 0' }} />
 
+                  {/* Delete Account Option inside Settings Dropdown */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSettings(false);
+                      setShowDeleteModal(true);
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.65rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: 'none',
+                      color: '#dc2626',
+                      fontSize: '0.82rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'background 0.15s'
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = '#fef2f2'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; }}
+                  >
+                    <Trash2 size={15} color="#dc2626" />
+                    <span>Delete Account Permanently</span>
+                  </button>
+
                   {/* Log Out Button inside Settings Dropdown */}
                   {onLogout && (
                     <button
@@ -2894,19 +2924,34 @@ export default function StudentDashboard({
                 </form>
               </div>
 
-            {/* Account Governance (Delete Account) */}
-            <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-              <div>
-                <strong style={{ fontSize: '0.9rem', color: '#dc2626', display: 'block' }}>Account Governance & Removal</strong>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Permanently delete account, applications, and student record.</span>
+            {/* Account Session Logout */}
+            {onLogout && (
+              <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <strong style={{ fontSize: '0.9rem', color: '#0f172a', display: 'block' }}>Account Session</strong>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Finished updating your profile? Sign out of your student session safely.</span>
+                </div>
+                <button 
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={onLogout}
+                  style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.45rem',
+                    fontWeight: '700',
+                    color: '#dc2626',
+                    borderColor: '#fecaca',
+                    background: '#fef2f2',
+                    padding: '0.5rem 1.15rem',
+                    cursor: 'pointer',
+                    borderRadius: '8px'
+                  }}
+                >
+                  <LogOut size={15} /> Log Out
+                </button>
               </div>
-              <button 
-                className="btn btn-danger btn-sm"
-                onClick={() => setShowDeleteModal(true)}
-              >
-                <Trash2 size={14} /> Delete Account Permanently
-              </button>
-            </div>
+            )}
           </div>
         )}
 

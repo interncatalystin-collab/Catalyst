@@ -118,7 +118,7 @@ export default function Footer({ setActiveTab }) {
                   interncatalyst.in@gmail.com
                 </a>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                 <Phone size={16} style={{ color: '#38bdf8', flexShrink: 0 }} />
                 <a 
                   href="tel:+919148762124" 
@@ -127,6 +127,15 @@ export default function Footer({ setActiveTab }) {
                   onMouseLeave={(e) => e.target.style.color = '#cbd5e1'}
                 >
                   +91 9148762124
+                </a>
+                <span style={{ color: '#64748b' }}>/</span>
+                <a 
+                  href="tel:+919014088240" 
+                  style={{ color: '#cbd5e1', fontWeight: '500', textDecoration: 'none', transition: 'color 0.2s', padding: '0.2rem 0' }}
+                  onMouseEnter={(e) => e.target.style.color = '#ffffff'}
+                  onMouseLeave={(e) => e.target.style.color = '#cbd5e1'}
+                >
+                  +91 9014088240
                 </a>
               </div>
               <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.25rem', lineHeight: '1.5' }}>
