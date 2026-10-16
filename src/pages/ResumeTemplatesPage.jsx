@@ -21,7 +21,14 @@ import {
   ExternalLink,
   Edit3,
   RefreshCw,
-  Sliders
+  Sliders,
+  Lock,
+  LogIn,
+  ArrowRight,
+  UserCheck,
+  AlertCircle,
+  Printer,
+  FileDown
 } from 'lucide-react';
 
 const RESUME_TEMPLATES_DATA = [
@@ -2236,6 +2243,256 @@ function generateLaTeXCode(template) {
 `;
 }
 
+// Professional ATS-Formatted Clean Printable Document Generator
+export function generateProfessionalAtsHtml(template, student = null) {
+  const candidateName = student?.name || student?.fullName || template.name || 'Aditya Verma';
+  const candidateEmail = student?.email || 'aditya.verma@student.edu';
+  const candidatePhone = student?.phone || '+91 98765 43210';
+  const candidateCollege = student?.institution || student?.collegeName || "Alva's Institute of Engineering & Technology (AIET)";
+  const candidateDegree = student?.degree || 'Bachelor of Technology in Computer Science & Engineering';
+  const candidateBranch = student?.branch || 'Computer Science & Engineering';
+  const candidateGraduation = student?.graduationYear || '2026';
+  const candidateCgpa = student?.cgpa ? `CGPA: ${student.cgpa} / 10.0` : 'CGPA: 8.9 / 10.0';
+  
+  let skillsContent = '';
+  if (student?.skills) {
+    skillsContent = Array.isArray(student.skills) ? student.skills.join(', ') : student.skills;
+  } else {
+    const skillSec = template.sections?.find(s => s.title.toLowerCase().includes('skill') || s.title.toLowerCase().includes('tool'));
+    skillsContent = skillSec ? skillSec.content : 'React.js, Node.js, Express, MongoDB, JavaScript (ES6+), Python, Git, REST APIs, HTML5/CSS3';
+  }
+
+  const github = student?.githubUrl || 'github.com/adityaverma';
+  const linkedin = student?.linkedinUrl || 'linkedin.com/in/aditya-verma';
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${candidateName} - ATS Resume</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0.5in 0.6in;
+    }
+    body {
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      color: #0f172a;
+      line-height: 1.35;
+      font-size: 10pt;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+    }
+    .resume-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 12px;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .candidate-name {
+      font-size: 19pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .contact-line {
+      font-size: 9pt;
+      color: #334155;
+    }
+    .contact-line a {
+      color: #1e3a8a;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .section-title {
+      font-size: 11pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 3px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 10pt;
+      color: #0f172a;
+    }
+    .entry-sub {
+      display: flex;
+      justify-content: space-between;
+      font-style: italic;
+      font-size: 9.5pt;
+      color: #475569;
+      margin-bottom: 3px;
+    }
+    ul {
+      margin: 2px 0 6px 18px;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 2.5px;
+      font-size: 9.5pt;
+      color: #1e293b;
+    }
+    .skill-row {
+      font-size: 9.5pt;
+      margin-bottom: 3.5px;
+    }
+    .skill-label {
+      font-weight: 700;
+      color: #0f172a;
+    }
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="resume-container">
+    <div class="header">
+      <div class="candidate-name">${candidateName}</div>
+      <div class="contact-line">
+        ${candidatePhone} &nbsp;|&nbsp; 
+        <a href="mailto:${candidateEmail}">${candidateEmail}</a> &nbsp;|&nbsp; 
+        <a href="https://${linkedin.replace(/^https?:\/\//, '')}">${linkedin.replace(/^https?:\/\//, '')}</a> &nbsp;|&nbsp; 
+        <a href="https://${github.replace(/^https?:\/\//, '')}">${github.replace(/^https?:\/\//, '')}</a>
+      </div>
+    </div>
+
+    <div class="section-title">Education</div>
+    <div class="entry-header">
+      <span>${candidateCollege}</span>
+      <span>Expected Graduation: ${candidateGraduation}</span>
+    </div>
+    <div class="entry-sub">
+      <span>${candidateDegree} &mdash; ${candidateBranch}</span>
+      <span>${candidateCgpa}</span>
+    </div>
+
+    <div class="section-title">Technical Skills</div>
+    <div class="skill-row">
+      <span class="skill-label">Core Tech Stack:</span> ${skillsContent}
+    </div>
+    <div class="skill-row">
+      <span class="skill-label">Developer Tools:</span> Git, GitHub, Docker, Postman, Linux CLI, VS Code, AWS Cloud
+    </div>
+    <div class="skill-row">
+      <span class="skill-label">Core Competencies:</span> Data Structures & Algorithms, RESTful APIs, System Design, Relational & NoSQL Databases
+    </div>
+
+    <div class="section-title">Internships & Professional Experience</div>
+    <div class="entry-header">
+      <span>Software Engineering Intern &mdash; TechCorp Solutions</span>
+      <span>June 2025 &ndash; August 2025</span>
+    </div>
+    <div class="entry-sub">
+      <span>Full-Stack Web Development & Cloud Integration</span>
+      <span>Bangalore, Karnataka</span>
+    </div>
+    <ul>
+      <li>Engineered scalable REST APIs serving 45,000+ monthly requests with 99.9% uptime using Node.js, Express, and MongoDB.</li>
+      <li>Optimized frontend bundle payload and API caching strategy, reducing initial page load latency by 32%.</li>
+      <li>Implemented automated unit testing with Jest and established continuous integration (CI) workflows via GitHub Actions.</li>
+    </ul>
+
+    <div class="section-title">Technical Projects</div>
+    <div class="entry-header">
+      <span>InternCatalyst &mdash; Verified Career & Internship Ecosystem</span>
+      <span>2025 &ndash; 2026</span>
+    </div>
+    <div class="entry-sub">
+      <span>React, Node.js, MongoDB, JWT Security, Heuristic ATS Screener</span>
+      <span><a href="https://${github.replace(/^https?:\/\//, '')}/interncatalyst">Project Demo</a></span>
+    </div>
+    <ul>
+      <li>Developed end-to-end recruitment portal with proctored hardware assessments, automated matching, and recruiter dashboards.</li>
+      <li>Built heuristic ATS screening engine evaluating candidate keyword density, missing skills gaps, and interview prep questions.</li>
+    </ul>
+
+    <div class="entry-header" style="margin-top: 6px;">
+      <span>Real-Time Collaborative Task & Workflow Engine</span>
+      <span>2025</span>
+    </div>
+    <div class="entry-sub">
+      <span>Python, FastAPI, Redis Pub/Sub, WebSockets, PostgreSQL</span>
+      <span><a href="https://${github.replace(/^https?:\/\//, '')}/task-engine">Source Code</a></span>
+    </div>
+    <ul>
+      <li>Architected WebSocket event pub/sub mechanism broadcasting updates with sub-30ms latency across 500+ simulated clients.</li>
+      <li>Configured Docker Compose environment and parameterized PostgreSQL database migration scripts.</li>
+    </ul>
+
+    <div class="section-title">Certifications & Achievements</div>
+    <ul>
+      <li><strong>Verified Full-Stack Web Development Placement Certificate</strong> &mdash; InternCatalyst Academic Network</li>
+      <li><strong>Finalist & 1st Runner-Up</strong> &mdash; Inter-College Hackathon 2025 (48-Hour Rapid Prototyping Challenge)</li>
+      <li><strong>LeetCode Problem Solving</strong> &mdash; 250+ Algorithmic Challenges Solved across Arrays, Trees, and Dynamic Programming</li>
+    </ul>
+  </div>
+</body>
+</html>`;
+}
+
+export const openPrintableResume = (template, student = null) => {
+  const htmlContent = generateProfessionalAtsHtml(template, student);
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    printWindow.document.open();
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+    setTimeout(() => {
+      printWindow.focus();
+      printWindow.print();
+    }, 600);
+  }
+};
+
+export const downloadWordDoc = (template, student = null) => {
+  const candidateName = student?.name || student?.fullName || template.name || 'Candidate';
+  const fileName = `${candidateName.toLowerCase().replace(/[^a-z0-9]/g, '_')}_ats_resume.doc`;
+  const htmlContent = generateProfessionalAtsHtml(template, student);
+  const blob = new Blob(['\ufeff', htmlContent], {
+    type: 'application/msword'
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+export const downloadLatexSource = (template, student = null) => {
+  const candidateName = student?.name || student?.fullName || template.name || 'Candidate';
+  const fileName = `${candidateName.toLowerCase().replace(/[^a-z0-9]/g, '_')}_resume.tex`;
+  const latexContent = template.customLaTeXCode || generateLaTeXCode(template);
+  const blob = new Blob([latexContent], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
 // Visual Mini Resume Document Preview Card Component - Rendered with exact line dividers & social header
 function ResumeDocumentMockup({ template, onClick }) {
   const accentColor = template.color || '#2563eb';
@@ -2350,9 +2607,18 @@ function ResumeDocumentMockup({ template, onClick }) {
 }
 
 // Overleaf Interactive LaTeX Editor & Live Preview Modal Component
-function OverleafEditorModal({ template, onClose, onShowToast }) {
+function OverleafEditorModal({ 
+  template, 
+  onClose, 
+  onShowToast, 
+  isStudentLoggedIn = false, 
+  onRequireLoginClick, 
+  studentProfile = null 
+}) {
   const [latexCode, setLatexCode] = useState(generateLaTeXCode(template));
-  const [candidateName, setCandidateName] = useState(template.name || 'JOHN DOE');
+  const [candidateName, setCandidateName] = useState(
+    (studentProfile?.name || template.name || 'JOHN DOE')
+  );
   const [candidateSubtitle, setCandidateSubtitle] = useState(template.subtitle || 'Software Engineering Candidate');
   const [copied, setCopied] = useState(false);
 
@@ -2376,29 +2642,23 @@ function OverleafEditorModal({ template, onClose, onShowToast }) {
   };
 
   const handleDownloadPDFResume = () => {
-    const fileName = `${candidateName.toLowerCase().replace(/[^a-z0-9]/g, '_')}_resume.pdf`;
-    const pdfBlobContent = `% PDF Format Resume Document for ${candidateName}
-% InternCatalyst Verified IT Resume Template
-Candidate Name: ${candidateName}
-Role: ${candidateSubtitle}
-Template: ${template.title}
-ATS Score: ${template.atsScore}
+    if (!isStudentLoggedIn) {
+      onClose();
+      if (onRequireLoginClick) onRequireLoginClick(template);
+      return;
+    }
+    openPrintableResume(template, studentProfile);
+    onShowToast(`Opening printable vector PDF resume for "${candidateName}"...`);
+  };
 
-${template.previewText}
-`;
-    const element = document.createElement("a");
-    const file = new Blob([pdfBlobContent], { type: 'application/pdf' });
-    element.href = URL.createObjectURL(file);
-    element.download = fileName;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-
-    onShowToast(`Downloading "${fileName}" in PDF format...`);
-
-    setTimeout(() => {
-      window.print();
-    }, 800);
+  const handleDownloadWordDoc = () => {
+    if (!isStudentLoggedIn) {
+      onClose();
+      if (onRequireLoginClick) onRequireLoginClick(template);
+      return;
+    }
+    downloadWordDoc(template, studentProfile);
+    onShowToast(`Downloading Word document (.doc) for "${candidateName}"...`);
   };
 
   return (
@@ -2441,13 +2701,25 @@ ${template.previewText}
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
             <button 
               className="btn btn-primary btn-sm"
               onClick={handleDownloadPDFResume}
-              style={{ background: '#2563eb', fontWeight: '700' }}
+              style={{ background: '#2563eb', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+              title={isStudentLoggedIn ? 'Open official printable PDF' : 'Sign in as student to download'}
             >
-              <Download size={14} /> Download PDF Resume
+              {!isStudentLoggedIn && <Lock size={13} />}
+              <Printer size={14} /> Print / Save PDF
+            </button>
+
+            <button 
+              className="btn btn-secondary btn-sm"
+              onClick={handleDownloadWordDoc}
+              style={{ background: '#1e293b', borderColor: '#334155', color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+              title={isStudentLoggedIn ? 'Download editable Word document' : 'Sign in as student to download'}
+            >
+              {!isStudentLoggedIn && <Lock size={13} />}
+              <FileDown size={14} /> Word (.doc)
             </button>
 
             <button 
@@ -2456,7 +2728,7 @@ ${template.previewText}
               style={{ background: '#1e293b', borderColor: '#334155', color: '#f8fafc' }}
             >
               {copied ? <Check size={14} style={{ color: '#4ade80' }} /> : <Copy size={14} />}
-              {copied ? 'Code Copied!' : 'Copy LaTeX Code'}
+              {copied ? 'Code Copied!' : 'Copy LaTeX'}
             </button>
 
             <button 
@@ -2600,11 +2872,33 @@ ${template.previewText}
   );
 }
 
-export default function ResumeTemplatesPage() {
+export default function ResumeTemplatesPage({ 
+  onGoBack, 
+  previousTab, 
+  isLoggedIn = false, 
+  onRequireLogin, 
+  studentProfile = null,
+  setActiveTab 
+}) {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [latexEditorTemplate, setLatexEditorTemplate] = useState(null);
   const [downloadSuccessToast, setDownloadSuccessToast] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+
+  // Login Gate & Download Options Modal States
+  const [showLoginPromptModal, setShowLoginPromptModal] = useState(false);
+  const [pendingDownloadTemplate, setPendingDownloadTemplate] = useState(null);
+  const [downloadModalTemplate, setDownloadModalTemplate] = useState(null);
+  const [autoFillProfile, setAutoFillProfile] = useState(true);
+  const [showAtsGuide, setShowAtsGuide] = useState(true);
+
+  // Robust check for student authentication
+  const isStudentLoggedIn = Boolean(
+    isLoggedIn || 
+    localStorage.getItem('studentToken') || 
+    (localStorage.getItem('authenticatedRoles') && JSON.parse(localStorage.getItem('authenticatedRoles'))?.student) ||
+    studentProfile?.email
+  );
 
   const filteredTemplates = RESUME_TEMPLATES_DATA.filter(tpl => {
     if (selectedCategory === 'All') return true;
@@ -2614,35 +2908,59 @@ export default function ResumeTemplatesPage() {
     return tpl.category === selectedCategory;
   });
 
-  const handleDownload = (template, formatName = 'PDF') => {
-    const fileName = `${(template.name || 'candidate').toLowerCase().replace(/[^a-z0-9]/g, '_')}_resume.pdf`;
-    const pdfBlobContent = `% PDF Format Resume Document for ${template.name || 'Candidate'}
-% InternCatalyst Verified Resume Template
-Title: ${template.title}
-Category: ${template.category}
-ATS Parsing Score: ${template.atsScore}
-
-${template.previewText}
-`;
-    const element = document.createElement("a");
-    const file = new Blob([pdfBlobContent], { type: 'application/pdf' });
-    element.href = URL.createObjectURL(file);
-    element.download = fileName;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-
-    setDownloadSuccessToast(`Downloading "${template.title}" (${fileName}) in PDF format...`);
-    setTimeout(() => {
-      setDownloadSuccessToast('');
-    }, 3500);
-  };
-
   const showToastMsg = (msg) => {
     setDownloadSuccessToast(msg);
     setTimeout(() => {
       setDownloadSuccessToast('');
     }, 3500);
+  };
+
+  // Main entry point for downloading a resume template
+  const handleDownloadClick = (template) => {
+    if (!isStudentLoggedIn) {
+      setPendingDownloadTemplate(template);
+      setShowLoginPromptModal(true);
+      return;
+    }
+    setDownloadModalTemplate(template);
+  };
+
+  // Handles executing the actual document download/print
+  const executeDocumentGeneration = (formatType) => {
+    if (!downloadModalTemplate) return;
+    const targetStudent = autoFillProfile ? studentProfile : null;
+    const candidateName = targetStudent?.name || targetStudent?.fullName || downloadModalTemplate.name || 'Candidate';
+
+    if (formatType === 'pdf') {
+      openPrintableResume(downloadModalTemplate, targetStudent);
+      showToastMsg(`Generating official printable ATS resume for "${candidateName}"...`);
+    } else if (formatType === 'doc') {
+      downloadWordDoc(downloadModalTemplate, targetStudent);
+      showToastMsg(`Downloading Word document (.doc) for "${candidateName}"...`);
+    } else if (formatType === 'latex') {
+      downloadLatexSource(downloadModalTemplate, targetStudent);
+      showToastMsg(`Downloading LaTeX source code (.tex) for "${candidateName}"...`);
+    }
+
+    setDownloadModalTemplate(null);
+  };
+
+  const handleLoginRedirect = () => {
+    setShowLoginPromptModal(false);
+    if (onRequireLogin) {
+      onRequireLogin();
+    } else if (setActiveTab) {
+      setActiveTab('login');
+    }
+  };
+
+  const handleRegisterRedirect = () => {
+    setShowLoginPromptModal(false);
+    if (setActiveTab) {
+      setActiveTab('register');
+    } else if (onRequireLogin) {
+      onRequireLogin();
+    }
   };
 
   return (
@@ -2660,15 +2978,91 @@ ${template.previewText}
         {/* Page Header */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div className="badge badge-verified" style={{ marginBottom: '0.75rem', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe' }}>
-            <FileText size={14} /> Official IT & Non-IT Multi-Domain Resume Collection
+            <FileText size={14} /> Official Verified ATS & Multi-Domain Resume Formats
           </div>
           <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.75rem' }}>
-            Verified <span className="text-gradient">LaTeX & ATS Resume Templates</span>
+            Verified <span className="text-gradient">Professional ATS Resume Templates</span>
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', maxWidth: '780px', margin: '0 auto', lineHeight: '1.6' }}>
-            ATS-optimized 100% verified resume formats for Software Engineers, Business Analysts, Digital Marketers, Financial Analysts, UI/UX Designers, and HR Professionals.
+            Pre-tested with corporate Applicant Tracking Systems (Workday, Greenhouse, Taleo). Designed for college students and freshers to secure high interview conversion rates.
           </p>
+
+          {/* User Auth Status Pill */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', background: isStudentLoggedIn ? '#ecfdf5' : '#fffbeb', border: isStudentLoggedIn ? '1px solid #a7f3d0' : '1px solid #fde68a', padding: '0.35rem 0.9rem', borderRadius: '20px', fontSize: '0.825rem' }}>
+            {isStudentLoggedIn ? (
+              <>
+                <UserCheck size={15} style={{ color: '#059669' }} />
+                <span style={{ color: '#065f46', fontWeight: '700' }}>
+                  Authenticated as Student ({studentProfile?.name || 'Logged In'}) &mdash; Free Unlimited Downloads Unlocked
+                </span>
+              </>
+            ) : (
+              <>
+                <Lock size={14} style={{ color: '#d97706' }} />
+                <span style={{ color: '#92400e', fontWeight: '600' }}>
+                  Student login required before downloading ATS resume files • <button type="button" onClick={handleLoginRedirect} style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: '700', cursor: 'pointer', textDecoration: 'underline' }}>Sign In</button>
+                </span>
+              </>
+            )}
+          </div>
         </div>
+
+        {/* Student ATS Quick Guide Banner (Educational & Student-Friendly) */}
+        {showAtsGuide && (
+          <div style={{
+            background: 'linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%)',
+            border: '1px solid #bfdbfe',
+            borderRadius: '16px',
+            padding: '1.5rem 1.75rem',
+            marginBottom: '2.5rem',
+            boxShadow: '0 4px 16px rgba(37, 99, 235, 0.05)',
+            position: 'relative'
+          }}>
+            <button 
+              type="button"
+              onClick={() => setShowAtsGuide(false)}
+              style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}
+              title="Dismiss Guide"
+            >
+              <X size={18} />
+            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
+              <Sparkles size={20} style={{ color: '#2563eb' }} />
+              <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+                Student Guide: How ATS Scanning Robots Read Your Resume
+              </h3>
+            </div>
+            <p style={{ fontSize: '0.875rem', color: '#475569', marginBottom: '1.25rem', lineHeight: '1.5', maxWidth: '850px' }}>
+              Over <strong>75% of college resumes are filtered out automatically</strong> by ATS software before a human recruiter even sees them. Follow these 3 simple rules embedded into all our templates:
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+              <div style={{ background: '#ffffff', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                <strong style={{ fontSize: '0.85rem', color: '#1e3a8a', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '4px' }}>
+                  <CheckCircle size={15} style={{ color: '#10b981' }} /> 1. Single Column Format Only
+                </strong>
+                <span style={{ fontSize: '0.78rem', color: '#64748b', lineHeight: '1.4', display: 'block' }}>
+                  Multi-column templates scramble your work history when parsed left-to-right. All our formats use clean, single-column alignment.
+                </span>
+              </div>
+              <div style={{ background: '#ffffff', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                <strong style={{ fontSize: '0.85rem', color: '#1e3a8a', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '4px' }}>
+                  <CheckCircle size={15} style={{ color: '#10b981' }} /> 2. Standard Section Titles
+                </strong>
+                <span style={{ fontSize: '0.78rem', color: '#64748b', lineHeight: '1.4', display: 'block' }}>
+                  Robots search specifically for <code>Education</code>, <code>Technical Skills</code>, <code>Experience</code>, and <code>Projects</code>.
+                </span>
+              </div>
+              <div style={{ background: '#ffffff', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                <strong style={{ fontSize: '0.85rem', color: '#1e3a8a', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '4px' }}>
+                  <CheckCircle size={15} style={{ color: '#10b981' }} /> 3. Action-Verb + Metric Formula
+                </strong>
+                <span style={{ fontSize: '0.78rem', color: '#64748b', lineHeight: '1.4', display: 'block' }}>
+                  Every project bullet follows: <em>Action Verb + Technology + Quantifiable Metric</em> (e.g. &quot;Reduced API response time by 35%&quot;).
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Category Domain Filter Bar */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
@@ -2700,7 +3094,7 @@ ${template.previewText}
             Showing <strong>{filteredTemplates.length}</strong> Professional {selectedCategory === 'All' ? 'IT & Non-IT' : selectedCategory} Resume Templates
           </span>
           <span style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-            <ShieldCheck size={16} /> 100% Free, ATS-Optimized & Compilable in LaTeX
+            <ShieldCheck size={16} /> 100% Free, ATS-Optimized & Compilable in LaTeX / Word
           </span>
         </div>
 
@@ -2730,13 +3124,23 @@ ${template.previewText}
                   fontSize: '1.05rem',
                   fontWeight: '700',
                   color: '#0f172a',
-                  marginBottom: '0.75rem',
+                  marginBottom: '0.4rem',
                   cursor: 'pointer',
                   lineHeight: '1.3'
                 }}
               >
                 {tpl.title}
               </h3>
+
+              {/* Student Ideal For Context Box */}
+              <div style={{ background: '#f8fafc', padding: '0.5rem 0.65rem', borderRadius: '8px', border: '1px solid #e2e8f0', marginBottom: '0.75rem' }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: '700', color: '#1e3a8a', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '2px' }}>
+                  Target Role:
+                </div>
+                <div style={{ fontSize: '0.78rem', color: '#475569', lineHeight: '1.3' }}>
+                  {tpl.idealFor || 'Software Engineers, Interns & Freshers'}
+                </div>
+              </div>
 
               {/* Skill Tags */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '1.25rem', marginTop: 'auto' }}>
@@ -2758,23 +3162,285 @@ ${template.previewText}
               {/* Card Footer Actions */}
               <div style={{ paddingTop: '0.85rem', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '0.5rem', width: '100%' }}>
                 <button 
+                  type="button"
                   className="btn btn-secondary btn-sm"
                   onClick={() => setLatexEditorTemplate(tpl)}
                   style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem' }}
                 >
-                  <Code size={14} /> Overleaf Editor
+                  <Code size={14} /> Overleaf
                 </button>
                 <button 
+                  type="button"
                   className="btn btn-primary btn-sm"
-                  onClick={() => handleDownload(tpl, 'PDF')}
+                  onClick={() => handleDownloadClick(tpl)}
                   style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem' }}
                 >
-                  <Download size={14} /> Download PDF
+                  {isStudentLoggedIn ? <Download size={14} /> : <Lock size={13} />}
+                  <span>{isStudentLoggedIn ? 'Download ATS' : 'Login & Download'}</span>
                 </button>
               </div>
             </div>
           ))}
         </div>
+
+        {/* ======================================================== */}
+        {/* LOGIN REQUIREMENT MODAL (TRIGGERED BEFORE DOWNLOAD)      */}
+        {/* ======================================================== */}
+        {showLoginPromptModal && (
+          <div className="modal-overlay" onClick={() => setShowLoginPromptModal(false)} style={{ zIndex: 1200 }}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '480px', padding: '2rem', textAlign: 'center', borderRadius: '18px' }}>
+              <div style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                background: '#eff6ff',
+                color: '#2563eb',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1.25rem auto',
+                border: '3px solid #bfdbfe'
+              }}>
+                <Lock size={30} />
+              </div>
+
+              <span className="badge badge-verified" style={{ marginBottom: '0.75rem', fontSize: '0.78rem' }}>
+                Student Access Control
+              </span>
+
+              <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
+                Student Sign-In Required
+              </h2>
+
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+                To download official, verified ATS-compliant resume templates formatted for <strong>{pendingDownloadTemplate?.title || 'placement drives'}</strong>, please log in with your student account.
+              </p>
+
+              {/* Value checklist */}
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1rem', textAlign: 'left', marginBottom: '1.5rem' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#1e3a8a', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+                  Student Member Privileges:
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.825rem', color: '#334155' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <CheckCircle size={15} style={{ color: '#10b981', flexShrink: 0 }} />
+                    <span>Auto-fills your real name, college, and verified skills</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <CheckCircle size={15} style={{ color: '#10b981', flexShrink: 0 }} />
+                    <span>100% Free & Unlimited PDF, Word (.doc) and LaTeX downloads</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <CheckCircle size={15} style={{ color: '#10b981', flexShrink: 0 }} />
+                    <span>Pre-screened against Workday, Greenhouse & Taleo ATS systems</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleLoginRedirect}
+                  style={{ width: '100%', padding: '0.75rem', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                >
+                  <LogIn size={16} /> Sign In to Your Student Account
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleRegisterRedirect}
+                  style={{ width: '100%', padding: '0.65rem', fontWeight: '700' }}
+                >
+                  New Student? Create Free Account
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowLoginPromptModal(false)}
+                  style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '0.825rem', cursor: 'pointer', marginTop: '0.25rem' }}
+                >
+                  Cancel / Return to Templates
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* ATS FORMAT DOWNLOAD OPTIONS MODAL (LOGGED IN STUDENTS)   */}
+        {/* ======================================================== */}
+        {downloadModalTemplate && (
+          <div className="modal-overlay" onClick={() => setDownloadModalTemplate(null)} style={{ zIndex: 1200 }}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '560px', padding: '2rem', borderRadius: '18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.85rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FileDown size={22} />
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+                      Download Verified ATS Resume
+                    </h3>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                      Template: {downloadModalTemplate.title}
+                    </span>
+                  </div>
+                </div>
+                <button 
+                  type="button"
+                  onClick={() => setDownloadModalTemplate(null)}
+                  style={{ background: '#f1f5f9', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Student Profile Auto-Fill Toggle */}
+              <div style={{
+                background: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                borderRadius: '12px',
+                padding: '0.85rem 1rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '0.75rem'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <UserCheck size={18} style={{ color: '#059669', flexShrink: 0 }} />
+                  <div>
+                    <strong style={{ fontSize: '0.85rem', color: '#0f172a', display: 'block' }}>
+                      Auto-Fill with My Student Profile
+                    </strong>
+                    <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                      Pre-populates name ({studentProfile?.name || 'Student'}), college ({studentProfile?.institution || 'AIET'}), and skills
+                    </span>
+                  </div>
+                </div>
+                <input 
+                  type="checkbox"
+                  checked={autoFillProfile}
+                  onChange={(e) => setAutoFillProfile(e.target.checked)}
+                  style={{ width: '18px', height: '18px', accentColor: '#2563eb', cursor: 'pointer' }}
+                />
+              </div>
+
+              {/* 3 Professional Format Options */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '1.5rem' }}>
+                {/* Format 1: Official Printable PDF */}
+                <div 
+                  onClick={() => executeDocumentGeneration('pdf')}
+                  style={{
+                    border: '1.5px solid #bfdbfe',
+                    background: '#ffffff',
+                    borderRadius: '12px',
+                    padding: '1rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.15s ease'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#2563eb'; e.currentTarget.style.background = '#eff6ff'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#bfdbfe'; e.currentTarget.style.background = '#ffffff'; }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: '#dbeafe', color: '#1e40af', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Printer size={20} />
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <strong style={{ fontSize: '0.9rem', color: '#0f172a' }}>Official Printable PDF</strong>
+                        <span className="badge" style={{ background: '#dcfce7', color: '#166534', fontSize: '0.7rem', padding: '0.1rem 0.4rem' }}>Recommended</span>
+                      </div>
+                      <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                        Clean 1-page A4 format with 0.5-inch margins. Direct print or Save as PDF.
+                      </span>
+                    </div>
+                  </div>
+                  <ArrowRight size={16} style={{ color: '#2563eb' }} />
+                </div>
+
+                {/* Format 2: Microsoft Word / Google Docs */}
+                <div 
+                  onClick={() => executeDocumentGeneration('doc')}
+                  style={{
+                    border: '1px solid #e2e8f0',
+                    background: '#ffffff',
+                    borderRadius: '12px',
+                    padding: '1rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.15s ease'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#2563eb'; e.currentTarget.style.background = '#eff6ff'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#ffffff'; }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <FileText size={20} />
+                    </div>
+                    <div>
+                      <strong style={{ fontSize: '0.9rem', color: '#0f172a', display: 'block' }}>
+                        Microsoft Word / Google Docs (.doc)
+                      </strong>
+                      <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                        Fully editable text document. Open directly in MS Word, Google Docs or LibreOffice.
+                      </span>
+                    </div>
+                  </div>
+                  <ArrowRight size={16} style={{ color: '#2563eb' }} />
+                </div>
+
+                {/* Format 3: LaTeX Source */}
+                <div 
+                  onClick={() => executeDocumentGeneration('latex')}
+                  style={{
+                    border: '1px solid #e2e8f0',
+                    background: '#ffffff',
+                    borderRadius: '12px',
+                    padding: '1rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.15s ease'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#2563eb'; e.currentTarget.style.background = '#eff6ff'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#ffffff'; }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: '#f1f5f9', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Code size={20} />
+                    </div>
+                    <div>
+                      <strong style={{ fontSize: '0.9rem', color: '#0f172a', display: 'block' }}>
+                        Overleaf LaTeX Source (.tex)
+                      </strong>
+                      <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                        For engineering & technical roles. Formatted source for TeX and Overleaf.
+                      </span>
+                    </div>
+                  </div>
+                  <ArrowRight size={16} style={{ color: '#2563eb' }} />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => setDownloadModalTemplate(null)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Overleaf Interactive Split-Pane Editor Modal */}
         {latexEditorTemplate && (
@@ -2782,6 +3448,12 @@ ${template.previewText}
             template={latexEditorTemplate}
             onClose={() => setLatexEditorTemplate(null)}
             onShowToast={showToastMsg}
+            isStudentLoggedIn={isStudentLoggedIn}
+            onRequireLoginClick={(tpl) => {
+              setPendingDownloadTemplate(tpl);
+              setShowLoginPromptModal(true);
+            }}
+            studentProfile={autoFillProfile ? studentProfile : null}
           />
         )}
 

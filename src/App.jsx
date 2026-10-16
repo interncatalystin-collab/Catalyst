@@ -777,6 +777,13 @@ export default function App() {
           <ResumeTemplatesPage 
             onGoBack={handleGoBack}
             previousTab={previousTab}
+            isLoggedIn={authenticatedRoles?.student || currentRole === 'student' || Boolean(localStorage.getItem('studentToken'))}
+            onRequireLogin={() => {
+              handleNavigate('login');
+              addToast('Please sign in as a student to download verified ATS-compliant resume templates.', 'info');
+            }}
+            studentProfile={studentProfile}
+            setActiveTab={handleNavigate}
           />
         )}
 
