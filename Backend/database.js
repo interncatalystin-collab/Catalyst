@@ -70,4 +70,35 @@ export let companies = [
   }
 ];
 
+export let reports = [
+  {
+    id: 'rep-101',
+    companyId: 'comp-101',
+    companyName: 'Nexus Tech Solutions',
+    studentId: 'std-001',
+    studentName: 'Adithya S',
+    studentEmail: 'adithya@student.edu',
+    studentPhone: '+91 98765 43210',
+    studentCollege: "Alva's Institute of Engineering & Technology",
+    internshipId: 'int-101',
+    internshipTitle: 'Full-Stack Web Development Intern',
+    reportTitle: 'Month 1 Progress & Milestone Deliverable Report',
+    reportType: 'Monthly Milestone Report',
+    submissionDate: '2026-10-10',
+    supervisorName: 'Dr. Rajesh V. Sharma',
+    supervisorDesignation: 'Engineering Director',
+    supervisorEmail: 'hr@nexustech.io',
+    rating: 5,
+    attendance: '98%',
+    stipendStatus: 'Processed (₹15,000 / month)',
+    keyDeliverables: 'Designed RESTful API endpoints for user authentication; configured automated test suites; resolved 12 frontend UI bugs in React; assisted in Vite migration.',
+    supervisorRemarks: 'Adithya has demonstrated exceptional technical aptitude, proactive communication, and quick turnaround on assigned sprints. Recommended for continuation into advanced modules.',
+    fileName: 'NexusTech_Adithya_Month1_Progress_Report.pdf',
+    fileSize: '1.8 MB',
+    status: 'Approved',
+    uploadedBy: 'Company Supervisor',
+    createdAt: '2026-10-10 14:30:00'
+  }
+];
+
 export let activeOtps = {};

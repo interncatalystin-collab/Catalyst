@@ -226,8 +226,9 @@ export const INITIAL_APPLICATIONS = [
     assessmentScore: 92,
     adminScreened: true,
     forwardedToEmployer: true,
-    status: "Forwarded to Employer",
-    companyStatus: "Under Recruiter Review",
+    status: "Selected",
+    companyStatus: "Selected & Hired for Vacant Seat",
+    employerDecision: "Selected for Vacant Seat",
     adminSelectionStatus: "Top Candidate Selected & Sent to Company"
   },
   {
@@ -256,6 +257,69 @@ export const INITIAL_APPLICATIONS = [
     status: "Pending Admin Screening",
     companyStatus: "Queued in Admin Dashboard",
     adminSelectionStatus: "Registered in Admin Dashboard"
+  }
+];
+
+export const INITIAL_REPORTS = [
+  {
+    id: "rep-101",
+    companyId: "comp-101",
+    companyName: "Nexus Tech Solutions",
+    studentId: "stud-101",
+    studentName: "Adithya S",
+    studentEmail: "adithya@student.edu",
+    studentPhone: "+91 98765 43210",
+    studentCollege: "Alva's Institute of Engineering & Technology",
+    internshipId: "int-101",
+    internshipTitle: "Full-Stack Web Development Intern",
+    reportTitle: "Month 1 Progress & Milestone Deliverable Report",
+    reportType: "Monthly Milestone Report",
+    period: "Month 1 (Sprint 1-4)",
+    submissionDate: "2026-10-10",
+    supervisorName: "Dr. Rajesh V. Sharma",
+    supervisorDesignation: "Engineering Director",
+    supervisorEmail: "hr@nexustech.io",
+    rating: 5,
+    attendance: "98%",
+    stipendStatus: "Processed (₹15,000 / month)",
+    keyDeliverables: "Designed RESTful API endpoints for user authentication; configured automated test suites with 92% coverage; resolved 12 frontend UI bugs in React; assisted in Vite build pipeline optimization.",
+    supervisorRemarks: "Adithya has demonstrated exceptional technical aptitude, proactive team collaboration, and high code quality. He delivered all initial sprint tasks ahead of schedule with thorough documentation. Highly recommended for continuation into advanced cloud integration modules.",
+    fileName: "NexusTech_Adithya_Month1_Progress_Report.pdf",
+    fileSize: "1.8 MB",
+    fileUrl: "#",
+    status: "Approved",
+    uploadedBy: "Company Supervisor",
+    createdAt: "2026-10-10 14:30:00"
+  },
+  {
+    id: "rep-102",
+    companyId: "comp-101",
+    companyName: "Nexus Tech Solutions",
+    studentId: "stud-101",
+    studentName: "Adithya S",
+    studentEmail: "adithya@student.edu",
+    studentPhone: "+91 98765 43210",
+    studentCollege: "Alva's Institute of Engineering & Technology",
+    internshipId: "int-101",
+    internshipTitle: "Full-Stack Web Development Intern",
+    reportTitle: "Mid-Term Project Architecture & Sprint Evaluation",
+    reportType: "Mid-Term Evaluation",
+    period: "Mid-Term Review (Weeks 5-8)",
+    submissionDate: "2026-10-14",
+    supervisorName: "Dr. Rajesh V. Sharma",
+    supervisorDesignation: "Engineering Director",
+    supervisorEmail: "hr@nexustech.io",
+    rating: 4,
+    attendance: "100%",
+    stipendStatus: "Eligible for Next Cycle",
+    keyDeliverables: "Implemented role-based access control (RBAC), optimized PostgreSQL database queries reducing API latency by 35%, and conducted peer code reviews.",
+    supervisorRemarks: "Consistently delivers quality code within project deadlines. Excellent grasp of backend architecture, database optimization, and web security protocols.",
+    fileName: "NexusTech_MidTerm_CodeReview_Report.pdf",
+    fileSize: "2.4 MB",
+    fileUrl: "#",
+    status: "Approved",
+    uploadedBy: "Company Supervisor",
+    createdAt: "2026-10-14 16:15:00"
   }
 ];
 

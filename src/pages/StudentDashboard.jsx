@@ -43,7 +43,10 @@ import {
   Bell,
   Settings,
   Shield,
-  Key
+  Key,
+  ListChecks,
+  TrendingUp,
+  CheckSquare
 } from 'lucide-react';
 import { DOMAIN_ROLES_DATA, IT_DOMAINS, NON_IT_DOMAINS, getDomainRoleForStudent } from '../data/domainRolesData';
 import ProctoredAssessmentModal from '../components/ProctoredAssessmentModal';
@@ -88,6 +91,26 @@ export default function StudentDashboard({
   // Mentor Guidance State
   const [showMentorModal, setShowMentorModal] = useState(false);
   const [mentorTopic, setMentorTopic] = useState('1-on-1 Mock Technical Interview');
+
+  // Interactive Domain Placement Roadmap State
+  const [showRoadmapModal, setShowRoadmapModal] = useState(false);
+  const [roadmapTasks, setRoadmapTasks] = useState([
+    { id: 1, week: 'Week 1', title: 'Profile & ATS Resume Audit', desc: 'Ensure degree, branch, GPA and PDF resume are fully loaded and ATS-friendly.', done: true },
+    { id: 2, week: 'Week 1', title: 'Connect Coding Handles', desc: 'Link GitHub, LinkedIn, or LeetCode profiles to provide social proof to recruiters.', done: true },
+    { id: 3, week: 'Week 2', title: 'Domain Core Concepts Review', desc: 'Review fundamental architecture, APIs, data structures, and best practices for your track.', done: true },
+    { id: 4, week: 'Week 2', title: 'Deploy 1 Capstone Project', desc: 'Host a working live demo with clean README on GitHub to demonstrate real problem-solving.', done: false },
+    { id: 5, week: 'Week 3', title: 'Take AI Proctored Assessment', desc: 'Complete 15-minute 10-MCQ proctored test with webcam/mic anti-cheat check.', done: false },
+    { id: 6, week: 'Week 3', title: 'Analyze Scorecard Metrics', desc: 'Aim for 70%+ score to earn the "Top 10% Star Candidate" priority badge.', done: false },
+    { id: 7, week: 'Week 4', title: 'Schedule Mock Interview', desc: 'Book 1-on-1 session with your assigned industry mentor for behavioral and tech prep.', done: false },
+    { id: 8, week: 'Week 4', title: 'Interview & Accept Offer', desc: 'Attend recruiter interview calls, verify supervisor contact, and sign digital offer letter.', done: false },
+  ]);
+
+  const toggleRoadmapTask = (taskId) => {
+    setRoadmapTasks(prev => prev.map(t => t.id === taskId ? { ...t, done: !t.done } : t));
+  };
+
+  const completedRoadmapCount = roadmapTasks.filter(t => t.done).length;
+  const roadmapProgressPercent = Math.round((completedRoadmapCount / roadmapTasks.length) * 100);
 
   // Delete Account Modal State
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -2023,25 +2046,48 @@ export default function StudentDashboard({
                 {/* Module 3: Domain Placement Roadmap */}
                 <div className="glass-card" style={{ padding: '1.5rem', background: '#ffffff', borderRadius: '14px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
-                    <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(124, 58, 237, 0.1)', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
-                      <BookOpen size={22} />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                      <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(124, 58, 237, 0.1)', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <BookOpen size={22} />
+                      </div>
+                      <span style={{
+                        background: roadmapProgressPercent >= 75 ? '#f0fdf4' : '#f5f3ff',
+                        color: roadmapProgressPercent >= 75 ? '#16a34a' : '#7c3aed',
+                        fontSize: '0.75rem',
+                        fontWeight: '800',
+                        padding: '0.2rem 0.6rem',
+                        borderRadius: '20px',
+                        border: '1px solid rgba(124, 58, 237, 0.2)'
+                      }}>
+                        {completedRoadmapCount}/{roadmapTasks.length} Done ({roadmapProgressPercent}%)
+                      </span>
                     </div>
+
                     <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
                       Domain Placement Roadmap
                     </h4>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '1.25rem' }}>
-                      Customized 30-day skill enhancement checklist tailored specifically to your chosen domain role ({currentDomainRole.roleTitle}).
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '0.9rem' }}>
+                      Interactive 4-week preparation & placement checklist customized for {currentDomainRole.roleTitle}.
                     </p>
+
+                    {/* Progress Bar */}
+                    <div style={{ background: '#f1f5f9', borderRadius: '10px', height: '7px', overflow: 'hidden', marginBottom: '1.25rem' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${roadmapProgressPercent}%`,
+                        background: 'linear-gradient(90deg, #7c3aed, #3b82f6)',
+                        borderRadius: '10px',
+                        transition: 'width 0.4s ease'
+                      }} />
+                    </div>
                   </div>
+
                   <button 
-                    className="btn btn-secondary btn-sm"
-                    onClick={() => {
-                      setMentorTopic('Domain Placement Roadmap Guidance');
-                      setShowMentorModal(true);
-                    }}
-                    style={{ width: '100%', justifyContent: 'center', gap: '0.4rem', fontWeight: '700' }}
+                    className="btn btn-primary btn-sm"
+                    onClick={() => setShowRoadmapModal(true)}
+                    style={{ width: '100%', justifyContent: 'center', gap: '0.4rem', fontWeight: '700', background: '#7c3aed', borderColor: '#7c3aed' }}
                   >
-                    View Domain Checklist <ArrowRight size={14} />
+                    <ListChecks size={15} /> Open Interactive Roadmap <ArrowRight size={14} />
                   </button>
                 </div>
 
@@ -3381,6 +3427,240 @@ export default function StudentDashboard({
                   </div>
                 </div>
               </form>
+
+            </div>
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* INTERACTIVE DOMAIN PLACEMENT ROADMAP MODAL               */}
+        {/* ======================================================== */}
+        {showRoadmapModal && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(5px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '1.5rem'
+          }}>
+            <div className="glass-card" style={{
+              background: '#ffffff',
+              borderRadius: '20px',
+              maxWidth: '680px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              padding: '2rem',
+              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
+              border: '1px solid var(--border-color)',
+              position: 'relative'
+            }}>
+              {/* Close Button */}
+              <button 
+                type="button"
+                onClick={() => setShowRoadmapModal(false)}
+                style={{
+                  position: 'absolute',
+                  top: '1.25rem',
+                  right: '1.25rem',
+                  background: '#f1f5f9',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: '#64748b'
+                }}
+              >
+                <X size={18} />
+              </button>
+
+              {/* Modal Header */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.25rem' }}>
+                <div style={{ width: '46px', height: '46px', borderRadius: '12px', background: 'rgba(124, 58, 237, 0.1)', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <ListChecks size={24} />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2px' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#7c3aed', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      Placement Acceleration Roadmap
+                    </span>
+                    <span className="badge badge-verified" style={{ fontSize: '0.7rem', padding: '0.1rem 0.45rem' }}>
+                      {currentDomainRole.domainName} Track
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+                    {currentDomainRole.roleTitle}
+                  </h3>
+                </div>
+              </div>
+
+              {/* Readiness Meter Card */}
+              <div style={{
+                background: 'linear-gradient(135deg, #f5f3ff, #eff6ff)',
+                borderRadius: '14px',
+                padding: '1.25rem',
+                border: '1px solid #ddd6fe',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '1rem'
+              }}>
+                <div>
+                  <div style={{ fontSize: '0.82rem', fontWeight: '700', color: '#6d28d9', marginBottom: '3px' }}>
+                    YOUR PLACEMENT READINESS
+                  </div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a' }}>
+                    {roadmapProgressPercent}% Ready ({completedRoadmapCount} of {roadmapTasks.length} Milestones)
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: '#4b5563', marginTop: '2px' }}>
+                    {roadmapProgressPercent >= 75 ? '🔥 Excellent! You are in prime shape for enterprise selection.' : 'Complete pending items below to boost your selection chances.'}
+                  </div>
+                </div>
+
+                <div style={{ width: '130px' }}>
+                  <div style={{ background: '#ffffff', borderRadius: '10px', height: '10px', overflow: 'hidden', border: '1px solid #c4b5fd' }}>
+                    <div style={{
+                      height: '100%',
+                      width: `${roadmapProgressPercent}%`,
+                      background: 'linear-gradient(90deg, #7c3aed, #2563eb)',
+                      borderRadius: '10px',
+                      transition: 'width 0.3s ease'
+                    }} />
+                  </div>
+                  <span style={{ fontSize: '0.72rem', color: '#6d28d9', fontWeight: '700', textAlign: 'center', display: 'block', marginTop: '4px' }}>
+                    {roadmapTasks.length - completedRoadmapCount} steps remaining
+                  </span>
+                </div>
+              </div>
+
+              {/* Checklist Items Grouped */}
+              <div style={{ marginBottom: '1.5rem' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: '800', color: '#475569', textTransform: 'uppercase', marginBottom: '0.75rem', letterSpacing: '0.04em' }}>
+                  Interactive 30-Day Checklist (Click to Mark Complete)
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  {roadmapTasks.map((task) => (
+                    <div
+                      key={task.id}
+                      onClick={() => toggleRoadmapTask(task.id)}
+                      style={{
+                        padding: '0.85rem 1rem',
+                        borderRadius: '12px',
+                        border: task.done ? '1px solid #bbf7d0' : '1px solid #e2e8f0',
+                        background: task.done ? '#f0fdf4' : '#ffffff',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '0.85rem',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      <input 
+                        type="checkbox"
+                        checked={task.done}
+                        onChange={() => {}} // handled by parent onClick
+                        style={{
+                          width: '18px',
+                          height: '18px',
+                          accentColor: '#16a34a',
+                          cursor: 'pointer',
+                          marginTop: '2px',
+                          flexShrink: 0
+                        }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2px' }}>
+                          <span style={{
+                            fontSize: '0.88rem',
+                            fontWeight: '700',
+                            color: task.done ? '#15803d' : '#0f172a',
+                            textDecoration: task.done ? 'line-through' : 'none'
+                          }}>
+                            {task.title}
+                          </span>
+                          <span style={{
+                            fontSize: '0.7rem',
+                            fontWeight: '700',
+                            color: task.done ? '#16a34a' : '#64748b',
+                            background: task.done ? '#dcfce7' : '#f1f5f9',
+                            padding: '0.15rem 0.5rem',
+                            borderRadius: '6px'
+                          }}>
+                            {task.week}
+                          </span>
+                        </div>
+                        <p style={{
+                          fontSize: '0.8rem',
+                          color: task.done ? '#166534' : 'var(--text-muted)',
+                          margin: 0,
+                          lineHeight: '1.4'
+                        }}>
+                          {task.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '0.75rem',
+                borderTop: '1px solid #f1f5f9',
+                paddingTop: '1.25rem'
+              }}>
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => {
+                    setShowRoadmapModal(false);
+                    setMentorTopic('Domain Placement Roadmap Guidance');
+                    setShowMentorModal(true);
+                  }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: '700' }}
+                >
+                  <GraduationCap size={15} /> Book Mentor Session
+                </button>
+
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => setShowRoadmapModal(false)}
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-sm"
+                    onClick={() => {
+                      setShowRoadmapModal(false);
+                      if (onAddToast) onAddToast(`Roadmap saved! Keep ticking off milestones to reach 100%.`, 'success');
+                    }}
+                    style={{ background: '#7c3aed', borderColor: '#7c3aed', fontWeight: '700' }}
+                  >
+                    Done & Save Progress
+                  </button>
+                </div>
+              </div>
 
             </div>
           </div>

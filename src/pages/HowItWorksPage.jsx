@@ -4,41 +4,164 @@ import {
   FileText, 
   Send, 
   CheckCircle, 
+  CheckCircle2,
   ShieldCheck, 
   Briefcase, 
   Sparkles, 
   Award,
   ArrowRight,
+  ArrowLeft,
   GraduationCap,
-  Building2
+  Building2,
+  Clock,
+  Cpu,
+  Compass,
+  Zap,
+  HelpCircle,
+  Target,
+  BookOpen,
+  ChevronRight,
+  ChevronLeft,
+  Lightbulb,
+  BadgeCheck,
+  Check
 } from 'lucide-react';
+
+const STUDENT_ROADMAP_CHART = [
+  {
+    step: '01',
+    phase: 'Stage 1',
+    title: 'Sign Up & Build ATS Profile',
+    time: '5 Mins',
+    badge: '100% Free',
+    badgeColor: '#1e3a8a',
+    badgeBg: '#eff6ff',
+    icon: UserCheck,
+    accent: '#2563eb',
+    points: [
+      'Create free student account with Gmail & mobile number',
+      'Select your degree (B.Tech, BCA, MCA, MBA) & branch',
+      'Upload your ATS-optimized resume in PDF format'
+    ],
+    outcome: 'Activated Student Profile & ATS Resume Match Score'
+  },
+  {
+    step: '02',
+    phase: 'Stage 2',
+    title: 'Choose Domain Track',
+    time: '2 Mins',
+    badge: 'Pooled Seats',
+    badgeColor: '#7c3aed',
+    badgeBg: '#f5f3ff',
+    icon: Compass,
+    accent: '#7c3aed',
+    points: [
+      'Select technical domain: Full-Stack, Data, AI/ML, Cyber, or UI/UX',
+      'Explore verified companies offering ₹8k–₹25k/month stipends',
+      'Single ₹100 verified application connects to all partner seats'
+    ],
+    outcome: 'Domain Pool Assigned & Seat Eligibility Confirmed'
+  },
+  {
+    step: '03',
+    phase: 'Stage 3',
+    title: 'AI Proctored Online Test',
+    time: '15 Mins',
+    badge: 'Anti-Cheat Verified',
+    badgeColor: '#059669',
+    badgeBg: '#ecfdf5',
+    icon: Cpu,
+    accent: '#059669',
+    points: [
+      '1-click hardware test for Webcam, Microphone & Screen share',
+      '10 timed domain technical MCQs in full-screen lockdown',
+      'Score 70%+ to unlock "Top 10% Star Candidate" priority badge'
+    ],
+    outcome: 'Verified Technical Scorecard Generated'
+  },
+  {
+    step: '04',
+    phase: 'Stage 4',
+    title: 'Central Vetting & Shortlisting',
+    time: '24–48 Hours',
+    badge: 'Admin Vetted',
+    badgeColor: '#d97706',
+    badgeBg: '#fffbeb',
+    icon: ShieldCheck,
+    accent: '#d97706',
+    points: [
+      'Catalyst trust team reviews proctored score & manual resume',
+      'Real-time status tracking live in your Student Dashboard',
+      'Top candidate profiles shortlisted & forwarded to employer HR'
+    ],
+    outcome: 'Central Vetting Clearance & Employer Portal Shortlist'
+  },
+  {
+    step: '05',
+    phase: 'Stage 5',
+    title: 'Recruiter Interview & Offer',
+    time: '3–5 Days',
+    badge: 'Direct Connect',
+    badgeColor: '#0891b2',
+    badgeBg: '#ecfeff',
+    icon: Building2,
+    accent: '#0891b2',
+    points: [
+      'Receive virtual interview invite link via email and dashboard',
+      'Direct technical conversation with company engineering manager',
+      'Official offer letter issued stating stipend, duration & supervisor'
+    ],
+    outcome: 'Formal Digitally Signed Internship Offer Letter'
+  },
+  {
+    step: '06',
+    phase: 'Stage 6',
+    title: 'Active Internship & Certification',
+    time: '3–6 Months',
+    badge: 'Stipend + LOR',
+    badgeColor: '#e11d48',
+    badgeBg: '#fff1f2',
+    icon: Award,
+    accent: '#e11d48',
+    points: [
+      'Collaborate on live company projects under designated supervisor',
+      'Guaranteed monthly stipend disbursed directly on time',
+      'Download verifiable certificate with unique QR code + official LOR'
+    ],
+    outcome: 'Verifiable Completion Certificate & Industry LOR'
+  }
+];
 
 export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
   const [activeWorkflow, setActiveWorkflow] = useState('students'); // 'students' or 'companies'
 
   return (
-    <div style={{ padding: '4rem 0' }}>
+    <div style={{ padding: '3.5rem 0' }}>
       <div className="container">
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h1 style={{ fontSize: '2.4rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.75rem' }}>
+          <div className="badge badge-pill" style={{ marginBottom: '0.75rem', color: '#1e3a8a', background: 'rgba(30, 58, 138, 0.08)' }}>
+            <Sparkles size={14} /> Clear, Step-By-Step Career Journey
+          </div>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
             How <span className="text-gradient">InternCatalyst</span> Works
           </h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', maxWidth: '680px', margin: '0 auto 2rem' }}>
-            Simple, step-by-step guide for students to land internships and companies to hire top talent.
+          <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', maxWidth: '680px', margin: '0 auto 2rem', lineHeight: '1.6' }}>
+            A transparent, guaranteed roadmap designed so students can easily land verified internships with on-time stipends and official certificates.
           </p>
 
           {/* Workflow Toggle */}
           <div 
             className="workflow-toggle-container"
             style={{
-            display: 'inline-flex',
-            background: '#ffffff',
-            border: '1px solid var(--border-color)',
-            borderRadius: '30px',
-            padding: '0.35rem',
-            boxShadow: 'var(--shadow-sm)'
-          }}>
+              display: 'inline-flex',
+              background: '#ffffff',
+              border: '1px solid var(--border-color)',
+              borderRadius: '30px',
+              padding: '0.35rem',
+              boxShadow: 'var(--shadow-sm)'
+            }}
+          >
             <button 
               className="workflow-toggle-btn"
               onClick={() => setActiveWorkflow('students')}
@@ -54,7 +177,8 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
                 transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem'
+                gap: '0.5rem',
+                boxShadow: activeWorkflow === 'students' ? '0 4px 12px rgba(37, 99, 235, 0.25)' : 'none'
               }}
             >
               <GraduationCap size={16} /> Roadmap For Students
@@ -75,7 +199,8 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
                 transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem'
+                gap: '0.5rem',
+                boxShadow: activeWorkflow === 'companies' ? '0 4px 12px rgba(16, 185, 129, 0.25)' : 'none'
               }}
             >
               <Building2 size={16} /> Workflow For Companies
@@ -83,48 +208,188 @@ export default function HowItWorksPage({ setActiveTab, setCurrentRole }) {
           </div>
         </div>
 
-        {/* Workflow 1: Student Steps */}
+        {/* Workflow 1: Clean, Attractive Student Roadmap Chart */}
         {activeWorkflow === 'students' && (
-          <div className="grid-4">
-            <div className="glass-card">
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', border: '1px solid #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: '800', fontSize: '1.1rem' }}>
-                01
-              </div>
-              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>Sign Up & Complete Profile</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                Create your student account with Name, Gmail, and Password. Fill in mandatory contact number, branch, GPA, and upload your ATS resume.
-              </p>
+          <div style={{ marginBottom: '3.5rem' }}>
+            {/* Complete 6-Step Visual Roadmap Chart (All Visible At Once) */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: '1.5rem',
+              marginBottom: '2.5rem'
+            }}>
+              {STUDENT_ROADMAP_CHART.map((item, idx) => {
+                const ItemIcon = item.icon;
+
+                return (
+                  <div
+                    key={item.step}
+                    className="glass-card"
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid var(--border-color)',
+                      borderTop: `4px solid ${item.accent}`,
+                      borderRadius: '18px',
+                      padding: '1.6rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      position: 'relative',
+                      boxShadow: '0 6px 20px rgba(0, 0, 0, 0.04)',
+                      transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                    }}
+                  >
+                    <div>
+                      {/* Card Header */}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <div style={{
+                            width: '46px',
+                            height: '46px',
+                            borderRadius: '12px',
+                            background: `${item.accent}15`,
+                            color: item.accent,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: '900',
+                            fontSize: '1.1rem',
+                            flexShrink: 0
+                          }}>
+                            {item.step}
+                          </div>
+                          <div>
+                            <span style={{ fontSize: '0.72rem', fontWeight: '800', color: item.accent, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                              {item.phase}
+                            </span>
+                            <div style={{ fontSize: '0.75rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                              <Clock size={12} /> {item.time}
+                            </div>
+                          </div>
+                        </div>
+
+                        <span style={{
+                          background: item.badgeBg,
+                          color: item.badgeColor,
+                          fontSize: '0.72rem',
+                          fontWeight: '800',
+                          padding: '0.2rem 0.55rem',
+                          borderRadius: '6px'
+                        }}>
+                          {item.badge}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.85rem' }}>
+                        {item.title}
+                      </h3>
+
+                      {/* 3 Simple Action Bullets */}
+                      <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.25rem 0', display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
+                        {item.points.map((pt, i) => (
+                          <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.85rem', color: '#334155', lineHeight: 1.45 }}>
+                            <span style={{ color: item.accent, fontWeight: '800', marginTop: '1px' }}>✓</span>
+                            <span>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Milestone Deliverable Box */}
+                    <div style={{
+                      background: '#f8fafc',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '10px',
+                      padding: '0.65rem 0.85rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.45rem'
+                    }}>
+                      <span style={{ fontSize: '0.78rem', color: item.accent, fontWeight: '800' }}>
+                        🎯 Milestone:
+                      </span>
+                      <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#0f172a' }}>
+                        {item.outcome}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
-            <div className="glass-card">
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(30, 58, 138, 0.08)', color: '#1e3a8a', border: '1px solid #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: '800', fontSize: '1.1rem' }}>
-                02
+            {/* 4 Pillars of the Student Placement Guarantee */}
+            <div style={{
+              background: '#f0f7ff',
+              border: '1px solid #bfdbfe',
+              borderRadius: '20px',
+              padding: '2rem',
+              marginBottom: '2rem'
+            }}>
+              <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+                <span className="badge badge-verified" style={{ background: '#dbeafe', color: '#1d4ed8', marginBottom: '0.5rem' }}>
+                  <ShieldCheck size={13} /> The InternCatalyst Student Pledge
+                </span>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+                  Why Students Love & Trust This Roadmap
+                </h3>
               </div>
-              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>Search Verified Roles</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                Explore specialized domain tracks (Full-Stack, Data, UI/UX, AI, Cyber) backed by Employer Verification Badges (✓) and supervisor contacts.
-              </p>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: '1.25rem'
+              }}>
+                <div style={{ background: '#ffffff', borderRadius: '12px', padding: '1.2rem', border: '1px solid #e2e8f0' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                    <ShieldCheck size={20} />
+                  </div>
+                  <strong style={{ fontSize: '0.925rem', color: '#0f172a', display: 'block', marginBottom: '0.35rem' }}>
+                    100% Scam-Free Companies
+                  </strong>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: '1.45', margin: 0 }}>
+                    Every listing undergoes corporate GST verification and supervisor phone validation. Zero fake recruiters.
+                  </p>
+                </div>
+
+                <div style={{ background: '#ffffff', borderRadius: '12px', padding: '1.2rem', border: '1px solid #e2e8f0' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#ecfdf5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                    <Cpu size={20} />
+                  </div>
+                  <strong style={{ fontSize: '0.925rem', color: '#0f172a', display: 'block', marginBottom: '0.35rem' }}>
+                    Hardware-Proctored Merit
+                  </strong>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: '1.45', margin: 0 }}>
+                    Transparent 10-MCQ testing validates real skills so college tier doesn’t hold talented students back.
+                  </p>
+                </div>
+
+                <div style={{ background: '#ffffff', borderRadius: '12px', padding: '1.2rem', border: '1px solid #e2e8f0' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#fffbeb', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                    <Briefcase size={20} />
+                  </div>
+                  <strong style={{ fontSize: '0.925rem', color: '#0f172a', display: 'block', marginBottom: '0.35rem' }}>
+                    Protected Monthly Stipends
+                  </strong>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: '1.45', margin: 0 }}>
+                    Stipend ranges (₹8k–₹25k) are contractually locked in your offer letter with supervisor milestone approvals.
+                  </p>
+                </div>
+
+                <div style={{ background: '#ffffff', borderRadius: '12px', padding: '1.2rem', border: '1px solid #e2e8f0' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#fff1f2', color: '#e11d48', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                    <Award size={20} />
+                  </div>
+                  <strong style={{ fontSize: '0.925rem', color: '#0f172a', display: 'block', marginBottom: '0.35rem' }}>
+                    Verifiable Certificate & LOR
+                  </strong>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: '1.45', margin: 0 }}>
+                    Receive a digitally verifiable completion certificate with unique ID + supervisor Letter of Recommendation.
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="glass-card">
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#f5f3ff', color: '#7c3aed', border: '1px solid #ddd6fe', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: '800', fontSize: '1.1rem' }}>
-                03
-              </div>
-              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>Apply with Registration Fee</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                Submit your profile for your chosen verified role by paying the nominal ₹100 registration fee via UPI or Debit/Credit Card.
-              </p>
-            </div>
-
-            <div className="glass-card">
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: '800', fontSize: '1.1rem' }}>
-                04
-              </div>
-              <h3 style={{ color: '#0f172a', fontSize: '1.15rem', marginBottom: '0.5rem' }}>Application Confirmation Mail</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                Instantly receive an official email confirmation with your Application ID, proctored assessment link, and real-time status tracking.
-              </p>
-            </div>
           </div>
         )}
 

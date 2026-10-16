@@ -30,6 +30,7 @@ import {
   Copy,
   Clock
 } from 'lucide-react';
+import AIResumeReaderModal from '../components/AIResumeReaderModal';
 
 export default function AdminDashboard({ 
   students, 
@@ -50,6 +51,10 @@ export default function AdminDashboard({
   onLogout
 }) {
   const [adminTab, setAdminTab] = useState('verifications'); // 'verifications', 'students', 'listings', 'applications', 'matcher', 'notifications', 'complaints', 'cms', 'analytics', 'audit'
+
+  // AI Resume Reader & Candidate Screening Modal State
+  const [activeAIResumeCandidate, setActiveAIResumeCandidate] = useState(null);
+  const [showAIResumeModal, setShowAIResumeModal] = useState(false);
 
   const handleSelectAndForwardCandidate = (appId) => {
     const targetApp = applications.find(a => a.id === appId);
@@ -1569,6 +1574,80 @@ export default function AdminDashboard({
               Workflow: All incoming student applications & stored resumes are queued here. Admin reviews qualifications, resume, and ATS match, then selects the top candidates to forward to the employer portal for vacant seat hiring.
             </p>
 
+            {/* AI Resume Screening Engine Hub */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(30, 58, 138, 0.4), rgba(15, 23, 42, 0.9))',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
+              borderRadius: '12px',
+              padding: '1.25rem 1.5rem',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{
+                  width: '46px',
+                  height: '46px',
+                  borderRadius: '12px',
+                  background: 'rgba(56, 189, 248, 0.15)',
+                  color: '#38bdf8',
+                  border: '1px solid rgba(56, 189, 248, 0.4)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 0 20px rgba(56, 189, 248, 0.25)',
+                  flexShrink: 0
+                }}>
+                  <Sparkles size={24} />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '3px' }}>
+                    <span style={{ fontSize: '0.72rem', fontWeight: '800', color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      Central Admin AI Screening Hub
+                    </span>
+                    <span className="badge badge-verified" style={{ background: '#0284c7', color: '#ffffff', fontSize: '0.68rem', padding: '0.1rem 0.45rem' }}>
+                      Automated ATS Screening
+                    </span>
+                  </div>
+                  <strong style={{ fontSize: '1.05rem', color: '#ffffff', display: 'block' }}>
+                    Automated Candidate Qualification & Resume Scoring Engine
+                  </strong>
+                  <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
+                    Click "🤖 AI Resume Reader & Screen" on any candidate to inspect technical scores, verify ATS compliance, and forward with AI clearance.
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="btn btn-sm"
+                onClick={() => {
+                  setActiveAIResumeCandidate(applications[0] || { studentName: 'Adithya S', internshipTitle: 'Full-Stack Web Development Intern' });
+                  setShowAIResumeModal(true);
+                }}
+                style={{
+                  background: 'linear-gradient(90deg, #0284c7, #2563eb)',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '0.55rem 1rem',
+                  fontSize: '0.82rem',
+                  fontWeight: '700',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  boxShadow: '0 4px 14px rgba(2, 132, 199, 0.35)',
+                  cursor: 'pointer'
+                }}
+              >
+                <Sparkles size={14} /> Launch AI Resume Screener
+              </button>
+            </div>
+
             <div className="data-table-container">
               <table className="data-table">
                 <thead>
@@ -1599,15 +1678,29 @@ export default function AdminDashboard({
                           {app.studentDegree || 'B.Tech CS'} • {app.studentYear || '3rd Year'}
                         </span>
                         <div style={{ marginTop: '3px', display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
-                          <a 
-                            href={app.resumeUrl || '#'} 
-                            target="_blank" 
-                            rel="noreferrer"
-                            onClick={(e) => { e.preventDefault(); alert(`Viewing Candidate Resume: ${app.resumeName || 'Student_ATS_Resume.pdf'}\n\nCollege: ${app.studentCollege}\nCourse: ${app.studentDegree}\nYear: ${app.studentYear}\nLinkedIn: ${app.linkedinUrl || 'https://linkedin.com/in/aditya-verma-dev'}\nGitHub: ${app.githubUrl || 'https://github.com/adityaverma'}\nPayment: ₹100 Verified (${app.txnId || 'TXN_UPI_100_892104'})`); }}
-                            style={{ color: '#38bdf8', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.2rem', fontWeight: '600' }}
+                          <button 
+                            type="button"
+                            onClick={() => {
+                              setActiveAIResumeCandidate(app);
+                              setShowAIResumeModal(true);
+                            }}
+                            style={{
+                              background: 'rgba(56, 189, 248, 0.15)',
+                              border: '1px solid #0284c7',
+                              color: '#38bdf8',
+                              fontSize: '0.78rem',
+                              fontWeight: '700',
+                              padding: '0.3rem 0.6rem',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.35rem',
+                              transition: 'all 0.15s ease'
+                            }}
                           >
-                            <FileText size={12} /> 📄 {app.resumeName || 'Student_ATS_Resume.pdf'}
-                          </a>
+                            <Sparkles size={13} style={{ color: '#38bdf8' }} /> 🤖 AI Resume Reader & Screen
+                          </button>
                           <a href={app.linkedinUrl || 'https://linkedin.com/in/aditya-verma-dev'} target="_blank" rel="noreferrer" style={{ color: '#60a5fa', fontSize: '0.72rem', fontWeight: '700', textDecoration: 'underline' }}>
                             LinkedIn 🔗
                           </a>
@@ -2149,6 +2242,25 @@ export default function AdminDashboard({
             </div>
           </div>
         )}
+
+        {/* ======================================================== */}
+        {/* AI RESUME READER & CANDIDATE SCREENING MODAL             */}
+        {/* ======================================================== */}
+        {showAIResumeModal && activeAIResumeCandidate && (
+          <AIResumeReaderModal
+            candidate={activeAIResumeCandidate}
+            targetJob={internships.find(j => j.id === activeAIResumeCandidate.internshipId || j.title === activeAIResumeCandidate.internshipTitle) || { title: activeAIResumeCandidate.internshipTitle, companyName: activeAIResumeCandidate.companyName }}
+            isOpen={showAIResumeModal}
+            onClose={() => setShowAIResumeModal(false)}
+            onForwardCandidate={(appId) => {
+              handleSelectAndForwardCandidate(appId);
+              if (onAddToast) onAddToast(`Candidate forwarded to employer with AI screening verification!`, 'success');
+            }}
+            onAddToast={onAddToast}
+            userRole="admin"
+          />
+        )}
+
       </div>
     </div>
   );

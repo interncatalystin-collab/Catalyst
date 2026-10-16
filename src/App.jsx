@@ -24,7 +24,8 @@ import {
   INITIAL_AUDIT_LOGS, 
   INITIAL_BLOGS, 
   INITIAL_FAQS, 
-  INITIAL_TESTIMONIALS 
+  INITIAL_TESTIMONIALS,
+  INITIAL_REPORTS
 } from './data/mockData';
 
 export const getTabLabel = (tab) => {
@@ -155,6 +156,62 @@ export default function App() {
   const [faqs, setFaqs] = useState(INITIAL_FAQS);
   const [testimonials, setTestimonials] = useState(INITIAL_TESTIMONIALS);
   const [auditLogs, setAuditLogs] = useState(INITIAL_AUDIT_LOGS);
+
+  // Company Internship Reports State with LocalStorage & REST sync
+  const [reports, setReports] = useState(() => {
+    try {
+      const saved = localStorage.getItem('companyInternshipReports');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return INITIAL_REPORTS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('companyInternshipReports', JSON.stringify(reports));
+    } catch (e) {}
+  }, [reports]);
+
+  const handleAddReport = (newReport) => {
+    setReports(prev => [newReport, ...prev]);
+    addAuditLog('UPLOAD_INTERNSHIP_REPORT', `Company '${newReport.companyName || 'Company'}' uploaded report '${newReport.reportTitle}' for intern '${newReport.studentName}'.`);
+    addToast(`🎉 Internship Report '${newReport.reportTitle}' uploaded successfully!`, 'success');
+
+    // Sync to backend REST API
+    try {
+      fetch('/api/reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newReport)
+      }).catch(() => {});
+    } catch (e) {}
+  };
+
+  const handleUpdateReport = (reportId, updatedFields) => {
+    setReports(prev => prev.map(r => r.id === reportId ? { ...r, ...updatedFields } : r));
+    addAuditLog('UPDATE_INTERNSHIP_REPORT', `Updated report '${reportId}'.`);
+    addToast('Report updated successfully.', 'info');
+
+    try {
+      fetch(`/api/reports/${reportId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedFields)
+      }).catch(() => {});
+    } catch (e) {}
+  };
+
+  const handleDeleteReport = (reportId) => {
+    setReports(prev => prev.filter(r => r.id !== reportId));
+    addAuditLog('DELETE_INTERNSHIP_REPORT', `Deleted report '${reportId}'.`);
+    addToast('Report removed from records.', 'info');
+
+    try {
+      fetch(`/api/reports/${reportId}`, {
+        method: 'DELETE'
+      }).catch(() => {});
+    } catch (e) {}
+  };
 
   // Modal State
   const [modalInternship, setModalInternship] = useState(null);
@@ -770,6 +827,7 @@ export default function App() {
               applications={applications}
               internships={internships}
               companies={companies}
+              reports={reports}
               onApplyDomainRole={handleApplyDomainRole}
               onCompleteAssessment={handleCompleteAssessment}
               onWithdrawApplication={handleWithdrawApplication}
@@ -802,6 +860,10 @@ export default function App() {
               onAddInternship={handleAddInternship}
               applications={applications}
               onUpdateAppStatus={handleEmployerSelectCandidate}
+              reports={reports}
+              onAddReport={handleAddReport}
+              onUpdateReport={handleUpdateReport}
+              onDeleteReport={handleDeleteReport}
               onAddToast={addToast}
               onLogout={() => handleLogoutRole('company')}
               onGoBack={handleGoBack}

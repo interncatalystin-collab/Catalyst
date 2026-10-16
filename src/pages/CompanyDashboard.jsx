@@ -23,9 +23,25 @@ import {
   Check,
   ArrowRight,
   Key,
-  LogOut
+  LogOut,
+  Upload,
+  Download,
+  Star,
+  Award,
+  Trash2,
+  Edit3,
+  X,
+  Eye,
+  Filter,
+  Search,
+  CheckCircle2,
+  ChevronRight,
+  FileCheck,
+  RefreshCw,
+  Printer
 } from 'lucide-react';
 import { SUBSCRIPTION_PLANS } from '../data/mockData';
+import AIResumeReaderModal from '../components/AIResumeReaderModal';
 
 export default function CompanyDashboard({ 
   company, 
@@ -34,10 +50,46 @@ export default function CompanyDashboard({
   onAddInternship, 
   applications, 
   onUpdateAppStatus,
+  reports = [],
+  onAddReport,
+  onUpdateReport,
+  onDeleteReport,
   onAddToast,
   onLogout
 }) {
-  const [activeTab, setActiveTab] = useState('post-role'); // 'post-role', 'company-profile', 'listings', 'applicants', 'verification', 'subscription'
+  const [activeTab, setActiveTab] = useState('post-role'); // 'post-role', 'company-profile', 'listings', 'applicants', 'reports', 'verification', 'subscription'
+
+  // Reports & Evaluation State
+  const [selectedReportCategoryFilter, setSelectedReportCategoryFilter] = useState('all');
+  const [reportSearchTerm, setReportSearchTerm] = useState('');
+  const [selectedStudentFilter, setSelectedStudentFilter] = useState('all');
+  const [showUploadReportModal, setShowUploadReportModal] = useState(false);
+  const [showViewReportModal, setShowViewReportModal] = useState(false);
+  const [activeViewingReport, setActiveViewingReport] = useState(null);
+
+  // AI Resume Reader & Candidate Screening Modal State
+  const [activeAIResumeCandidate, setActiveAIResumeCandidate] = useState(null);
+  const [showAIResumeModal, setShowAIResumeModal] = useState(false);
+
+  // Form state for Upload Report modal
+  const [reportStudentAppId, setReportStudentAppId] = useState('');
+  const [customStudentName, setCustomStudentName] = useState('');
+  const [customStudentEmail, setCustomStudentEmail] = useState('');
+  const [customRoleTitle, setCustomRoleTitle] = useState('');
+  const [formReportTitle, setFormReportTitle] = useState('');
+  const [formReportType, setFormReportType] = useState('Monthly Milestone Report');
+  const [formPeriod, setFormPeriod] = useState('Month 1 Review');
+  const [formRating, setFormRating] = useState(5);
+  const [formAttendance, setFormAttendance] = useState('98%');
+  const [formStipendStatus, setFormStipendStatus] = useState('Processed / Released');
+  const [formKeyDeliverables, setFormKeyDeliverables] = useState('');
+  const [formSupervisorRemarks, setFormSupervisorRemarks] = useState('');
+  const [formStatus, setFormStatus] = useState('Approved');
+  const [formFileName, setFormFileName] = useState('');
+  const [formFileSize, setFormFileSize] = useState('');
+  const [formFileData, setFormFileData] = useState('');
+  const [isDraggingFile, setIsDraggingFile] = useState(false);
+  const [editingReportId, setEditingReportId] = useState(null);
 
   // Company Profile Form State
   const [isEditingCompanyProfile, setIsEditingCompanyProfile] = useState(false);
@@ -155,6 +207,260 @@ export default function CompanyDashboard({
   const pendingVettingApps = allCompanyApplications.filter(app => 
     !(app.forwardedToEmployer || app.adminSelectionStatus === 'Shortlisted & Forwarded to Employer')
   );
+
+  // Hired / Selected candidates who have been awarded an internship at this company:
+  const hiredStudents = allCompanyApplications.filter(app => 
+    app.status === 'Selected' || app.status === 'Hired'
+  );
+
+  // Filter company reports strictly by company ID or company name
+  const companyReports = (reports || []).filter(rep => {
+    if (!company) return false;
+    const matchId = rep.companyId && company.id && String(rep.companyId).trim() === String(company.id).trim();
+    const matchName = rep.companyName && company.name && rep.companyName.trim().toLowerCase() === company.name.trim().toLowerCase();
+    return matchId || matchName;
+  });
+
+  const handleOpenUploadForStudent = (studentApp) => {
+    if (studentApp) {
+      setReportStudentAppId(studentApp.id);
+      setCustomStudentName(studentApp.studentName || '');
+      setCustomStudentEmail(studentApp.studentEmail || '');
+      setCustomRoleTitle(studentApp.internshipTitle || '');
+      setFormReportTitle(`Month 1 Progress & Milestone Evaluation - ${studentApp.studentName || 'Intern'}`);
+      setFormReportType('Monthly Milestone Report');
+      setFormPeriod('Month 1 (Sprint 1-4)');
+      setFormRating(5);
+      setFormAttendance('98%');
+      setFormStipendStatus('Processed (₹15,000 / month)');
+      setFormKeyDeliverables('Successfully completed assigned engineering sprints; resolved key GitHub issues; passed all continuous integration test suites.');
+      setFormSupervisorRemarks('Exceptional problem-solving abilities, high attention to code quality, and active team participation throughout this milestone.');
+      setFormFileName(`${(studentApp.studentName || 'Student').replace(/\s+/g, '_')}_Milestone1_Report.pdf`);
+      setFormFileSize('1.8 MB');
+      setFormStatus('Approved');
+    } else {
+      setReportStudentAppId('');
+      setCustomStudentName('');
+      setCustomStudentEmail('');
+      setCustomRoleTitle('');
+      setFormReportTitle('');
+      setFormReportType('Monthly Milestone Report');
+      setFormPeriod('Month 1 Review');
+      setFormRating(5);
+      setFormAttendance('98%');
+      setFormStipendStatus('Processed / Released');
+      setFormKeyDeliverables('');
+      setFormSupervisorRemarks('');
+      setFormFileName('');
+      setFormFileSize('');
+      setFormStatus('Approved');
+    }
+    setEditingReportId(null);
+    setShowUploadReportModal(true);
+  };
+
+  const handleOpenEditReport = (rep) => {
+    setEditingReportId(rep.id);
+    setReportStudentAppId(rep.applicationId || '');
+    setCustomStudentName(rep.studentName || '');
+    setCustomStudentEmail(rep.studentEmail || '');
+    setCustomRoleTitle(rep.internshipTitle || '');
+    setFormReportTitle(rep.reportTitle || '');
+    setFormReportType(rep.reportType || 'Monthly Milestone Report');
+    setFormPeriod(rep.period || 'Month 1 Review');
+    setFormRating(rep.rating || 5);
+    setFormAttendance(rep.attendance || '98%');
+    setFormStipendStatus(rep.stipendStatus || 'Approved');
+    setFormKeyDeliverables(rep.keyDeliverables || '');
+    setFormSupervisorRemarks(rep.supervisorRemarks || '');
+    setFormFileName(rep.fileName || '');
+    setFormFileSize(rep.fileSize || '');
+    setFormStatus(rep.status || 'Approved');
+    setShowUploadReportModal(true);
+  };
+
+  const handleFileSelect = (file) => {
+    if (!file) return;
+    setFormFileName(file.name);
+    const sizeInMb = (file.size / (1024 * 1024)).toFixed(1);
+    setFormFileSize(file.size > 1024 * 1024 ? `${sizeInMb} MB` : `${Math.round(file.size / 1024)} KB`);
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setFormFileData(e.target?.result || '');
+    };
+    reader.readAsDataURL(file);
+    onAddToast(`📄 File attached: ${file.name}`, 'info');
+  };
+
+  const handleAutofillTemplate = () => {
+    setFormReportTitle(`Official Milestone Progress & Capstone Evaluation Report`);
+    setFormReportType('Monthly Milestone Report');
+    setFormPeriod('Sprint Milestone 2-4');
+    setFormRating(5);
+    setFormAttendance('100%');
+    setFormStipendStatus('Processed & Released (₹15,000 / month)');
+    setFormKeyDeliverables('• Completed core module architectural design\n• Implemented secure REST APIs with schema validation\n• Added automated unit tests achieving 94% coverage\n• Collaborated on production deployment pipeline');
+    setFormSupervisorRemarks('The intern exhibited remarkable diligence, high attention to code quality, and exceptional communication. Completed all deliverables ahead of sprint deadlines. Strongly recommended for milestone sign-off and completion certificate.');
+    setFormFileName('Internship_Evaluation_Official_Report.pdf');
+    setFormFileSize('2.1 MB');
+    setFormStatus('Approved');
+    onAddToast('✨ Autofilled form with standard corporate milestone template!', 'info');
+  };
+
+  const handleSubmitReport = (e) => {
+    e.preventDefault();
+
+    let targetStudentName = customStudentName;
+    let targetStudentEmail = customStudentEmail;
+    let targetRole = customRoleTitle;
+    let targetStudentCollege = '';
+    let targetStudentPhone = '';
+    let targetAppId = reportStudentAppId;
+
+    if (reportStudentAppId) {
+      const matchedApp = allCompanyApplications.find(a => String(a.id) === String(reportStudentAppId));
+      if (matchedApp) {
+        targetStudentName = matchedApp.studentName;
+        targetStudentEmail = matchedApp.studentEmail;
+        targetRole = matchedApp.internshipTitle;
+        targetStudentCollege = matchedApp.studentCollege || '';
+        targetStudentPhone = matchedApp.studentPhone || '';
+      }
+    }
+
+    if (!targetStudentName || !formReportTitle) {
+      onAddToast('Please select a student and provide a Report Title.', 'danger');
+      return;
+    }
+
+    const reportPayload = {
+      id: editingReportId || `rep-${Date.now()}`,
+      companyId: company.id || 'comp-101',
+      companyName: company.name || 'Company',
+      applicationId: targetAppId || null,
+      studentId: targetAppId || `stud-${Date.now()}`,
+      studentName: targetStudentName,
+      studentEmail: targetStudentEmail,
+      studentPhone: targetStudentPhone,
+      studentCollege: targetStudentCollege,
+      internshipTitle: targetRole || 'Internship Opportunity',
+      reportTitle: formReportTitle,
+      reportType: formReportType,
+      period: formPeriod,
+      submissionDate: new Date().toISOString().split('T')[0],
+      supervisorName: company.contactPerson || 'HR Lead',
+      supervisorDesignation: 'Designated Corporate Supervisor',
+      supervisorEmail: company.businessEmail || 'hr@company.com',
+      rating: Number(formRating) || 5,
+      attendance: formAttendance,
+      stipendStatus: formStipendStatus,
+      keyDeliverables: formKeyDeliverables || 'All assigned internship milestone deliverables completed satisfactorily.',
+      supervisorRemarks: formSupervisorRemarks || 'Satisfactory progress and dedication observed during the review cycle.',
+      fileName: formFileName || `${targetStudentName.replace(/\s+/g, '_')}_Milestone_Report.pdf`,
+      fileSize: formFileSize || '1.6 MB',
+      fileUrl: formFileData || '#',
+      status: formStatus,
+      uploadedBy: 'Company Supervisor',
+      createdAt: new Date().toISOString()
+    };
+
+    if (editingReportId && onUpdateReport) {
+      onUpdateReport(editingReportId, reportPayload);
+      onAddToast(`Report '${formReportTitle}' updated successfully!`, 'success');
+    } else if (onAddReport) {
+      onAddReport(reportPayload);
+      onAddToast(`🎉 Internship Report '${formReportTitle}' uploaded successfully!`, 'success');
+    }
+
+    setShowUploadReportModal(false);
+    setEditingReportId(null);
+  };
+
+  const handleDownloadReport = (rep) => {
+    const reportText = `=====================================================
+INTERNCATALYST OFFICIAL INTERNSHIP PROGRESS & EVALUATION REPORT
+=====================================================
+
+COMPANY INFORMATION
+Company Name: ${rep.companyName}
+Corporate Supervisor: ${rep.supervisorName} (${rep.supervisorDesignation || 'Supervisor'})
+Supervisor Email: ${rep.supervisorEmail || 'hr@company.com'}
+Verification Status: Verified Employer
+
+STUDENT INTERN INFORMATION
+Candidate Name: ${rep.studentName}
+Email: ${rep.studentEmail}
+Phone: ${rep.studentPhone || 'N/A'}
+Institution / College: ${rep.studentCollege || 'N/A'}
+Internship Opportunity: ${rep.internshipTitle}
+
+REPORT METRICS & EVALUATION
+Report Title: ${rep.reportTitle}
+Report Category: ${rep.reportType}
+Evaluation Period: ${rep.period || 'Milestone Period'}
+Submission Date: ${rep.submissionDate}
+Overall Performance Rating: ${rep.rating} / 5 Stars
+Attendance Record: ${rep.attendance || '100%'}
+Stipend Disbursal Status: ${rep.stipendStatus || 'Approved'}
+Compliance Status: ${rep.status}
+
+KEY PROJECT DELIVERABLES & RESPONSIBILITIES
+${rep.keyDeliverables || 'Standard milestone deliverables met per curriculum.'}
+
+CORPORATE SUPERVISOR REMARKS & RECOMMENDATIONS
+${rep.supervisorRemarks || 'Satisfactory performance throughout the internship tenure.'}
+
+-----------------------------------------------------
+Official Electronic Seal: VERIFIED BY ${rep.companyName.toUpperCase()}
+Generated on: ${new Date().toLocaleString()}
+Document ID: ${rep.id}
+Attachment File: ${rep.fileName} (${rep.fileSize || 'N/A'})
+=====================================================`;
+
+    const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${rep.studentName.replace(/\s+/g, '_')}_${rep.reportType.replace(/\s+/g, '_')}_${rep.submissionDate}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    if (onAddToast) onAddToast(`📥 Report '${rep.reportTitle}' downloaded successfully!`, 'success');
+  };
+
+  const handleExportReportsCSV = () => {
+    if (companyReports.length === 0) {
+      if (onAddToast) onAddToast('No reports available to export.', 'info');
+      return;
+    }
+    const headers = ['Report ID', 'Student Name', 'Email', 'Role Title', 'Report Title', 'Type', 'Period', 'Rating (Out of 5)', 'Attendance', 'Stipend Status', 'Date', 'Supervisor', 'Status'];
+    const rows = companyReports.map(r => [
+      r.id,
+      `"${r.studentName || ''}"`,
+      r.studentEmail || '',
+      `"${r.internshipTitle || ''}"`,
+      `"${r.reportTitle || ''}"`,
+      `"${r.reportType || ''}"`,
+      `"${r.period || ''}"`,
+      r.rating || 5,
+      r.attendance || '100%',
+      `"${r.stipendStatus || ''}"`,
+      r.submissionDate,
+      `"${r.supervisorName || ''}"`,
+      r.status
+    ]);
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `${company.name.replace(/\s+/g, '_')}_Internship_Reports_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    if (onAddToast) onAddToast('📊 Internship reports exported as CSV successfully!', 'success');
+  };
 
   const handlePostSubmit = (e) => {
     e.preventDefault();
@@ -399,6 +705,25 @@ export default function CompanyDashboard({
             }}
           >
             <Users size={15} /> Applicant Manager ({companyApps.length})
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('reports')}
+            style={{
+              background: activeTab === 'reports' ? 'var(--verified-color)' : '#f1f5f9',
+              border: 'none',
+              color: activeTab === 'reports' ? '#fff' : 'var(--text-dim)',
+              padding: '0.6rem 1.2rem',
+              borderRadius: 'var(--radius-md)',
+              fontWeight: '600',
+              fontSize: '0.875rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem'
+            }}
+          >
+            <FileText size={15} /> Student Reports & Progress ({companyReports.length})
           </button>
 
           <button 
@@ -979,6 +1304,80 @@ export default function CompanyDashboard({
               </span>
             </div>
 
+            {/* AI Resume Screening & ATS Candidate Match Engine Banner */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(30, 58, 138, 0.35), rgba(15, 23, 42, 0.85))',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
+              borderRadius: '12px',
+              padding: '1.25rem 1.5rem',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{
+                  width: '46px',
+                  height: '46px',
+                  borderRadius: '12px',
+                  background: 'rgba(56, 189, 248, 0.15)',
+                  color: '#38bdf8',
+                  border: '1px solid rgba(56, 189, 248, 0.4)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 0 20px rgba(56, 189, 248, 0.25)',
+                  flexShrink: 0
+                }}>
+                  <Sparkles size={24} />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '3px' }}>
+                    <span style={{ fontSize: '0.72rem', fontWeight: '800', color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      AI Resume Reader & Intelligent Screening
+                    </span>
+                    <span className="badge badge-verified" style={{ background: '#0284c7', color: '#ffffff', fontSize: '0.68rem', padding: '0.1rem 0.45rem' }}>
+                      Active
+                    </span>
+                  </div>
+                  <strong style={{ fontSize: '1.05rem', color: '#ffffff', display: 'block' }}>
+                    Deep Candidate Match Engine & Tailored Interview Guide
+                  </strong>
+                  <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
+                    Click "🤖 AI Resume Reader & Screen" on any candidate to inspect parsed skills, project depth, ATS compliance, and custom interview questions.
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="btn btn-sm"
+                onClick={() => {
+                  setActiveAIResumeCandidate(companyApps[0] || { studentName: 'External Candidate', internshipTitle: 'Software Development' });
+                  setShowAIResumeModal(true);
+                }}
+                style={{
+                  background: 'linear-gradient(90deg, #0284c7, #2563eb)',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '0.55rem 1rem',
+                  fontSize: '0.82rem',
+                  fontWeight: '700',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  boxShadow: '0 4px 14px rgba(2, 132, 199, 0.35)',
+                  cursor: 'pointer'
+                }}
+              >
+                <Upload size={14} /> Screen Any External Resume
+              </button>
+            </div>
+
             <h3 style={{ color: '#fff', fontSize: '1.2rem', fontWeight: '700', marginBottom: '1rem' }}>
               Top Selected Candidates for Recruiter Hiring ({companyApps.length})
             </h3>
@@ -1019,18 +1418,29 @@ export default function CompanyDashboard({
                               {app.studentDegree || 'B.Tech CS'} • {app.studentYear || '3rd Year'}
                             </span>
                             <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
-                              <a 
-                                href={app.resumeUrl || '#'} 
-                                target="_blank" 
-                                rel="noreferrer"
-                                onClick={(e) => { 
-                                  e.preventDefault(); 
-                                  alert(`📄 VERIFIED CANDIDATE PROFILE & RESUME\n\nCandidate Name: ${app.studentName}\nEmail: ${app.studentEmail}\nPhone: ${app.studentPhone}\nCollege: ${app.studentCollege || 'IIT Bombay'}\nDegree/Course: ${app.studentDegree || 'B.Tech Computer Science'}\nYear of Study: ${app.studentYear || '3rd Year'}\nLinkedIn: ${app.linkedinUrl || 'https://linkedin.com/in/aditya-verma-dev'}\nGitHub: ${app.githubUrl || 'https://github.com/adityaverma'}\n₹100 Fee Payment: Verified (${app.txnId || 'TXN_UPI_100_892104'})\n\nResume File: ${app.resumeName || 'Student_ATS_Resume.pdf'}`); 
+                              <button 
+                                type="button"
+                                onClick={() => {
+                                  setActiveAIResumeCandidate(app);
+                                  setShowAIResumeModal(true);
                                 }}
-                                style={{ color: '#38bdf8', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.2rem', fontWeight: '700', textDecoration: 'underline' }}
+                                style={{
+                                  background: 'rgba(56, 189, 248, 0.15)',
+                                  border: '1px solid #0284c7',
+                                  color: '#38bdf8',
+                                  fontSize: '0.78rem',
+                                  fontWeight: '700',
+                                  padding: '0.35rem 0.65rem',
+                                  borderRadius: '6px',
+                                  cursor: 'pointer',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '0.35rem',
+                                  transition: 'all 0.15s ease'
+                                }}
                               >
-                                <FileText size={12} /> 📄 View ATS Resume ({app.resumeName || 'Resume.pdf'})
-                              </a>
+                                <Sparkles size={13} style={{ color: '#38bdf8' }} /> 🤖 AI Resume Reader & Screen
+                              </button>
                               <a href={app.linkedinUrl || 'https://linkedin.com/in/aditya-verma-dev'} target="_blank" rel="noreferrer" style={{ color: '#60a5fa', fontSize: '0.72rem', fontWeight: '700', textDecoration: 'underline' }}>
                                 LinkedIn 🔗
                               </a>
@@ -1062,9 +1472,35 @@ export default function CompanyDashboard({
                           <td>
                             <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
                               {app.status === 'Selected' || app.status === 'Hired' ? (
-                                <span className="badge badge-verified" style={{ background: '#16a34a', color: '#fff', fontSize: '0.8rem', padding: '0.4rem 0.75rem' }}>
-                                  🎉 Selected & Hired for Vacant Seat (Returned to Admin) ✓
-                                </span>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', alignItems: 'flex-start' }}>
+                                  <span className="badge badge-verified" style={{ background: '#16a34a', color: '#fff', fontSize: '0.8rem', padding: '0.35rem 0.65rem' }}>
+                                    🎉 Selected & Hired for Vacant Seat ✓
+                                  </span>
+                                  <button 
+                                    type="button"
+                                    className="btn btn-sm"
+                                    onClick={() => {
+                                      handleOpenUploadForStudent(app);
+                                      setActiveTab('reports');
+                                    }}
+                                    style={{
+                                      background: '#0284c7',
+                                      color: '#ffffff',
+                                      border: 'none',
+                                      borderRadius: '6px',
+                                      padding: '0.35rem 0.75rem',
+                                      fontSize: '0.78rem',
+                                      fontWeight: '700',
+                                      cursor: 'pointer',
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      gap: '0.35rem',
+                                      boxShadow: '0 2px 4px rgba(2, 132, 199, 0.25)'
+                                    }}
+                                  >
+                                    <Upload size={13} /> Upload Intern Report
+                                  </button>
+                                </div>
                               ) : app.status === 'Rejected' ? (
                                 <span className="badge badge-danger">Rejected (Returned to Admin)</span>
                               ) : (
@@ -1180,6 +1616,534 @@ export default function CompanyDashboard({
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Tab: Internship Reports, Milestones & Progress */}
+        {activeTab === 'reports' && (
+          <div>
+            {/* Header Banner */}
+            <div className="glass-card" style={{ marginBottom: '1.5rem', padding: '1.75rem 2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.25rem' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
+                    <span className="badge" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                      <FileCheck size={13} /> Corporate Internship Evaluation Hub
+                    </span>
+                    <span className="badge" style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+                      Verified Company Portal
+                    </span>
+                  </div>
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#fff', marginBottom: '0.35rem' }}>
+                    Intern Progress, Milestone & Final Reports
+                  </h2>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', maxWidth: '720px', lineHeight: '1.5' }}>
+                    After awarding internships to students, record weekly milestones, upload performance evaluation reports, track stipend release status, and issue official completion sign-offs.
+                  </p>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <button 
+                    type="button" 
+                    className="btn btn-secondary" 
+                    onClick={handleExportReportsCSV}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem' }}
+                  >
+                    <Download size={14} /> Export CSV Summary
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn btn-emerald" 
+                    onClick={() => handleOpenUploadForStudent(null)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontWeight: '700', padding: '0.7rem 1.4rem' }}
+                  >
+                    <PlusCircle size={16} /> Upload New Report
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Metrics KPI Bar */}
+            <div className="grid-4" style={{ gap: '1rem', marginBottom: '1.5rem' }}>
+              <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Users size={24} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Hired Interns</div>
+                  <div style={{ fontSize: '1.6rem', fontWeight: '800', color: '#fff' }}>{hiredStudents.length}</div>
+                </div>
+              </div>
+
+              <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FileText size={24} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Reports Uploaded</div>
+                  <div style={{ fontSize: '1.6rem', fontWeight: '800', color: '#fff' }}>{companyReports.length}</div>
+                </div>
+              </div>
+
+              <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Star size={24} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Avg Supervisor Rating</div>
+                  <div style={{ fontSize: '1.6rem', fontWeight: '800', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                    {companyReports.length > 0 
+                      ? (companyReports.reduce((acc, r) => acc + (Number(r.rating) || 5), 0) / companyReports.length).toFixed(1)
+                      : '5.0'}
+                    <span style={{ fontSize: '0.85rem', color: '#fbbf24' }}>★</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(168, 85, 247, 0.15)', color: '#c084fc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Award size={24} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Approved Milestones</div>
+                  <div style={{ fontSize: '1.6rem', fontWeight: '800', color: '#fff' }}>
+                    {companyReports.filter(r => r.status === 'Approved').length}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Active Hired Interns Roster */}
+            <div className="glass-card" style={{ marginBottom: '1.5rem', padding: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Users size={18} style={{ color: '#10b981' }} /> Active Hired Candidates ({hiredStudents.length})
+                  </h3>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    Students selected and awarded an internship at {company.name}. Click "Upload Report" on any intern to attach milestone reviews.
+                  </span>
+                </div>
+                {hiredStudents.length > 0 && (
+                  <span className="badge badge-verified">
+                    {hiredStudents.length} Assigned {hiredStudents.length === 1 ? 'Intern' : 'Interns'} Active
+                  </span>
+                )}
+              </div>
+
+              {hiredStudents.length > 0 ? (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1rem' }}>
+                  {hiredStudents.map(student => {
+                    const studentReportCount = companyReports.filter(r => 
+                      (r.applicationId && r.applicationId === student.id) ||
+                      (r.studentEmail && r.studentEmail.toLowerCase() === (student.studentEmail || '').toLowerCase()) ||
+                      (r.studentName && r.studentName.toLowerCase() === (student.studentName || '').toLowerCase())
+                    ).length;
+
+                    return (
+                      <div 
+                        key={student.id} 
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.03)',
+                          border: '1px solid rgba(255, 255, 255, 0.08)',
+                          borderRadius: '12px',
+                          padding: '1.25rem',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          gap: '0.85rem'
+                        }}
+                      >
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'linear-gradient(135deg, #2563eb, #10b981)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '1rem' }}>
+                                {(student.studentName || 'S').charAt(0).toUpperCase()}
+                              </div>
+                              <div>
+                                <strong style={{ color: '#fff', fontSize: '0.98rem', display: 'block' }}>{student.studentName}</strong>
+                                <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>{student.studentEmail}</span>
+                              </div>
+                            </div>
+                            <span className="badge" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', fontSize: '0.72rem' }}>
+                              Hired Intern ✓
+                            </span>
+                          </div>
+
+                          <div style={{ background: 'rgba(0,0,0,0.2)', padding: '0.65rem 0.85rem', borderRadius: '8px', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.4rem' }}>
+                            <div style={{ fontWeight: '600', color: '#f8fafc', marginBottom: '2px' }}>{student.internshipTitle}</div>
+                            <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>
+                              {student.studentCollege || 'Engineering College'} • {student.studentDegree || 'B.Tech'}
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.76rem', color: '#94a3b8', padding: '0 0.2rem' }}>
+                            <span>📞 {student.studentPhone || 'Contact verified'}</span>
+                            <span style={{ color: '#38bdf8', fontWeight: '600' }}>{studentReportCount} Reports Filed</span>
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
+                          <button
+                            type="button"
+                            className="btn btn-emerald btn-sm"
+                            onClick={() => handleOpenUploadForStudent(student)}
+                            style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', fontWeight: '700' }}
+                          >
+                            <Upload size={13} /> + Upload Report
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => {
+                              setSelectedStudentFilter(student.studentName);
+                            }}
+                            title="Filter reports by this student"
+                            style={{ padding: '0.4rem 0.65rem' }}
+                          >
+                            <Filter size={13} />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div style={{ padding: '2rem 1.5rem', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px dashed rgba(255,255,255,0.12)' }}>
+                  <Users size={34} style={{ color: '#38bdf8', marginBottom: '0.75rem' }} />
+                  <h4 style={{ color: '#fff', fontSize: '1.05rem', fontWeight: '700', marginBottom: '0.4rem' }}>
+                    No Students Hired Yet
+                  </h4>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', maxWidth: '560px', margin: '0 auto 1.25rem', lineHeight: '1.5' }}>
+                    Once you review applications in the <strong>Applicant Manager</strong> tab and click <strong>Select Candidate & Send Result to Admin</strong>, their profile will automatically appear here to upload milestone progress reports.
+                  </p>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    <button 
+                      type="button" 
+                      className="btn btn-secondary" 
+                      onClick={() => setActiveTab('applicants')}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                    >
+                      <Users size={14} /> Open Applicant Manager
+                    </button>
+                    <button 
+                      type="button" 
+                      className="btn btn-emerald" 
+                      onClick={() => handleOpenUploadForStudent(null)}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                    >
+                      <PlusCircle size={14} /> Upload Custom Intern Report
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Filter & Search Bar */}
+            <div className="glass-card" style={{ marginBottom: '1.5rem', padding: '1.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '260px' }}>
+                  <div style={{ position: 'relative', width: '100%' }}>
+                    <Search size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+                    <input 
+                      type="text" 
+                      className="form-input" 
+                      placeholder="Search reports by student name, role, title, or keywords..."
+                      value={reportSearchTerm}
+                      onChange={(e) => setReportSearchTerm(e.target.value)}
+                      style={{ paddingLeft: '2.25rem', margin: 0 }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <Filter size={14} style={{ color: 'var(--text-dim)' }} />
+                    <select 
+                      className="form-select" 
+                      value={selectedReportCategoryFilter} 
+                      onChange={(e) => setSelectedReportCategoryFilter(e.target.value)}
+                      style={{ margin: 0, padding: '0.55rem 1rem', fontSize: '0.85rem' }}
+                    >
+                      <option value="all">📁 All Report Categories</option>
+                      <option value="Monthly Milestone Report">🎯 Monthly Milestone Report</option>
+                      <option value="Weekly Progress Report">📊 Weekly Progress Report</option>
+                      <option value="Mid-Term Evaluation">🛠️ Mid-Term Project Evaluation</option>
+                      <option value="Final Internship Completion Report">🎓 Final Completion Report</option>
+                      <option value="Performance Appraisal">🌟 Performance Appraisal</option>
+                      <option value="Attendance & Stipend Log">💼 Attendance & Stipend Log</option>
+                    </select>
+                  </div>
+
+                  <select 
+                    className="form-select" 
+                    value={selectedStudentFilter} 
+                    onChange={(e) => setSelectedStudentFilter(e.target.value)}
+                    style={{ margin: 0, padding: '0.55rem 1rem', fontSize: '0.85rem' }}
+                  >
+                    <option value="all">👤 All Interns</option>
+                    {Array.from(new Set(companyReports.map(r => r.studentName).filter(Boolean))).map(sName => (
+                      <option key={sName} value={sName}>Intern: {sName}</option>
+                    ))}
+                  </select>
+
+                  {(reportSearchTerm || selectedReportCategoryFilter !== 'all' || selectedStudentFilter !== 'all') && (
+                    <button 
+                      type="button" 
+                      className="btn btn-secondary btn-sm" 
+                      onClick={() => {
+                        setReportSearchTerm('');
+                        setSelectedReportCategoryFilter('all');
+                        setSelectedStudentFilter('all');
+                      }}
+                      style={{ padding: '0.55rem 0.85rem' }}
+                    >
+                      Reset Filters
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Reports List */}
+            {(() => {
+              const filteredReports = companyReports.filter(rep => {
+                if (selectedReportCategoryFilter !== 'all' && rep.reportType !== selectedReportCategoryFilter) {
+                  return false;
+                }
+                if (selectedStudentFilter !== 'all' && rep.studentName !== selectedStudentFilter) {
+                  return false;
+                }
+                if (reportSearchTerm.trim()) {
+                  const q = reportSearchTerm.toLowerCase();
+                  const inStudent = (rep.studentName || '').toLowerCase().includes(q);
+                  const inTitle = (rep.reportTitle || '').toLowerCase().includes(q);
+                  const inRole = (rep.internshipTitle || '').toLowerCase().includes(q);
+                  const inType = (rep.reportType || '').toLowerCase().includes(q);
+                  const inRemarks = (rep.supervisorRemarks || '').toLowerCase().includes(q);
+                  if (!inStudent && !inTitle && !inRole && !inType && !inRemarks) return false;
+                }
+                return true;
+              });
+
+              if (filteredReports.length === 0) {
+                return (
+                  <div className="glass-card" style={{ textAlign: 'center', padding: '3.5rem 1.5rem' }}>
+                    <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+                      <FileText size={28} />
+                    </div>
+                    <h3 style={{ color: '#fff', fontSize: '1.2rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+                      No Internship Reports Found
+                    </h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', maxWidth: '480px', margin: '0 auto 1.5rem' }}>
+                      {companyReports.length === 0
+                        ? 'No progress or evaluation reports have been uploaded yet for this company.'
+                        : 'No reports match your current filter criteria. Try adjusting or clearing search terms.'}
+                    </p>
+                    <button 
+                      type="button" 
+                      className="btn btn-emerald" 
+                      onClick={() => handleOpenUploadForStudent(hiredStudents[0] || null)}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontWeight: '700' }}
+                    >
+                      <PlusCircle size={15} /> Upload First Student Report
+                    </button>
+                  </div>
+                );
+              }
+
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {filteredReports.map(rep => {
+                    const typeColor = 
+                      rep.reportType === 'Final Internship Completion Report' ? '#a855f7' :
+                      rep.reportType === 'Monthly Milestone Report' ? '#3b82f6' :
+                      rep.reportType === 'Mid-Term Evaluation' ? '#f59e0b' :
+                      rep.reportType === 'Weekly Progress Report' ? '#06b6d4' : '#10b981';
+
+                    return (
+                      <div 
+                        key={rep.id} 
+                        className="glass-card" 
+                        style={{
+                          padding: '1.5rem',
+                          borderRadius: '14px',
+                          border: '1px solid rgba(255, 255, 255, 0.08)',
+                          background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.6) 100%)',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: `${typeColor}22`, border: `1px solid ${typeColor}55`, color: typeColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '1.2rem', flexShrink: 0 }}>
+                              <FileCheck size={24} />
+                            </div>
+                            <div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2px' }}>
+                                <span className="badge" style={{ background: `${typeColor}20`, color: typeColor, border: `1px solid ${typeColor}40`, fontSize: '0.72rem', fontWeight: '700' }}>
+                                  {rep.reportType}
+                                </span>
+                                {rep.period && (
+                                  <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                                    • Period: <strong style={{ color: '#e2e8f0' }}>{rep.period}</strong>
+                                  </span>
+                                )}
+                                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                                  • Date: <strong style={{ color: '#e2e8f0' }}>{rep.submissionDate}</strong>
+                                </span>
+                              </div>
+                              <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#fff', margin: 0 }}>
+                                {rep.reportTitle}
+                              </h3>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                            <span className="badge badge-verified" style={{ background: rep.status === 'Approved' ? '#16a34a' : 'rgba(245, 158, 11, 0.2)', color: '#fff', fontSize: '0.78rem' }}>
+                              {rep.status === 'Approved' ? 'Approved ✓' : rep.status || 'Under Review'}
+                            </span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '2px', background: 'rgba(245, 158, 11, 0.15)', padding: '0.25rem 0.55rem', borderRadius: '6px', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
+                              {[...Array(5)].map((_, i) => (
+                                <Star 
+                                  key={i} 
+                                  size={13} 
+                                  fill={i < (rep.rating || 5) ? '#fbbf24' : 'none'} 
+                                  color={i < (rep.rating || 5) ? '#fbbf24' : '#64748b'} 
+                                />
+                              ))}
+                              <span style={{ color: '#fbbf24', fontSize: '0.75rem', fontWeight: '800', marginLeft: '4px' }}>
+                                {rep.rating || 5}.0
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Student & Project Details Grid */}
+                        <div style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                          gap: '0.75rem',
+                          background: 'rgba(0,0,0,0.25)',
+                          padding: '0.85rem 1rem',
+                          borderRadius: '10px',
+                          marginBottom: '1rem',
+                          fontSize: '0.82rem'
+                        }}>
+                          <div>
+                            <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem', textTransform: 'uppercase' }}>Student Intern</span>
+                            <strong style={{ color: '#fff' }}>{rep.studentName}</strong>
+                            <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>{rep.studentEmail}</div>
+                          </div>
+
+                          <div>
+                            <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem', textTransform: 'uppercase' }}>Internship Opportunity</span>
+                            <strong style={{ color: '#38bdf8' }}>{rep.internshipTitle}</strong>
+                            <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>{rep.studentCollege || company.name}</div>
+                          </div>
+
+                          <div>
+                            <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem', textTransform: 'uppercase' }}>Supervisor Evaluation</span>
+                            <strong style={{ color: '#e2e8f0' }}>{rep.supervisorName}</strong>
+                            <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>{rep.supervisorDesignation || 'Supervisor'}</div>
+                          </div>
+
+                          <div>
+                            <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem', textTransform: 'uppercase' }}>Attendance & Stipend</span>
+                            <span style={{ color: '#34d399', fontWeight: '700' }}>Attendance: {rep.attendance || '100%'}</span>
+                            <div style={{ color: '#cbd5e1', fontSize: '0.75rem' }}>{rep.stipendStatus || 'Processed'}</div>
+                          </div>
+                        </div>
+
+                        {/* Deliverables & Remarks Excerpts */}
+                        <div style={{ marginBottom: '1rem', fontSize: '0.85rem' }}>
+                          {rep.keyDeliverables && (
+                            <div style={{ marginBottom: '0.5rem' }}>
+                              <strong style={{ color: '#e2e8f0', fontSize: '0.8rem', display: 'block', marginBottom: '2px' }}>
+                                📌 Key Deliverables Completed:
+                              </strong>
+                              <p style={{ color: 'var(--text-muted)', margin: 0, lineHeight: '1.45', whiteSpace: 'pre-line' }}>
+                                {rep.keyDeliverables}
+                              </p>
+                            </div>
+                          )}
+
+                          {rep.supervisorRemarks && (
+                            <div style={{ background: 'rgba(59, 130, 246, 0.08)', borderLeft: '3px solid #3b82f6', padding: '0.65rem 0.85rem', borderRadius: '0 8px 8px 0', marginTop: '0.5rem' }}>
+                              <strong style={{ color: '#93c5fd', fontSize: '0.78rem', display: 'block', marginBottom: '2px' }}>
+                                💬 Supervisor Remarks & Recommendation:
+                              </strong>
+                              <p style={{ color: '#cbd5e1', margin: 0, fontSize: '0.82rem', lineHeight: '1.45', fontStyle: 'italic' }}>
+                                "{rep.supervisorRemarks}"
+                              </p>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Footer Bar: Attached File + Action Buttons */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '0.85rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.05)', padding: '0.35rem 0.75rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', fontSize: '0.78rem', color: '#e2e8f0' }}>
+                              <FileText size={13} style={{ color: '#38bdf8' }} />
+                              <strong>{rep.fileName || 'Evaluation_Report.pdf'}</strong>
+                              <span style={{ color: '#94a3b8', fontSize: '0.72rem' }}>({rep.fileSize || '1.8 MB'})</span>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                            <button
+                              type="button"
+                              className="btn btn-secondary btn-sm"
+                              onClick={() => {
+                                setActiveViewingReport(rep);
+                                setShowViewReportModal(true);
+                              }}
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem' }}
+                            >
+                              <Eye size={13} /> View Full Report
+                            </button>
+
+                            <button
+                              type="button"
+                              className="btn btn-secondary btn-sm"
+                              onClick={() => handleDownloadReport(rep)}
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', background: '#0284c7', color: '#fff', border: 'none' }}
+                            >
+                              <Download size={13} /> Download File
+                            </button>
+
+                            <button
+                              type="button"
+                              className="btn btn-secondary btn-sm"
+                              onClick={() => handleOpenEditReport(rep)}
+                              title="Edit Report"
+                              style={{ padding: '0.35rem 0.6rem' }}
+                            >
+                              <Edit3 size={13} />
+                            </button>
+
+                            {onDeleteReport && (
+                              <button
+                                type="button"
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => {
+                                  if (window.confirm(`Are you sure you want to delete the report '${rep.reportTitle}' for ${rep.studentName}?`)) {
+                                    onDeleteReport(rep.id);
+                                  }
+                                }}
+                                title="Delete Report"
+                                style={{ padding: '0.35rem 0.6rem', color: '#f87171', borderColor: 'rgba(239,68,68,0.3)' }}
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
           </div>
         )}
 
@@ -1564,6 +2528,530 @@ export default function CompanyDashboard({
             </div>
           </div>
         )}
+
+        {/* Upload / Edit Internship Report Modal */}
+        {showUploadReportModal && (
+          <div className="modal-overlay" onClick={() => setShowUploadReportModal(false)}>
+            <div className="modal-content" style={{ maxWidth: '680px', maxHeight: '90vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Upload size={20} />
+                  </div>
+                  <div>
+                    <h3 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: '800', margin: 0 }}>
+                      {editingReportId ? 'Edit Internship Progress Report' : 'Upload Student Internship Report'}
+                    </h3>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                      Post-hiring performance milestone, deliverables & supervisor appraisal
+                    </span>
+                  </div>
+                </div>
+                <button 
+                  type="button"
+                  onClick={() => setShowUploadReportModal(false)}
+                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '1.2rem' }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmitReport}>
+                {/* 1. Student Selection */}
+                <div className="form-group">
+                  <label className="form-label">
+                    Select Hired Candidate / Intern <span className="required">*</span>
+                  </label>
+                  <select 
+                    className="form-select" 
+                    value={reportStudentAppId} 
+                    onChange={(e) => {
+                      const selectedVal = e.target.value;
+                      setReportStudentAppId(selectedVal);
+                      if (selectedVal && selectedVal !== 'custom') {
+                        const matched = allCompanyApplications.find(a => String(a.id) === String(selectedVal));
+                        if (matched) {
+                          setCustomStudentName(matched.studentName);
+                          setCustomStudentEmail(matched.studentEmail);
+                          setCustomRoleTitle(matched.internshipTitle);
+                          if (!formReportTitle) {
+                            setFormReportTitle(`Month 1 Progress & Performance Evaluation - ${matched.studentName}`);
+                          }
+                          setFormFileName(`${matched.studentName.replace(/\s+/g, '_')}_Milestone_Report.pdf`);
+                          setFormFileSize('1.8 MB');
+                        }
+                      }
+                    }}
+                  >
+                    <option value="">-- Choose from Awarded / Hired Candidates --</option>
+                    {hiredStudents.map(app => (
+                      <option key={app.id} value={app.id}>
+                        {app.studentName} — {app.internshipTitle} ({app.studentEmail})
+                      </option>
+                    ))}
+                    {/* Fallback to any company applicants */}
+                    {allCompanyApplications.filter(a => a.status !== 'Selected' && a.status !== 'Hired').map(app => (
+                      <option key={app.id} value={app.id}>
+                        [Candidate] {app.studentName} — {app.internshipTitle}
+                      </option>
+                    ))}
+                    <option value="custom">✏️ Enter Custom Intern Details Manually</option>
+                  </select>
+                </div>
+
+                {(!reportStudentAppId || reportStudentAppId === 'custom') && (
+                  <div className="grid-3" style={{ gap: '0.75rem', marginBottom: '1rem', background: 'rgba(0,0,0,0.2)', padding: '0.85rem', borderRadius: '8px' }}>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
+                      <label className="form-label">Student Full Name <span className="required">*</span></label>
+                      <input 
+                        type="text" 
+                        className="form-input" 
+                        placeholder="e.g. Adithya S"
+                        value={customStudentName}
+                        onChange={(e) => setCustomStudentName(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
+                      <label className="form-label">Student Email <span className="required">*</span></label>
+                      <input 
+                        type="email" 
+                        className="form-input" 
+                        placeholder="student@university.edu"
+                        value={customStudentEmail}
+                        onChange={(e) => setCustomStudentEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
+                      <label className="form-label">Internship Role</label>
+                      <input 
+                        type="text" 
+                        className="form-input" 
+                        placeholder="e.g. Full-Stack Web Development Intern"
+                        value={customRoleTitle}
+                        onChange={(e) => setCustomRoleTitle(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. Report Category & Title */}
+                <div className="grid-2" style={{ gap: '0.75rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">Report Category <span className="required">*</span></label>
+                    <select 
+                      className="form-select"
+                      value={formReportType}
+                      onChange={(e) => setFormReportType(e.target.value)}
+                      required
+                    >
+                      <option value="Monthly Milestone Report">🎯 Monthly Milestone Report</option>
+                      <option value="Weekly Progress Report">📊 Weekly Progress Report</option>
+                      <option value="Mid-Term Evaluation">🛠️ Mid-Term Project Evaluation</option>
+                      <option value="Final Internship Completion Report">🎓 Final Internship Completion Report</option>
+                      <option value="Performance Appraisal">🌟 Performance Appraisal & Supervisor Review</option>
+                      <option value="Attendance & Stipend Log">💼 Attendance & Stipend Disbursal Log</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Milestone Period</label>
+                    <input 
+                      type="text" 
+                      className="form-input" 
+                      placeholder="e.g. Month 1 (Sprint 1-4) or Final Review"
+                      value={formPeriod}
+                      onChange={(e) => setFormPeriod(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Report Title <span className="required">*</span></label>
+                  <input 
+                    type="text" 
+                    className="form-input" 
+                    placeholder="e.g. Month 1 Progress & Milestone Evaluation Report"
+                    value={formReportTitle}
+                    onChange={(e) => setFormReportTitle(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {/* 3. Rating & Attendance Record */}
+                <div className="grid-3" style={{ gap: '0.75rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">Performance Rating (1-5)</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '6px' }}>
+                      {[1, 2, 3, 4, 5].map((starVal) => (
+                        <button
+                          key={starVal}
+                          type="button"
+                          onClick={() => setFormRating(starVal)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '2px',
+                            color: starVal <= formRating ? '#fbbf24' : '#64748b'
+                          }}
+                        >
+                          <Star size={22} fill={starVal <= formRating ? '#fbbf24' : 'none'} />
+                        </button>
+                      ))}
+                      <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#fbbf24', marginLeft: '6px' }}>
+                        {formRating} / 5
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Attendance Record</label>
+                    <input 
+                      type="text" 
+                      className="form-input" 
+                      placeholder="e.g. 98% / 100%"
+                      value={formAttendance}
+                      onChange={(e) => setFormAttendance(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Stipend Status</label>
+                    <input 
+                      type="text" 
+                      className="form-input" 
+                      placeholder="e.g. Processed (₹15,000)"
+                      value={formStipendStatus}
+                      onChange={(e) => setFormStipendStatus(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* 4. Deliverables & Remarks */}
+                <div className="form-group">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <label className="form-label" style={{ marginBottom: 0 }}>Key Project Deliverables / Responsibilities</label>
+                    <button 
+                      type="button" 
+                      onClick={handleAutofillTemplate}
+                      style={{ background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'underline', fontWeight: '600' }}
+                    >
+                      ✨ Load Template Fill
+                    </button>
+                  </div>
+                  <textarea 
+                    className="form-textarea" 
+                    rows={3} 
+                    placeholder="List specific modules built, tickets resolved, and technologies used by the intern..."
+                    value={formKeyDeliverables}
+                    onChange={(e) => setFormKeyDeliverables(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Corporate Supervisor Written Feedback & Remarks</label>
+                  <textarea 
+                    className="form-textarea" 
+                    rows={3} 
+                    placeholder="Provide qualitative feedback on communication, code quality, punctuality, and next milestones..."
+                    value={formSupervisorRemarks}
+                    onChange={(e) => setFormSupervisorRemarks(e.target.value)}
+                  />
+                </div>
+
+                {/* 5. Document / File Attachment */}
+                <div className="form-group">
+                  <label className="form-label">Attach Official Report Document / Certificate (PDF / DOC)</label>
+                  <div 
+                    onDragOver={(e) => { e.preventDefault(); setIsDraggingFile(true); }}
+                    onDragLeave={() => setIsDraggingFile(false)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDraggingFile(false);
+                      const file = e.dataTransfer.files?.[0];
+                      if (file) handleFileSelect(file);
+                    }}
+                    style={{
+                      border: `2px dashed ${isDraggingFile ? '#38bdf8' : 'rgba(255, 255, 255, 0.15)'}`,
+                      borderRadius: '10px',
+                      padding: '1.25rem',
+                      textAlign: 'center',
+                      background: isDraggingFile ? 'rgba(56, 189, 248, 0.08)' : 'rgba(0, 0, 0, 0.2)',
+                      transition: 'all 0.2s ease',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => {
+                      const input = document.getElementById('report-file-picker');
+                      if (input) input.click();
+                    }}
+                  >
+                    <input 
+                      id="report-file-picker"
+                      type="file" 
+                      accept=".pdf,.doc,.docx,.zip,.png,.jpg"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleFileSelect(file);
+                      }}
+                    />
+                    <Upload size={24} style={{ color: '#38bdf8', marginBottom: '0.4rem' }} />
+                    <div style={{ color: '#fff', fontSize: '0.875rem', fontWeight: '600' }}>
+                      Click to browse or drag & drop evaluation report file
+                    </div>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      Supports PDF, DOC, DOCX up to 10MB
+                    </span>
+                  </div>
+
+                  {formFileName && (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '0.5rem 0.85rem', borderRadius: '8px', marginTop: '0.65rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.82rem', color: '#fff' }}>
+                        <FileCheck size={16} style={{ color: '#38bdf8' }} />
+                        <strong>{formFileName}</strong>
+                        <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>({formFileSize || '1.5 MB'})</span>
+                      </div>
+                      <button 
+                        type="button" 
+                        onClick={() => { setFormFileName(''); setFormFileSize(''); }}
+                        style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '0.9rem' }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* 6. Status & Submit */}
+                <div className="grid-2" style={{ gap: '0.75rem', alignItems: 'center', marginTop: '1.25rem' }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <label className="form-label" style={{ marginBottom: '4px' }}>Approval Status</label>
+                    <select 
+                      className="form-select" 
+                      value={formStatus} 
+                      onChange={(e) => setFormStatus(e.target.value)}
+                    >
+                      <option value="Approved">Approved ✓ (Sign-Off Granted)</option>
+                      <option value="Under Review">Under Review ⏳ (Draft Milestone)</option>
+                      <option value="Final Certified">Final Certified 🎓 (Internship Completed)</option>
+                    </select>
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.2rem' }}>
+                    <button 
+                      type="button" 
+                      className="btn btn-secondary" 
+                      onClick={() => setShowUploadReportModal(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="btn btn-emerald" 
+                      style={{ padding: '0.75rem 1.75rem', fontWeight: '700' }}
+                    >
+                      {editingReportId ? 'Save Changes' : 'Upload & Publish Report'}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* View / Preview Report Modal */}
+        {showViewReportModal && activeViewingReport && (
+          <div className="modal-overlay" onClick={() => setShowViewReportModal(false)}>
+            <div className="modal-content" style={{ maxWidth: '720px', maxHeight: '90vh', overflowY: 'auto', background: '#0b1120', border: '1px solid rgba(56, 189, 248, 0.4)' }} onClick={(e) => e.stopPropagation()}>
+              {/* Report Header with Corporate Letterhead */}
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                border: '1px solid rgba(56, 189, 248, 0.3)',
+                borderRadius: '12px',
+                padding: '1.5rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '1rem'
+              }}>
+                <div>
+                  <span className="badge badge-verified" style={{ marginBottom: '0.4rem', background: '#16a34a', color: '#fff' }}>
+                    Official Corporate Evaluation Report ✓
+                  </span>
+                  <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#fff', margin: '4px 0' }}>
+                    {activeViewingReport.companyName}
+                  </h2>
+                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                    {company.location || 'Bangalore, India'} • Contact: {activeViewingReport.supervisorEmail || company.businessEmail}
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>Report ID</div>
+                  <strong style={{ color: '#38bdf8', fontSize: '0.9rem' }}>{activeViewingReport.id}</strong>
+                  <div style={{ fontSize: '0.75rem', color: '#cbd5e1', marginTop: '2px' }}>
+                    Date: {activeViewingReport.submissionDate}
+                  </div>
+                </div>
+              </div>
+
+              {/* Title & Badge */}
+              <div style={{ marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
+                  <span className="badge" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.4)' }}>
+                    {activeViewingReport.reportType}
+                  </span>
+                  {activeViewingReport.period && (
+                    <span className="badge" style={{ background: 'rgba(245, 158, 11, 0.2)', color: '#fbbf24', border: '1px solid rgba(245, 158, 11, 0.4)' }}>
+                      {activeViewingReport.period}
+                    </span>
+                  )}
+                  <span className="badge badge-verified" style={{ background: '#16a34a', color: '#fff' }}>
+                    {activeViewingReport.status}
+                  </span>
+                </div>
+                <h3 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#fff', margin: 0 }}>
+                  {activeViewingReport.reportTitle}
+                </h3>
+              </div>
+
+              {/* Intern Information Box */}
+              <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '1.25rem', marginBottom: '1.25rem' }}>
+                <h4 style={{ color: '#38bdf8', fontSize: '0.9rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
+                  Candidate & Academic Particulars
+                </h4>
+                <div className="grid-2" style={{ gap: '0.75rem', fontSize: '0.85rem' }}>
+                  <div>
+                    <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.75rem' }}>Candidate Name</span>
+                    <strong style={{ color: '#fff', fontSize: '1rem' }}>{activeViewingReport.studentName}</strong>
+                    <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>{activeViewingReport.studentEmail} • {activeViewingReport.studentPhone || 'Phone Verified'}</div>
+                  </div>
+                  <div>
+                    <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.75rem' }}>Opportunity Role</span>
+                    <strong style={{ color: '#fff', fontSize: '1rem' }}>{activeViewingReport.internshipTitle}</strong>
+                    <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>{activeViewingReport.studentCollege || 'University Candidate'}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Performance Metrics Breakdown */}
+              <div className="grid-3" style={{ gap: '0.75rem', marginBottom: '1.25rem' }}>
+                <div style={{ background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)', borderRadius: '8px', padding: '0.85rem' }}>
+                  <span style={{ color: '#fbbf24', fontSize: '0.72rem', textTransform: 'uppercase', fontWeight: '700' }}>Overall Rating</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginTop: '4px' }}>
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={15} fill={i < (activeViewingReport.rating || 5) ? '#fbbf24' : 'none'} color={i < (activeViewingReport.rating || 5) ? '#fbbf24' : '#64748b'} />
+                    ))}
+                    <strong style={{ color: '#fbbf24', marginLeft: '6px' }}>{activeViewingReport.rating || 5}.0 / 5.0</strong>
+                  </div>
+                </div>
+
+                <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)', borderRadius: '8px', padding: '0.85rem' }}>
+                  <span style={{ color: '#34d399', fontSize: '0.72rem', textTransform: 'uppercase', fontWeight: '700' }}>Attendance Record</span>
+                  <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#fff', marginTop: '2px' }}>
+                    {activeViewingReport.attendance || '100%'}
+                  </div>
+                </div>
+
+                <div style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '8px', padding: '0.85rem' }}>
+                  <span style={{ color: '#38bdf8', fontSize: '0.72rem', textTransform: 'uppercase', fontWeight: '700' }}>Stipend Status</span>
+                  <div style={{ fontSize: '0.95rem', fontWeight: '700', color: '#fff', marginTop: '2px' }}>
+                    {activeViewingReport.stipendStatus || 'Approved'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Deliverables Section */}
+              {activeViewingReport.keyDeliverables && (
+                <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '1rem', marginBottom: '1rem' }}>
+                  <h4 style={{ color: '#f8fafc', fontSize: '0.85rem', fontWeight: '700', marginBottom: '0.4rem' }}>
+                    Key Project Deliverables & Tasks Completed
+                  </h4>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: '1.6', margin: 0, whiteSpace: 'pre-line' }}>
+                    {activeViewingReport.keyDeliverables}
+                  </p>
+                </div>
+              )}
+
+              {/* Supervisor Remarks */}
+              {activeViewingReport.supervisorRemarks && (
+                <div style={{ background: 'rgba(59, 130, 246, 0.08)', border: '1px solid rgba(59, 130, 246, 0.25)', borderRadius: '8px', padding: '1rem', marginBottom: '1.25rem' }}>
+                  <h4 style={{ color: '#93c5fd', fontSize: '0.85rem', fontWeight: '700', marginBottom: '0.4rem' }}>
+                    Supervisor Evaluation & Recommendations
+                  </h4>
+                  <p style={{ color: '#cbd5e1', fontSize: '0.85rem', lineHeight: '1.6', margin: 0, fontStyle: 'italic', whiteSpace: 'pre-line' }}>
+                    "{activeViewingReport.supervisorRemarks}"
+                  </p>
+                  <div style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: '#94a3b8', borderTop: '1px solid rgba(59, 130, 246, 0.2)', paddingTop: '0.5rem', display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Evaluator: <strong>{activeViewingReport.supervisorName}</strong></span>
+                    <span>Designation: <strong>{activeViewingReport.supervisorDesignation || 'Supervisor'}</strong></span>
+                  </div>
+                </div>
+              )}
+
+              {/* Attached File Download & Actions */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <FileText size={16} style={{ color: '#38bdf8' }} />
+                  <span style={{ color: '#fff', fontSize: '0.85rem', fontWeight: '600' }}>
+                    {activeViewingReport.fileName || 'Report_Document.pdf'}
+                  </span>
+                  <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>
+                    ({activeViewingReport.fileSize || '1.8 MB'})
+                  </span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <button 
+                    type="button" 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => window.print()}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
+                  >
+                    <Printer size={13} /> Print
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn btn-emerald btn-sm"
+                    onClick={() => handleDownloadReport(activeViewingReport)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontWeight: '700' }}
+                  >
+                    <Download size={13} /> Download Report
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => setShowViewReportModal(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* ======================================================== */}
+        {/* AI RESUME READER & CANDIDATE SCREENING MODAL             */}
+        {/* ======================================================== */}
+        {showAIResumeModal && activeAIResumeCandidate && (
+          <AIResumeReaderModal
+            candidate={activeAIResumeCandidate}
+            targetJob={companyListings.find(j => j.id === activeAIResumeCandidate.internshipId || j.title === activeAIResumeCandidate.internshipTitle) || { title: activeAIResumeCandidate.internshipTitle, companyName: company.name }}
+            isOpen={showAIResumeModal}
+            onClose={() => setShowAIResumeModal(false)}
+            onSelectCandidate={(appId, decision) => {
+              if (onUpdateAppStatus) onUpdateAppStatus(appId, decision);
+              if (onAddToast) onAddToast(`Candidate selected & hired for vacant seat!`, 'success');
+            }}
+            onAddToast={onAddToast}
+            userRole="company"
+          />
+        )}
+
       </div>
     </div>
   );

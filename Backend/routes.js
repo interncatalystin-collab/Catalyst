@@ -10,6 +10,8 @@ import { registerStudentHandler, loginStudentHandler, getStudentProfileHandler, 
 import { adminLoginHandler, getAdminDashboardMetricsHandler, getAllStudentsHandler, getStudentByIdHandler } from './controllers/adminController.js';
 import { exportStudentsExcelHandler } from './controllers/excelController.js';
 import { sendApplicationConfirmationEmail, sendRegistrationConfirmationMail, verifyEmailService } from './services/emailService.js';
+import { getReportsHandler, createReportHandler, updateReportHandler, deleteReportHandler } from './controllers/reportController.js';
+import { screenResumeHandler, getApplicationScreeningHandler } from './controllers/aiResumeController.js';
 
 // Utility helper to parse JSON payload (supports standalone Node streams, serverless pre-parsed req.body, and resilient fallback)
 const parseJson = (req) => {
@@ -234,6 +236,44 @@ export const routeDispatcher = async (req, res, pathname) => {
   if (req.method === 'POST' && pathname === '/api/applications/assessment') {
     const body = await parseJson(req);
     await submitAssessmentHandler(req, res, body);
+    return true;
+  }
+
+  // --- INTERNSHIP REPORT ROUTES ---
+  if (req.method === 'GET' && pathname === '/api/reports') {
+    await getReportsHandler(req, res, url);
+    return true;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/reports') {
+    const body = await parseJson(req);
+    await createReportHandler(req, res, body);
+    return true;
+  }
+
+  if ((req.method === 'PUT' || req.method === 'PATCH') && pathname.startsWith('/api/reports/')) {
+    const reportId = pathname.replace('/api/reports/', '');
+    const body = await parseJson(req);
+    await updateReportHandler(req, res, reportId, body);
+    return true;
+  }
+
+  if (req.method === 'DELETE' && pathname.startsWith('/api/reports/')) {
+    const reportId = pathname.replace('/api/reports/', '');
+    await deleteReportHandler(req, res, reportId);
+    return true;
+  }
+
+  // --- AI RESUME SCREENING ROUTES ---
+  if (req.method === 'POST' && pathname === '/api/resume/screen') {
+    const body = await parseJson(req);
+    await screenResumeHandler(req, res, body);
+    return true;
+  }
+
+  if (req.method === 'GET' && pathname.startsWith('/api/resume/screen/')) {
+    const appId = pathname.replace('/api/resume/screen/', '');
+    await getApplicationScreeningHandler(req, res, appId);
     return true;
   }
 
